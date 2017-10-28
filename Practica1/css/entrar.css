@@ -1,0 +1,79 @@
+@font-face {
+    font-family: GloriaHallelujah;
+    src: url("../fonts/GloriaHallelujah.ttf");
+}
+
+.background {
+    background: url("../img/Fondo.jpg");
+    position: absolute;
+    z-index: 0;
+}
+
+#app-image {
+    margin-left: 30%;
+    margin-right: 25%;
+    width: 40%;
+}
+
+.options-user {
+    display: flex;
+    justify-content: space-around;
+    font-size: xx-large;
+    font-family: GloriaHallelujah;
+    color: white;
+}
+
+.action-message {
+    margin-top: 10%;
+    padding-left: 45%;
+    margin-right: 35%;
+    text-align: center;
+    font-size: xx-large;
+    font-family: GloriaHallelujah;
+}
+
+.content {
+    margin-left: 30%;
+    margin-right: 30%;
+    border-radius: 15px 15px 15px 15px;
+    padding-top: 20px;
+    padding: 20px;
+    background-color: purple;
+}
+
+.input-label {
+    padding-top: 13px;
+    padding-right: 10px;
+    color: white;
+}
+
+.input-text {
+    padding-top: 13px;
+    width: 100%;
+}
+
+.form-submit {
+    padding-top: 15px;
+    padding-left: 33%;
+    align-content: center;
+}
+
+.submit {
+    background-color: purple;
+    color: white;
+    font-size: xx-large;
+    font-family: GloriaHallelujah;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+a:hover {
+    color: #FF00B3;
+}
+
+.submit:hover {
+    background-color: #FF00B3;
+}

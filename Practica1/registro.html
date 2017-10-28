@@ -1,0 +1,57 @@
+<head>
+    <title>Nuevo usuario: FaceBluff</title>
+    <link href="css/entrar.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="css/registro.css" rel="stylesheet" type="text/css" media="screen">
+</head>
+
+<body>
+    <div class="background">
+        <img id="app-image" src="img/Logo.png" alt="FaceBluff">
+        <div class="options-user">
+            <a href="entrar.html"> Entrar</a>
+            <a href="registro.html"> Registrarse </a>
+        </div>
+        <div>
+            <span class="action-message">Registro</span>
+            <div class="content">
+                <form action="#" method="post">
+                    <table>
+                        <tr>
+                            <td class="input-label"><label for="email">Email</label></td>
+                            <td class="input-text"><input type="text" size="55" name="email" id="email"></td>
+                        </tr>
+                        <tr>
+                            <td class="input-label"><label for="password">Contraseña</label></td>
+                            <td class="input-text"><input type="password" size="55" name="password" id="password"></td>
+                        </tr>
+                        <tr>
+                            <td class="input-label"><label for="complete-name">Nombre completo</label></td>
+                            <td class="input-text"><input type="text" size="55" name="complete-name" id="complete-name"></td>
+                        </tr>
+                        <tr>
+                            <td class="input-label"><label for="genre">Sexo</label></td>
+                            <td class="input-radio">
+                                <input type="radio" name="genre" value="man" id="genre">Hombre
+                                <input type="radio" name="genre" value="woman" id="genre">Mujer
+                                <input type="radio" name="genre" value="other" id="genre">Otro
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="input-label"><label for="birth-date">Fecha nacimiento</label></td>
+                            <td class="input-text"><input type="text" size="55" name="birth-date" id="birth-date" value="dd/mm/aaaa"></td>
+                        </tr>
+                        <tr>
+                            <td class="input-label"><label for="profile-image">Imagen de perfil</label></td>
+                            <td class="input-file"><input type="file" name="profile-image" id="profile-image"></td>
+                        </tr>
+
+                    </table>
+                    <div class="form-submit">
+                        <input class="submit" type="submit" value="Registrarse">
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
