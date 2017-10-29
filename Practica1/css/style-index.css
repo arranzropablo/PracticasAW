@@ -1,0 +1,17 @@
+.submit {
+    margin-top: 2%;
+    background-color: #AA68B3;
+    color: white;
+    font-size: x-large;
+    font-family: GloriaHallelujah;
+}
+
+label{
+    color: white;
+}
+
+a[href="index.html"]{
+    color: #b4aebb;
+    cursor: default;
+    pointer-events: none;
+}
