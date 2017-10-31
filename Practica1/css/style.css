@@ -9,11 +9,11 @@
     height: auto;
 }
 
-body{
-    margin:0;
+body {
+    margin: 0;
 }
 
-.header{
+.header {
     background: url("../img/header-background.png");
     background-size: cover;
 }
@@ -46,7 +46,7 @@ a:hover {
     margin: 0.5%;
 }
 
-.content{
+.content {
     margin-top: 5%;
     position: relative;
     display: flex;
@@ -67,7 +67,7 @@ a:hover {
     padding: 2% 4%;
 }
 
-#section-form{
+#section-form {
     display: flex;
     justify-content: space-around;
     flex-direction: column;
