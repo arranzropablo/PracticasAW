@@ -12,11 +12,13 @@ let usuario = {
     nombre: "Alberto Camino Sáez",
     contrasenia: "prueba",
     sexo: "H",
-    fecha_nacimiento: '1996-04-19',
+    fecha_nacimiento: '19/04/1996',
     imagen_perfil: 'imagen.jpg'
 };
 
-nuevoUsuario(usuario, x => { console.log(x) });
+//nuevoUsuario(usuario, x => { console.log(x) });
+//modificarUsuario(usuario, "ruperto@gmail.com", x => { console.log(x) });
+getUsuario("alber@gmail.com", x => { console.log(x) });
 
 /**
  * Funcion que añade un nuevo usuario a la base de datos
@@ -54,7 +56,7 @@ function modificarUsuario(usuario, email, callback) {
             console.log(`Error al obtener la conexión: ${err.message}`);
         } else {
             connection.query(
-                "UPDATE usuarios SET(nombre='" + usuario.nombre + "', email='" + usuario.email + "', contraseña='" +
+                "UPDATE usuarios SET nombre='" + usuario.nombre + "', email='" + usuario.email + "', contraseña='" +
                 usuario.contrasenia + "', sexo='" + usuario.sexo + "', fecha_nacimiento='" + usuario.fecha_nacimiento +
                 "', imagen_perfil='" + usuario.imagen_perfil + "' WHERE email ='" + email + "'",
                 (err, filas) => {
@@ -69,7 +71,7 @@ function modificarUsuario(usuario, email, callback) {
 }
 
 /**
- * Busca un usuario en la base de datos identificado por el email
+ * Busca y devuelve un usuario de la base de datos identificado por el email
  * @param {String} email email del usuario que intenta hacer login o del usuario del que se quiere ver la informacion de perfil 
  * @param {Function} callback Funcion que recoge el usuario o informa del error
  */
@@ -80,18 +82,22 @@ function getUsuario(email, callback) {
         } else {
             connection.query(
                 "SELECT * FROM usuarios WHERE email ='" + email + "'",
-                (err, fila) => {
+                (err, filas) => {
                     if (!err) {
-                        let login = {
-                            email: fila.email,
-                            nombre: fila.nombre,
-                            contrasenia: fila.contraseña,
-                            sexo: fila.sexo,
-                            fecha_nacimiento: fila.fecha_nacimiento,
-                            imagen_perfil: fila.imagen_perfil
-                        };
-                        callback(login);
-                    } else callback("No se ha encontrado el usuario");
+                        let login;
+                        filas.forEach(function(fila) {
+                            login = {
+                                email: fila.email,
+                                nombre: fila.nombre,
+                                contrasenia: fila.contraseña,
+                                sexo: fila.sexo,
+                                fecha_nacimiento: fila.fecha_nacimiento,
+                                imagen_perfil: fila.imagen_perfil
+                            };
+                        });
+                        if (login !== undefined) callback(login);
+                        else callback("No se ha encontrado el usuario")
+                    } else callback("Ha habido un error");
                 }
             );
             connection.release();
