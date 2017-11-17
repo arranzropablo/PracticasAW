@@ -177,10 +177,18 @@ function getAmigosUsuario(email, callback) {
 function getSolicitudesDeAmistad(email) {
     pools.getConnection((err, connection) => {
         if (err) {
-            console.log(`Error al obtener la conexión: ${err.message}`);
+            callback(`Error al obtener la conexión: ${err.message}`, undefined)
         } else {
             connection.query(
-                "select origen"
+                "select origen from amigos where pendiente=1 and destino=?", [email],
+                (err, filas) => {
+                    connection.release();
+                    if (err) {
+                        callback(`Ha habido un error ${err.message}`, undefined);
+                    } else {
+                        callback(null, filas);
+                    }
+                }
             )
         }
     });
