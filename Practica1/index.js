@@ -29,7 +29,7 @@ let usuario = {
 function nuevoUsuario(usuario, callback) {
     pool.getConnection((err, connection) => {
         if (err) {
-            console.log(`Error al obtener la conexión: ${err.message}`);
+            callback(`Error al obtener la conexión: ${err.message}`,undefined)
         } else {
             connection.query(
                 "insert into usuarios values(?,?,?,?,?,?,?)",
@@ -60,7 +60,7 @@ function nuevoUsuario(usuario, callback) {
 function modificarUsuario(usuario, callback) {
     pool.getConnection((err, connection) => {
         if (err) {
-            console.log(`Error al obtener la conexión: ${err.message}`);
+            callback(`Error al obtener la conexión: ${err.message}`,undefined)
         } else {
             connection.query(
                 "UPDATE usuarios SET nombre=?,password=?,sexo=?,fecha_nacimiento=?,imagen_perfil=? WHERE email=?",
@@ -106,7 +106,7 @@ function loginSuccessful(email, password, callback){
 function getUsuario(email, callback) {
     pool.getConnection((err, connection) => {
         if (err) {
-            console.log(`Error al obtener la conexión: ${err.message}`);
+            callback(`Error al obtener la conexión: ${err.message}`,undefined)
         } else {
             connection.query("SELECT * FROM usuarios WHERE email =?",[email],
                 (err, filas) => {
@@ -142,7 +142,7 @@ function getUsuario(email, callback) {
 function sumarPuntos(email, puntos, callback) {
     pool.getConnection((err, connection) => {
         if (err) {
-            console.log(`Error al obtener la conexión: ${err.message}`);
+            callback(`Error al obtener la conexión: ${err.message}`,undefined)
         } else {
             connection.query(
                 "UPDATE usuarios SET puntos=puntos + ? WHERE email = ?", [puntos, email],
@@ -160,7 +160,8 @@ function sumarPuntos(email, puntos, callback) {
  * Busca y recoge los amigos que tiene un usuario en concreto
  * @param {String} email email del usuario logueado que busca a sus amigos
  */
-function getAmigosUsuario(email) {
+function getAmigosUsuario(email, callback) {
+
 
 }
 
@@ -169,7 +170,15 @@ function getAmigosUsuario(email) {
  * @param {String} email email del usuario logueado
  */
 function getSolicitudesDeAmistad(email) {
-
+    pools.getConnection((err,connection)=>{
+        if(err){
+            console.log(`Error al obtener la conexión: ${err.message}`);
+        } else{
+            connection.query(
+                "select origen"
+            )
+        }
+    });
 }
 
 /**
