@@ -8,18 +8,27 @@ let pool = mysql.createPool({
 });
 
 let usuario = {
-    email: "alberto1@gmail.com",
+    email: "alberto@gmail.com",
     nombre: "Alberto Camino Sáez",
-    password: "prueba",
+    password: "funciona",
     sexo: "H",
     fecha_nacimiento: '19/04/1996',
-    imagen_perfil: 'imagen.jpg'
+    imagen_perfil: 'imagen.jpg',
+    puntos: 50
 };
 
 //nuevoUsuario(usuario, x => { console.log(x) });
-//modificarUsuario(usuario, "alberto1@gmail.com", x => { console.log(x) });
-//getUsuario("alberto1@gmail.com", x => { console.log(x) });
-//sumarPuntos("alberto1@gmail.com", -50, x => { console.log(x) });
+//modificarUsuario(usuario, x => {
+//    console.log(x);
+//});
+/*getUsuario("alberto@gmail.com", (x, y) => {
+    console.log(x);
+    console.log(y);
+});*/
+sumarPuntos("alberto@gmail.com", 100, (x, y) => {
+    console.log(x);
+    console.log(y);
+});
 
 /**
  * Funcion que añade un nuevo usuario a la base de datos
@@ -29,21 +38,20 @@ let usuario = {
 function nuevoUsuario(usuario, callback) {
     pool.getConnection((err, connection) => {
         if (err) {
-            callback(`Error al obtener la conexión: ${err.message}`,undefined)
+            callback(`Error al obtener la conexión: ${err.message}`, undefined)
         } else {
             connection.query(
-                "insert into usuarios values(?,?,?,?,?,?,?)",
-                    [usuario.email,
-                     usuario.nombre,
-                     usuario.password,
-                     usuario.sexo,
-                     usuario.fecha_nacimiento,
-                     usuario.imagen_perfil,
-                     usuario.puntos],
+                "INSERT INTO usuarios values(?,?,?,?,?,?,?)", [usuario.email,
+                    usuario.nombre,
+                    usuario.password,
+                    usuario.sexo,
+                    usuario.fecha_nacimiento,
+                    usuario.imagen_perfil,
+                    usuario.puntos
+                ],
                 (err, filas) => {
-                    connection.release();                    
-                    if (err){ callback("No se puede añadir el usuario",undefined); }
-                    else{ callback(null,usuario); }
+                    connection.release();
+                    if (err) { callback("No se puede añadir el usuario", undefined); } else { callback(null, usuario); }
                 }
             );
         }
@@ -60,20 +68,19 @@ function nuevoUsuario(usuario, callback) {
 function modificarUsuario(usuario, callback) {
     pool.getConnection((err, connection) => {
         if (err) {
-            callback(`Error al obtener la conexión: ${err.message}`,undefined)
+            callback(`Error al obtener la conexión: ${err.message}`, undefined)
         } else {
             connection.query(
-                "UPDATE usuarios SET nombre=?,password=?,sexo=?,fecha_nacimiento=?,imagen_perfil=? WHERE email=?",
-                    [usuario.nombre,
-                     usuario.password,
-                     usuario.sexo,
-                     usuario.fecha_nacimiento,
-                     usuario.imagen_perfil,
-                     usuario.email],
+                "UPDATE usuarios SET nombre=?,password=?,sexo=?,fecha_nacimiento=?,imagen_perfil=? WHERE email=?", [usuario.nombre,
+                    usuario.password,
+                    usuario.sexo,
+                    usuario.fecha_nacimiento,
+                    usuario.imagen_perfil,
+                    usuario.email
+                ],
                 (err, filas) => {
                     connection.release();
-                    if (err){ callback("No se puede modificar el usuario",undefined); }
-                    else{ callback(null,usuario); }
+                    if (err) { callback("No se puede modificar el usuario", undefined); } else { callback(null, usuario); }
                 }
             );
         }
@@ -86,13 +93,12 @@ function modificarUsuario(usuario, callback) {
  * @param {String} password password del user
  * @param {Function} callback 
  */
-function loginSuccessful(email, password, callback){
+function loginSuccessful(email, password, callback) {
     getUsuario(email, (err, data) => {
-        if(err){ callback(err, false); return;}
-        if(data.password === password){
+        if (err) { callback(err, false); return; }
+        if (data.password === password) {
             callback(null, true);
-        }
-        else{
+        } else {
             callback("La password es incorrecta", false);
         }
     });
@@ -106,27 +112,26 @@ function loginSuccessful(email, password, callback){
 function getUsuario(email, callback) {
     pool.getConnection((err, connection) => {
         if (err) {
-            callback(`Error al obtener la conexión: ${err.message}`,undefined)
+            callback(`Error al obtener la conexión: ${err.message}`, undefined)
         } else {
-            connection.query("SELECT * FROM usuarios WHERE email =?",[email],
+            connection.query("SELECT * FROM usuarios WHERE email =?", [email],
                 (err, filas) => {
-                    connection.release();                    
+                    connection.release();
                     if (!err) {
                         let login;
                         if (filas.length > 0) {
                             login = {
                                 email: filas[0].email,
                                 nombre: filas[0].nombre,
-                                password: filas[0].contraseña,
+                                password: filas[0].password,
                                 sexo: filas[0].sexo,
                                 fecha_nacimiento: filas[0].fecha_nacimiento,
                                 imagen_perfil: filas[0].imagen_perfil,
                                 puntos: filas[0].puntos
                             };
                         }
-                        if (login !== undefined){ callback(null, login); }
-                        else{ callback("No se ha encontrado el usuario",undefined); }
-                    } else{ callback("Ha habido un error",undefined); }
+                        if (login !== undefined) { callback(null, login); } else { callback("No se ha encontrado el usuario", undefined); }
+                    } else { callback("Ha habido un error", undefined); }
                 }
             );
         }
@@ -142,15 +147,15 @@ function getUsuario(email, callback) {
 function sumarPuntos(email, puntos, callback) {
     pool.getConnection((err, connection) => {
         if (err) {
-            callback(`Error al obtener la conexión: ${err.message}`,undefined)
+            callback(`Error al obtener la conexión: ${err.message}`, undefined)
         } else {
             connection.query(
                 "UPDATE usuarios SET puntos=puntos + ? WHERE email = ?", [puntos, email],
                 (err, filas) => {
-                    connection.release();                    
+                    connection.release();
                     if (!err) {
                         callback(null, puntos);
-                    } else{ callback(`Ha habido un error ${err.message}`,undefined); }
+                    } else { callback(`Ha habido un error ${err.message}`, undefined); }
                 }
             );
         }
@@ -170,10 +175,10 @@ function getAmigosUsuario(email, callback) {
  * @param {String} email email del usuario logueado
  */
 function getSolicitudesDeAmistad(email) {
-    pools.getConnection((err,connection)=>{
-        if(err){
+    pools.getConnection((err, connection) => {
+        if (err) {
             console.log(`Error al obtener la conexión: ${err.message}`);
-        } else{
+        } else {
             connection.query(
                 "select origen"
             )

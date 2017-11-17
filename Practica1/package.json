@@ -1,0 +1,14 @@
+{
+  "name": "practica1",
+  "version": "1.0.0",
+  "description": "Practica 1 de AW",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Alberto Camino & Pablo Arranz",
+  "license": "ISC",
+  "dependencies": {
+    "mysql": "^2.15.0"
+  }
+}
