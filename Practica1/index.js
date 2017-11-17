@@ -8,7 +8,7 @@ let pool = mysql.createPool({
 });
 
 let usuario = {
-    email: "alber@gmail.com",
+    email: "alberto1@gmail.com",
     nombre: "Alberto Camino Sáez",
     password: "prueba",
     sexo: "H",
@@ -17,8 +17,9 @@ let usuario = {
 };
 
 //nuevoUsuario(usuario, x => { console.log(x) });
-//modificarUsuario(usuario, "ruperto@gmail.com", x => { console.log(x) });
-getUsuario("alber@gmail.com", x => { console.log(x) });
+//modificarUsuario(usuario, "alberto1@gmail.com", x => { console.log(x) });
+//getUsuario("alberto1@gmail.com", x => { console.log(x) });
+//sumarPuntos("alberto1@gmail.com", -50, x => { console.log(x) });
 
 /**
  * Funcion que añade un nuevo usuario a la base de datos
@@ -41,7 +42,7 @@ function nuevoUsuario(usuario, callback) {
                      usuario.puntos],
                 (err, filas) => {
                     connection.release();                    
-                    if (err){ callback("No se puede añadir el usuario",null); }
+                    if (err){ callback("No se puede añadir el usuario",undefined); }
                     else{ callback(null,usuario); }
                 }
             );
@@ -71,7 +72,7 @@ function modificarUsuario(usuario, callback) {
                      usuario.email],
                 (err, filas) => {
                     connection.release();
-                    if (err){ callback("No se puede modificar el usuario",null); }
+                    if (err){ callback("No se puede modificar el usuario",undefined); }
                     else{ callback(null,usuario); }
                 }
             );
@@ -88,7 +89,12 @@ function modificarUsuario(usuario, callback) {
 function loginSuccessful(email, password, callback){
     getUsuario(email, (err, data) => {
         if(err){ callback(err, false); return;}
-        callback(null, data.email === email && data.password === password);
+        if(data.password === password){
+            callback(null, true);
+        }
+        else{
+            callback("La password es incorrecta", false);
+        }
     });
 }
 
@@ -104,26 +110,50 @@ function getUsuario(email, callback) {
         } else {
             connection.query("SELECT * FROM usuarios WHERE email =?",[email],
                 (err, filas) => {
+                    connection.release();                    
                     if (!err) {
                         let login;
-                        filas.forEach(function(fila) {
+                        if (filas.length > 0) {
                             login = {
-                                email: fila.email,
-                                nombre: fila.nombre,
-                                password: fila.password,
-                                sexo: fila.sexo,
-                                fecha_nacimiento: fila.fecha_nacimiento,
-                                imagen_perfil: fila.imagen_perfil
+                                email: filas[0].email,
+                                nombre: filas[0].nombre,
+                                password: filas[0].contraseña,
+                                sexo: filas[0].sexo,
+                                fecha_nacimiento: filas[0].fecha_nacimiento,
+                                imagen_perfil: filas[0].imagen_perfil,
+                                puntos: filas[0].puntos
                             };
-                        });
-                        if (login !== undefined) callback(login);
-                        else callback("No se ha encontrado el usuario")
-                    } else callback("Ha habido un error");
+                        }
+                        if (login !== undefined){ callback(null, login); }
+                        else{ callback("No se ha encontrado el usuario",undefined); }
+                    } else{ callback("Ha habido un error",undefined); }
                 }
             );
-            connection.release();
         }
 
+    });
+}
+
+/**
+ * Suma o resta una determinada cantidad de puntos a un usuario
+ * @param {string} email email del usuario afectado
+ * @param {int} puntos puntos a sumar/restar (si se restan, viene como número negativo)
+ */
+function sumarPuntos(email, puntos, callback) {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log(`Error al obtener la conexión: ${err.message}`);
+        } else {
+            connection.query(
+                "UPDATE usuarios SET puntos=puntos + ? WHERE email = ?", [puntos, email],
+                (err, filas) => {
+                    connection.release();                    
+                    if (!err) {
+                        callback(null, puntos);
+                    } else{ callback(`Ha habido un error ${err.message}`,undefined); }
+                }
+            );
+        }
     });
 }
 /**
