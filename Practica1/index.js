@@ -8,17 +8,18 @@ let pool = mysql.createPool({
 });
 
 let usuario = {
-    email: "alber@gmail.com",
+    email: "alberto1@gmail.com",
     nombre: "Alberto Camino Sáez",
-    contrasenia: "prueba",
+    password: "funciona!",
     sexo: "H",
     fecha_nacimiento: '19/04/1996',
     imagen_perfil: 'imagen.jpg'
 };
 
 //nuevoUsuario(usuario, x => { console.log(x) });
-//modificarUsuario(usuario, "ruperto@gmail.com", x => { console.log(x) });
-getUsuario("alber@gmail.com", x => { console.log(x) });
+//modificarUsuario(usuario, "alberto1@gmail.com", x => { console.log(x) });
+//getUsuario("alberto1@gmail.com", x => { console.log(x) });
+//sumarPuntos("alberto1@gmail.com", -50, x => { console.log(x) });
 
 /**
  * Funcion que añade un nuevo usuario a la base de datos
@@ -31,14 +32,15 @@ function nuevoUsuario(usuario, callback) {
             console.log(`Error al obtener la conexión: ${err.message}`);
         } else {
             connection.query(
-                "INSERT INTO usuarios values('" + usuario.email + "','" + usuario.nombre + "','" + usuario.contrasenia +
-                "','" + usuario.sexo + "','" + usuario.fecha_nacimiento + "','" + usuario.imagen_perfil + "')",
+                "INSERT INTO usuarios values(?, ?, ?, ?, ?, ?, 0)", [usuario.email, usuario.nombre, usuario.password, usuario.sexo, usuario.fecha_nacimiento, usuario.imagen_perfil],
                 (err, filas) => {
-                    if (!err) callback("Añadido nuevo usuario");
-                    else callback("No se puede añadir el usuario");
+                    if (!err) {
+                        connection.release();
+                        callback("Añadido nuevo usuario");
+                    } else callback(err);
                 }
             );
-            connection.release();
+
         }
 
     });
@@ -56,15 +58,14 @@ function modificarUsuario(usuario, email, callback) {
             console.log(`Error al obtener la conexión: ${err.message}`);
         } else {
             connection.query(
-                "UPDATE usuarios SET nombre='" + usuario.nombre + "', email='" + usuario.email + "', contraseña='" +
-                usuario.contrasenia + "', sexo='" + usuario.sexo + "', fecha_nacimiento='" + usuario.fecha_nacimiento +
-                "', imagen_perfil='" + usuario.imagen_perfil + "' WHERE email ='" + email + "'",
+                "UPDATE usuarios SET nombre= ?, contraseña= ?, sexo = ?, fecha_nacimiento = ?, imagen_perfil = ? WHERE email = ?", [usuario.nombre, usuario.password, usuario.sexo, usuario.fecha_nacimiento, usuario.imagen_perfil, email],
                 (err, filas) => {
+                    connection.release();
                     if (!err) callback("Modificado el usuario");
                     else callback("No se puede modificar el usuario");
                 }
             );
-            connection.release();
+
         }
 
     });
@@ -81,28 +82,52 @@ function getUsuario(email, callback) {
             console.log(`Error al obtener la conexión: ${err.message}`);
         } else {
             connection.query(
-                "SELECT * FROM usuarios WHERE email ='" + email + "'",
+                "SELECT * FROM usuarios WHERE email = ?", [email],
                 (err, filas) => {
                     if (!err) {
+                        connection.release();
                         let login;
-                        filas.forEach(function(fila) {
+                        if (filas.length > 0) {
                             login = {
-                                email: fila.email,
-                                nombre: fila.nombre,
-                                contrasenia: fila.contraseña,
-                                sexo: fila.sexo,
-                                fecha_nacimiento: fila.fecha_nacimiento,
-                                imagen_perfil: fila.imagen_perfil
+                                email: filas[0].email,
+                                nombre: filas[0].nombre,
+                                password: filas[0].contraseña,
+                                sexo: filas[0].sexo,
+                                fecha_nacimiento: filas[0].fecha_nacimiento,
+                                imagen_perfil: filas[0].imagen_perfil,
+                                puntos: filas[0].puntos
                             };
-                        });
+                        }
                         if (login !== undefined) callback(login);
                         else callback("No se ha encontrado el usuario")
                     } else callback("Ha habido un error");
                 }
             );
-            connection.release();
         }
 
+    });
+}
+
+/**
+ * Suma o resta una determinada cantidad de puntos a un usuario
+ * @param {string} email email del usuario afectado
+ * @param {int} puntos puntos a sumar/restar (si se restan, viene como número negativo)
+ */
+function sumarPuntos(email, puntos, callback) {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log(`Error al obtener la conexión: ${err.message}`);
+        } else {
+            connection.query(
+                "UPDATE usuarios SET puntos=puntos + ? WHERE email = ?", [puntos, email],
+                (err, filas) => {
+                    if (!err) {
+                        connection.release();
+                        callback("Sumados los puntos");
+                    } else callback(`Ha habido un error ${err.message}`);
+                }
+            );
+        }
     });
 }
 /**
