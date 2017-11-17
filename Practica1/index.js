@@ -10,7 +10,7 @@ let pool = mysql.createPool({
 let usuario = {
     email: "alber@gmail.com",
     nombre: "Alberto Camino Sáez",
-    contrasenia: "prueba",
+    password: "prueba",
     sexo: "H",
     fecha_nacimiento: '19/04/1996',
     imagen_perfil: 'imagen.jpg'
@@ -31,14 +31,20 @@ function nuevoUsuario(usuario, callback) {
             console.log(`Error al obtener la conexión: ${err.message}`);
         } else {
             connection.query(
-                "INSERT INTO usuarios values('" + usuario.email + "','" + usuario.nombre + "','" + usuario.contrasenia +
-                "','" + usuario.sexo + "','" + usuario.fecha_nacimiento + "','" + usuario.imagen_perfil + "')",
+                "insert into usuarios values(?,?,?,?,?,?,?)",
+                    [usuario.email,
+                     usuario.nombre,
+                     usuario.password,
+                     usuario.sexo,
+                     usuario.fecha_nacimiento,
+                     usuario.imagen_perfil,
+                     usuario.puntos],
                 (err, filas) => {
-                    if (!err) callback("Añadido nuevo usuario");
-                    else callback("No se puede añadir el usuario");
+                    connection.release();                    
+                    if (err){ callback("No se puede añadir el usuario",null); }
+                    else{ callback(null,usuario); }
                 }
             );
-            connection.release();
         }
 
     });
@@ -50,23 +56,39 @@ function nuevoUsuario(usuario, callback) {
  * @param {String} email email del usuario que se va a modificar (el anterior)
  * @param {Function} callback funcion que informa del proceso (como argumento tiene un String)
  */
-function modificarUsuario(usuario, email, callback) {
+function modificarUsuario(usuario, callback) {
     pool.getConnection((err, connection) => {
         if (err) {
             console.log(`Error al obtener la conexión: ${err.message}`);
         } else {
             connection.query(
-                "UPDATE usuarios SET nombre='" + usuario.nombre + "', email='" + usuario.email + "', contraseña='" +
-                usuario.contrasenia + "', sexo='" + usuario.sexo + "', fecha_nacimiento='" + usuario.fecha_nacimiento +
-                "', imagen_perfil='" + usuario.imagen_perfil + "' WHERE email ='" + email + "'",
+                "UPDATE usuarios SET nombre=?,password=?,sexo=?,fecha_nacimiento=?,imagen_perfil=? WHERE email=?",
+                    [usuario.nombre,
+                     usuario.password,
+                     usuario.sexo,
+                     usuario.fecha_nacimiento,
+                     usuario.imagen_perfil,
+                     usuario.email],
                 (err, filas) => {
-                    if (!err) callback("Modificado el usuario");
-                    else callback("No se puede modificar el usuario");
+                    connection.release();
+                    if (err){ callback("No se puede modificar el usuario",null); }
+                    else{ callback(null,usuario); }
                 }
             );
-            connection.release();
         }
+    });
+}
 
+/**
+ * Comprueba el login
+ * @param {String} email email del user
+ * @param {String} password password del user
+ * @param {Function} callback 
+ */
+function loginSuccessful(email, password, callback){
+    getUsuario(email, (err, data) => {
+        if(err){ callback(err, false); return;}
+        callback(null, data.email === email && data.password === password);
     });
 }
 
@@ -80,8 +102,7 @@ function getUsuario(email, callback) {
         if (err) {
             console.log(`Error al obtener la conexión: ${err.message}`);
         } else {
-            connection.query(
-                "SELECT * FROM usuarios WHERE email ='" + email + "'",
+            connection.query("SELECT * FROM usuarios WHERE email =?",[email],
                 (err, filas) => {
                     if (!err) {
                         let login;
@@ -89,7 +110,7 @@ function getUsuario(email, callback) {
                             login = {
                                 email: fila.email,
                                 nombre: fila.nombre,
-                                contrasenia: fila.contraseña,
+                                password: fila.password,
                                 sexo: fila.sexo,
                                 fecha_nacimiento: fila.fecha_nacimiento,
                                 imagen_perfil: fila.imagen_perfil
