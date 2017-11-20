@@ -8,8 +8,8 @@ let pool = mysql.createPool({
 });
 
 let usuario = {
-    email: "alberto@gmail.com",
-    nombre: "Alberto Camino Sáez",
+    email: "nacho@gmail.com",
+    nombre: "Nacho",
     password: "funciona",
     sexo: "H",
     fecha_nacimiento: '19/04/1996',
@@ -21,11 +21,37 @@ let usuario = {
 //modificarUsuario(usuario, x => {
 //    console.log(x);
 //});
+
 /*getUsuario("alberto@gmail.com", (x, y) => {
     console.log(x);
     console.log(y);
 });*/
-sumarPuntos("alberto@gmail.com", 100, (x, y) => {
+
+/*sumarPuntos("alberto@gmail.com", 100, (x, y) => {
+    console.log(x);
+    console.log(y);
+});*/
+
+/*crearSolicitudDeAmistad("nacho@gmail.com", "julia@gmail.com", (x, y) => {
+    console.log(x + " " + y);
+});*/
+
+/*getSolicitudesDeAmistad("julia@gmail.com", (x, y) => {
+    console.log(x);
+    console.log(y);
+});*/
+
+/*resolverSolicitud("nacho@gmail.com", "alberto@gmail.com", 0, (x, y) => {
+    console.log(x);
+    console.log(y);
+});*/
+
+/*busquedaPorNombre("o", (x, y) => {
+    console.log(x);
+    console.log(y);
+});*/
+
+getAmigosUsuario("julia@gmail.com", (x, y) => {
     console.log(x);
     console.log(y);
 });
@@ -164,31 +190,36 @@ function sumarPuntos(email, puntos, callback) {
 /**
  * Busca y recoge los amigos que tiene un usuario en concreto
  * @param {String} email email del usuario logueado que busca a sus amigos
+ * @param {Function} callback Funcion que informa del éxito o error
  */
 function getAmigosUsuario(email, callback) {
-    pools.getConnection((err, connection) => {
+    pool.getConnection((err, connection) => {
         if (err) {
-            connection.release();            
             callback(`Error al obtener la conexión: ${err.message}`, undefined);
         } else {
             connection.query(
-                "select origen from amigos where pendiente=0 and destino=?", [email],
+                "SELECT origen, nombre FROM amigos JOIN usuarios ON origen=email WHERE pendiente=0 and destino=?", [email],
                 (err, filas) => {
-                    
+
                     if (err) {
                         connection.release();
                         callback(`Ha habido un error ${err.message}`, undefined);
                     } else {
+                        let amigos = [];
+                        filas.forEach(fila => {
+                            amigos.push({ nombre: fila.nombre, email: fila.origen });
+                        })
                         connection.query(
-                            "select destino from amigos where pendiente=0 and origen=?", [email],
+                            "SELECT destino, nombre FROM amigos JOIN usuarios ON destino=email WHERE pendiente=0 AND origen=?", [email],
                             (err, resultado) => {
                                 if (err) {
                                     connection.release();
                                     callback(`Ha habido un error ${err.message}`, undefined);
                                 } else {
-                                    //No estoy seguro de si este callback funcionará hay que probarlo
-                                    //para obtener los amigos de alguien tienes qe mirar los origenes y los destinos
-                                    callback(null, filas + resultado);
+                                    resultado.forEach(fila => {
+                                        amigos.push({ nombre: fila.nombre, email: fila.destino });
+                                    })
+                                    callback(null, amigos);
                                 }
                             }
                         )
@@ -202,22 +233,25 @@ function getAmigosUsuario(email, callback) {
 /**
  * Función que devuelve las solicitudes de amistad que tiene un usuario
  * @param {String} email email del usuario logueado
+ * @param {Function} callback Funcion que informa del éxito o error
  */
-function getSolicitudesDeAmistad(email) {
-    pools.getConnection((err, connection) => {
+function getSolicitudesDeAmistad(email, callback) {
+    pool.getConnection((err, connection) => {
         if (err) {
-            //No se si en el primer if(err) hay que poner el connection release, porque quizas no existe el objeto connection aun, probar poniendo mal la base de datos o algo asi
-            connection.release();
             callback(`Error al obtener la conexión: ${err.message}`, undefined)
         } else {
             connection.query(
-                "select origen from amigos where pendiente=1 and destino=?", [email],
+                "SELECT origen, nombre FROM amigos JOIN usuarios ON email=origen WHERE pendiente=1 and destino=?", [email],
                 (err, filas) => {
                     connection.release();
                     if (err) {
                         callback(`Ha habido un error ${err.message}`, undefined);
                     } else {
-                        callback(null, filas);
+                        let solicitudes = [];
+                        filas.forEach(fila => {
+                            solicitudes.push({ nombre: fila.nombre, email: fila.origen });
+                        });
+                        callback(null, solicitudes);
                     }
                 }
             )
@@ -228,23 +262,27 @@ function getSolicitudesDeAmistad(email) {
 /**
  * Función que devuelve una lista de usuarios donde el nombre coincide con la cadena dada
  * @param {String} nombre cadena de texto para buscar en el nombre de los usuarios
+ * @param {Function} callback Funcion que informa del éxito o error
  */
-function busquedaPorNombre(nombre) {
-    pools.getConnection((err, connection) => {
+function busquedaPorNombre(nombre, callback) {
+    pool.getConnection((err, connection) => {
         if (err) {
-            connection.release();
             callback(`Error al obtener la conexión: ${err.message}`, undefined)
         } else {
             connection.query(
                 //busca que el nombre esté en cualquier posicion del nombre del usuario por ejemplo si metes "lo" te podría devolver "lorena" y "pablo" porque tienen "lo"
-                "select email, nombre from usuarios where nombre like '%?%'", 
-                [nombre],
+                "SELECT email, nombre FROM usuarios WHERE nombre LIKE ?", ["%" + nombre + "%"],
                 (err, filas) => {
                     connection.release();
                     if (err) {
                         callback(`Ha habido un error ${err.message}`, undefined);
                     } else {
-                        callback(null, filas);
+                        let usuarios = [];
+                        filas.forEach(fila => {
+                            usuarios.push({ nombre: fila.nombre, email: fila.email });
+
+                        });
+                        callback(null, usuarios);
                     }
                 }
             )
@@ -256,17 +294,66 @@ function busquedaPorNombre(nombre) {
  * Función que guarda una nueva solicitud de amistad
  * @param {String} emailEmisor email del usuario que envia la peticion de amistad
  * @param {String} emailDestinatario email del usuario que la recibe
+ * @param {Function} callback Funcion que informa del éxito o error
  */
-function crearSolicitudDeAmistad(emailEmisor, emailDestinatario) {
-
+function crearSolicitudDeAmistad(emailEmisor, emailDestinatario, callback) {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            callback(`Error al obtener la conexión: ${err.message}`, undefined)
+        } else {
+            connection.query(
+                "INSERT INTO amigos VALUES (?, ?, 1)", [emailEmisor, emailDestinatario],
+                (err, filas) => {
+                    connection.release();
+                    if (err) {
+                        callback(`Ha habido un error ${err.message}`, undefined);
+                    } else {
+                        callback(null, true);
+                    }
+                }
+            )
+        }
+    });
 }
 
 /**
  * Funcion para aceptar o rechazar una solicitud de amistad
- * @param {String} emailEmisor email del usuario que envia la peticion de amistad
- * @param {String} emailDestinatario email del usuario que la recibe
+ * @param {String} emailEmisor email del usuario que envió la peticion de amistad
+ * @param {String} emailDestinatario email del usuario que la recibió
  * @param {bool} aceptada booleano que indica si se acepta o rechaza la solicitud
+ * @param {Function} callback Funcion que informa del éxito o error
  */
-function resolverSolicitud(emailEmisor, emailDestinatario, aceptada) {
+function resolverSolicitud(emailEmisor, emailDestinatario, aceptada, callback) {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            callback(`Error al obtener la conexión: ${err.message}`, undefined)
+        } else {
+            if (aceptada) {
+                connection.query(
+                    "UPDATE amigos SET pendiente = 0 WHERE origen = ? AND destino = ?", [emailEmisor, emailDestinatario],
+                    (err, filas) => {
+                        connection.release();
+                        if (err) {
+                            callback(`Ha habido un error ${err.message}`, undefined);
+                        } else {
+                            callback(null, true);
+                        }
+                    }
+                )
 
+            } else {
+                connection.query(
+                    "DELETE FROM amigos WHERE origen = ? AND destino = ?", [emailEmisor, emailDestinatario],
+                    (err, filas) => {
+                        connection.release();
+                        if (err) {
+                            callback(`Ha habido un error ${err.message}`, undefined);
+                        } else {
+                            callback(null, true);
+                        }
+                    }
+                )
+            }
+        }
+    });
 }
