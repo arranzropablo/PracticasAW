@@ -166,8 +166,37 @@ function sumarPuntos(email, puntos, callback) {
  * @param {String} email email del usuario logueado que busca a sus amigos
  */
 function getAmigosUsuario(email, callback) {
-
-
+    pools.getConnection((err, connection) => {
+        if (err) {
+            connection.release();            
+            callback(`Error al obtener la conexión: ${err.message}`, undefined);
+        } else {
+            connection.query(
+                "select origen from amigos where pendiente=0 and destino=?", [email],
+                (err, filas) => {
+                    
+                    if (err) {
+                        connection.release();
+                        callback(`Ha habido un error ${err.message}`, undefined);
+                    } else {
+                        connection.query(
+                            "select destino from amigos where pendiente=0 and origen=?", [email],
+                            (err, resultado) => {
+                                if (err) {
+                                    connection.release();
+                                    callback(`Ha habido un error ${err.message}`, undefined);
+                                } else {
+                                    //No estoy seguro de si este callback funcionará hay que probarlo
+                                    //para obtener los amigos de alguien tienes qe mirar los origenes y los destinos
+                                    callback(null, filas + resultado);
+                                }
+                            }
+                        )
+                    }
+                }
+            )
+        }
+    });
 }
 
 /**
@@ -177,6 +206,8 @@ function getAmigosUsuario(email, callback) {
 function getSolicitudesDeAmistad(email) {
     pools.getConnection((err, connection) => {
         if (err) {
+            //No se si en el primer if(err) hay que poner el connection release, porque quizas no existe el objeto connection aun, probar poniendo mal la base de datos o algo asi
+            connection.release();
             callback(`Error al obtener la conexión: ${err.message}`, undefined)
         } else {
             connection.query(
@@ -196,10 +227,29 @@ function getSolicitudesDeAmistad(email) {
 
 /**
  * Función que devuelve una lista de usuarios donde el nombre coincide con la cadena dada
- * @param {String} cadena cadena de texto para buscar en el nombre de los usuarios
+ * @param {String} nombre cadena de texto para buscar en el nombre de los usuarios
  */
-function busquedaPorNombre(cadena) {
-
+function busquedaPorNombre(nombre) {
+    pools.getConnection((err, connection) => {
+        if (err) {
+            connection.release();
+            callback(`Error al obtener la conexión: ${err.message}`, undefined)
+        } else {
+            connection.query(
+                //busca que el nombre esté en cualquier posicion del nombre del usuario por ejemplo si metes "lo" te podría devolver "lorena" y "pablo" porque tienen "lo"
+                "select email, nombre from usuarios where nombre like '%?%'", 
+                [nombre],
+                (err, filas) => {
+                    connection.release();
+                    if (err) {
+                        callback(`Ha habido un error ${err.message}`, undefined);
+                    } else {
+                        callback(null, filas);
+                    }
+                }
+            )
+        }
+    });
 }
 
 /**
