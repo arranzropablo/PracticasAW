@@ -72,10 +72,10 @@ class DaoUsuarios {
      * @param {Function} callback 
      */
     loginSuccessful(email, password, callback) {
-        getUsuario(email, (err, data) => {
+        this.getUsuario(email, (err, data) => {
             if (err) { callback(err, false); return; }
             if (data.password === password) {
-                callback(null, true);
+                callback(null, data);
             } else {
                 callback("La password es incorrecta", false);
             }
