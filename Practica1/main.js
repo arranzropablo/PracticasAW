@@ -42,6 +42,9 @@ function usuarioConectado(request, response, next) {
     }
 }
 
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
 //app.use(usuarioConectado);
 app.use(express.static(ficherosEstaticos));
 
@@ -49,26 +52,28 @@ app.use(bodyParser.urlencoded({ extended: false }));
 /**
  * Procesa el formulario de login del usuario
  */
-app.post("/procesar_login.html", (request, response) => {
+app.post("/procesar_login", (request, response) => {
     daoUsuario.loginSuccessful(request.body.email, request.body.password, (err, user) => {
         if (err) {
             console.log(err);
+            response.status(500);
+            response.end();
         } else {
-            console.log(user);
+            //console.log(user);
             //response.redirect(path.join(__dirname, "/profile.html"));
+            response.render("profile", { user: user });
         }
     })
-    response.end();
 });
 /**
  * Procesa el formulario de registro del usuario
  */
-app.post("/procesar_registro.html", (request, response) => {
+app.post("/procesar_registro", (request, response) => {
     let user = {
         email: request.body.email,
         nombre: request.body.complete_name,
         password: request.body.password,
-        sexo: "H",
+        sexo: request.body.genre,
         fecha_nacimiento: request.body.birth_date,
         imagen_perfil: 'imagen.jpg',
         puntos: 50
@@ -76,11 +81,13 @@ app.post("/procesar_registro.html", (request, response) => {
     daoUsuario.nuevoUsuario(user, (err, u) => {
         if (err) {
             console.log(err);
+            response.status(500);
+            response.end();
         } else {
-            console.log(u);
+            //console.log(u);
+            response.render("profile", { user: u });
         }
     })
-    response.end();
 });
 
 /*app.get("/", (request, response) => {
