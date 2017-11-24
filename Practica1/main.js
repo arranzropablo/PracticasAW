@@ -48,6 +48,77 @@ app.set("views", path.join(__dirname, "views"));
 //app.use(usuarioConectado);
 app.use(express.static(ficherosEstaticos));
 
+app.get("/friends", (request, response) => {
+    let usuario = "alberto@gmail.com";
+
+    let user = {
+        email: usuario,
+        puntos: 50
+    }
+
+    daoUsuario.getSolicitudesDeAmistad(usuario, (err, requests) => {
+        if (err) {
+            console.log(err);
+            response.end();
+        } else {
+            daoUsuario.getAmigosUsuario(usuario, (err, friends) => {
+                if (err) {
+                    console.log(err);
+                    response.end();
+                } else {
+                    response.render("friends", { requests: requests, user: user, friends: friends });
+                }
+            });
+
+        }
+    });
+
+});
+
+app.get("/profile/:user", (request, response) => {
+    daoUsuario.getUsuario(request.params.user, (err, user) => {
+        if (err) {
+            console.log(err);
+            response.end();
+        } else {
+            response.render("profile", { user: user });
+        }
+    });
+});
+
+app.get("/resolver_solicitud", (request, response) => {
+    let aceptada = Number(request.query.aceptada);
+    let receptor = "alberto@gmail.com";
+    let emisor = request.query.email;
+
+    daoUsuario.resolverSolicitud(emisor, receptor, aceptada, (err, exito) => {
+        if (err) {
+            console.log(err);
+            response.end();
+        } else {
+            response.redirect("/friends");
+        }
+    });
+});
+
+app.get("/buscar", (request, response) => {
+    let buscar = request.query.text;
+
+    let user = {
+        email: "alberto@gmail.com",
+        puntos: 50
+    }
+
+    daoUsuario.busquedaPorNombre(text, (err, resultado) => {
+        if (err) {
+            console.log(err);
+            response.end();
+        } else {
+            response.render("search", { resultado: resultado, user: user });
+        }
+    });
+});
+
 app.use(bodyParser.urlencoded({ extended: false }));
 /**
  * Procesa el formulario de login del usuario

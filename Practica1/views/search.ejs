@@ -4,13 +4,13 @@
     <title>Busqueda: FaceBluff</title>
     <meta charset="utf-8" />
     <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
-    <link href="css/style.css" rel="stylesheet" type="text/css" media="screen">
-    <link href="css/style-search.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="/css/style-search.css" rel="stylesheet" type="text/css" media="screen">
 </head>
 
 <body>
-	<div class="header">
-        <img id="app-image" src="img/logo.png" alt="FaceBluff-logo">
+    <div class="header">
+        <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
         <div class="options-user">
             <a href="profile.html"> Perfil</a>
             <a href="friends.html"> Amigos </a>
@@ -25,7 +25,7 @@
             <table>
                 <% resultado.forEach(elem =>{%>
                     <tr>
-                        <td><img class="friend_image" src="icons/Vampire Bat-01.png" alt="Friend_image"></td>
+                        <td><img class="friend_image" src="/icons/Vampire Bat-01.png" alt="Friend_image"></td>
                         <td><span class="friend_name"> <%= elem.nombre %> </span></td>
                         <td>
                             <form action="/addFriend/<%=elem.id%>" method="POST" >

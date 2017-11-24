@@ -4,20 +4,20 @@
     <title>Amigos: FaceBluff</title>
     <meta charset="utf-8" />
     <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
-    <link href="css/style.css" rel="stylesheet" type="text/css" media="screen">
-    <link href="css/style-friends.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="/css/style-friends.css" rel="stylesheet" type="text/css" media="screen">
 </head>
 
 <body>
-	<div class="header">
-        <img id="app-image" src="img/logo.png" alt="FaceBluff-logo">
+    <div class="header">
+        <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
         <div class="options-user">
             <a href="profile.html"> Perfil</a>
             <a href="friends.html"> Amigos </a>
             <a href="#"> Preguntas </a>
             <a href="index.html"> Desconectar </a>
             <!--Dinamico-->
-            <span> 50 pts </span>
+            <span> <%= user.puntos %> </span>
             <!--Acaba dinamico-->
         </div>
     </div>
@@ -26,27 +26,46 @@
         <!--Dinamico Aquí se muestran las solicitudes de amistad-->
         <div class="request_table">
             <table>
-                <tr>
-                    <td><img class="friend_image" src="icons/Devil-01.png" alt="Friend_image"></td>
-                    <td><a class="friend_name name" href="#"> Pablo Arranz </a></td>
-                    <td><button class="profile_buttons" onclick = "location='#'">Aceptar</button></td>
-                    <td><button class="profile_buttons" onclick = "location='#'">Rechazar</button></td>
-                </tr>
-                <tr>
+                <% if (requests.length === 0) { %>
+                    <span> No tienes nuevas solicitudes de amistad </span>
+                    <% } else { %>
+                        <% requests.forEach(request => { %>
+                            <tr>
+                                <td><img class="friend_image" src="/icons/Devil-01.png" alt="Friend_image"></td>
+                                <td>
+                                    <a class="friend_name name" href="/profile/<%=request.email%>">
+                                        <%= request.nombre %>
+                                    </a>
+                                </td>
+                                <form action="/resolver_solicitud" method="GET">
+                                    <input type="hidden" name="email" value="<%= request.email %>">
+                                    <input type="hidden" name="aceptada" value="1">
+                                    <td><input class="profile_buttons" type="submit" value="Aceptar"></td>
+                                    <!--<td><input class="profile_buttons" onclick = "location='#'">Aceptar</input></td>-->
+                                </form>
+                                <form action="/resolver_solicitud" method="GET">
+                                    <input type="hidden" name="email" value="<%= request.email %>">
+                                    <input type="hidden" name="aceptada" value="0">
+                                    <td><input class="profile_buttons" type="submit" value="Rechazar"></td>
+                                    <!--<td><input class="profile_buttons" onclick = "location='#'">Aceptar</input></td>-->
+                                </form>
+                            </tr>
+                            <% }); } %>
+                                <!--<tr>
                     <td><img class="friend_image" src="icons/Diablo-01.png" alt="Friend_image"></td>
                     <td><a class="friend_name name" href="#"> Pedro Sánchez Gómez </a></td>
                     <td><button class="profile_buttons" onclick = "location='#'">Aceptar</button></td>
                     <td><button class="profile_buttons" onclick = "location='#'">Rechazar</button></td>
-                </tr>
+                </tr>-->
             </table>
         </div>
         <!--Acaba dinamico-->
         <div class="section-message">Búsqueda de amigos</div>
         <div class="friend_search">
-            <form action="#" method="post" id="friend_search_form">
-                    <label for="email">Búsqueda por nombre:</label></td>
-                    <input type="text" name="email"></td>
-                    <input class="submit" type="submit" value="Buscar">
+            <form action="/buscar" method="post" id="friend_search_form">
+                <label for="email">Búsqueda por nombre:</label></td>
+                <input type="text" name="text"></td>
+                <input class="submit" type="submit" value="Buscar">
             </form>
         </div>
 
@@ -54,18 +73,27 @@
         <!--Dinamico aqui se muestran los amigos-->
         <div class="friend_table">
             <table>
-                <tr>
-                    <td><img class="friend_image" src="icons/Minion Pig-01.png" alt="Friend_image"></td>
-                    <td><a class="friend_name name" href="#"> Pablo Arranz Ropero </a></td>
-                </tr>
-                <tr>
+                <% if (friends.length === 0) { %>
+                    <span> No tienes amigos :/ </span>
+                    <% } else { %>
+                        <% friends.forEach(friend => { %>
+                            <tr>
+                                <td><img class="friend_image" src="/icons/Minion Pig-01.png" alt="Friend_image"></td>
+                                <td>
+                                    <a class="friend_name name" href="/profile/<%=friend.email%>">
+                                        <%= friend.nombre %>
+                                    </a>
+                                </td>
+                            </tr>
+                            <% }); } %>
+                                <!--<tr>
                     <td><img class="friend_image" src="icons/Jigsaw-01.png" alt="Friend_image"></td>
                     <td><a class="friend_name name" href="#"> Jose Luis Ramírez </a></td>
-                </tr>
+                </tr>-->
             </table>
         </div>
         <!--Acaba dinamico-->
-        </div>
+    </div>
     </div>
 </body>
 
