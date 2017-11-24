@@ -16,9 +16,7 @@
             <a href="friends.html"> Amigos </a>
             <a href="#"> Preguntas </a>
             <a href="index.html"> Desconectar </a>
-            <!--Dinamico-->
-            <span> <%= user.puntos %> </span>
-            <!--Acaba dinamico-->
+            <span> <%= user.puntos %> puntos</span>
         </div>
     </div>
     <div class="body-content">
@@ -28,38 +26,29 @@
             <table>
                 <% if (requests.length === 0) { %>
                     <span> No tienes nuevas solicitudes de amistad </span>
-                    <% } else { %>
-                        <% requests.forEach(request => { %>
-                            <tr>
-                                <td><img class="friend_image" src="/icons/Devil-01.png" alt="Friend_image"></td>
-                                <td>
-                                    <a class="friend_name name" href="/profile/<%=request.email%>">
-                                        <%= request.nombre %>
-                                    </a>
-                                </td>
-                                <form action="/resolver_solicitud" method="GET">
-                                    <input type="hidden" name="email" value="<%= request.email %>">
-                                    <input type="hidden" name="aceptada" value="1">
-                                    <td><input class="profile_buttons" type="submit" value="Aceptar"></td>
-                                    <!--<td><input class="profile_buttons" onclick = "location='#'">Aceptar</input></td>-->
-                                </form>
-                                <form action="/resolver_solicitud" method="GET">
-                                    <input type="hidden" name="email" value="<%= request.email %>">
-                                    <input type="hidden" name="aceptada" value="0">
-                                    <td><input class="profile_buttons" type="submit" value="Rechazar"></td>
-                                    <!--<td><input class="profile_buttons" onclick = "location='#'">Aceptar</input></td>-->
-                                </form>
-                            </tr>
-                            <% }); } %>
-                                <!--<tr>
-                    <td><img class="friend_image" src="icons/Diablo-01.png" alt="Friend_image"></td>
-                    <td><a class="friend_name name" href="#"> Pedro Sánchez Gómez </a></td>
-                    <td><button class="profile_buttons" onclick = "location='#'">Aceptar</button></td>
-                    <td><button class="profile_buttons" onclick = "location='#'">Rechazar</button></td>
-                </tr>-->
+                <% } else { 
+                    requests.forEach(request => {%>
+                        <tr>
+                            <td><img class="friend_image" src="/icons/Devil-01.png" alt="Friend_image"></td>
+                            <td>
+                                <a class="friend_name name" href="/profile/<%=request.email%>">
+                                    <%= request.nombre %>
+                                </a>
+                            </td>
+                            <form action="/resolver_solicitud" method="GET">
+                                <input type="hidden" name="email" value="<%= request.email %>">
+                                <input type="hidden" name="aceptada" value="1">
+                                <td><input class="profile_buttons" type="submit" value="Aceptar"></td>
+                            </form>
+                            <form action="/resolver_solicitud" method="GET">
+                                <input type="hidden" name="email" value="<%= request.email %>">
+                                <input type="hidden" name="rechazada" value="0">
+                                <td><input class="profile_buttons" type="submit" value="Rechazar"></td>
+                            </form>
+                        </tr>
+                <% }); } %>
             </table>
         </div>
-        <!--Acaba dinamico-->
         <div class="section-message">Búsqueda de amigos</div>
         <div class="friend_search">
             <form action="/buscar" method="post" id="friend_search_form">
@@ -70,29 +59,23 @@
         </div>
 
         <div class="section-message">Mis amigos</div>
-        <!--Dinamico aqui se muestran los amigos-->
         <div class="friend_table">
             <table>
                 <% if (friends.length === 0) { %>
                     <span> No tienes amigos :/ </span>
-                    <% } else { %>
-                        <% friends.forEach(friend => { %>
-                            <tr>
-                                <td><img class="friend_image" src="/icons/Minion Pig-01.png" alt="Friend_image"></td>
-                                <td>
-                                    <a class="friend_name name" href="/profile/<%=friend.email%>">
-                                        <%= friend.nombre %>
-                                    </a>
-                                </td>
-                            </tr>
-                            <% }); } %>
-                                <!--<tr>
-                    <td><img class="friend_image" src="icons/Jigsaw-01.png" alt="Friend_image"></td>
-                    <td><a class="friend_name name" href="#"> Jose Luis Ramírez </a></td>
-                </tr>-->
+                <% } else {
+                friends.forEach(friend => { %>
+                    <tr>
+                        <td><img class="friend_image" src="/icons/Minion Pig-01.png" alt="Friend_image"></td>
+                        <td>
+                            <a class="friend_name name" href="/profile/<%=friend.email%>">
+                                <%= friend.nombre %>
+                            </a>
+                        </td>
+                    </tr>
+                <% }); } %>
             </table>
         </div>
-        <!--Acaba dinamico-->
     </div>
     </div>
 </body>
