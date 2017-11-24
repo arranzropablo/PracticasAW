@@ -1,41 +1,36 @@
-.request_table, .friend_table {
-	margin-top: 15px;
-	display:flex;
-	justify-content: space-around;
-	flex-direction: column;
-	align-items: center;
-
+.request_table,
+.friend_table {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
 }
 
 table {
-	text-align: center;
-	margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .friend_search {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	flex-wrap: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*flex-wrap: nowrap;*/
 }
 
 .friend_image {
-	width: 80px;
+    width: 80px;
 }
 
 .friend_search_form {
-	display: flex;
+    display: flex;
     justify-content: space-around;
     flex-direction: row;
     align-items: center;
 }
 
-.name {
-	padding-left: 3%;
-	color:black;
-}
-
-a[href="friends.html"]{
+a[href="friends.html"] {
     color: #b4aebb;
     cursor: default;
     pointer-events: none;

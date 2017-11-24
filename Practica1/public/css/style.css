@@ -20,7 +20,7 @@ body {
 
 .body-content {
     background: url("../img/body-background.png");
-    height: 75%;
+    /*height: 75%;*/
     width: 100%;
     position: absolute;
 }
@@ -28,6 +28,11 @@ body {
 a {
     text-decoration: none;
     color: white;
+}
+
+.name {
+    padding-left: 3px;
+    color: black;
 }
 
 a:hover {
@@ -98,7 +103,8 @@ a:hover {
     background-color: #FF00B3;
 }
 
-.profile_name, .friend_name {
+.profile_name,
+.friend_name {
     font-family: GloriaHallelujah;
     font-size: large;
 }

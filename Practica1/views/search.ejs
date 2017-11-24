@@ -20,20 +20,25 @@
         </div>
     </div>
     <div class="body-content">
-        <div class="section-message">Resultados de búsqueda: '<%=busqueda%>'</div>
+        <div class="section-message">Resultados de búsqueda: '
+            <%=busqueda%>'</div>
         <div class="search_table">
             <table>
                 <% resultado.forEach(elem =>{%>
                     <tr>
                         <td><img class="friend_image" src="/icons/Vampire Bat-01.png" alt="Friend_image"></td>
-                        <td><span class="friend_name"> <%= elem.nombre %> </span></td>
                         <td>
-                            <form action="/addFriend/<%=elem.id%>" method="POST" >
-                                <input class="profile_buttons" type="submit" value="Solicitar amistad"/>
+                            <a class="friend_name name" href="/profile/<%=elem.email%>">
+                                <%= elem.nombre %>
+                            </a>
+                        </td>
+                        <td>
+                            <form action="/addFriend/<%=elem.email%>" method="POST">
+                                <input class="profile_buttons" type="submit" value="Solicitar amistad" />
                             </form>
                         </td>
                     </tr>
-                <% });%>
+                    <% });%>
             </table>
         </div>
     </div>

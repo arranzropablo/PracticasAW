@@ -101,6 +101,7 @@ app.get("/resolver_solicitud", (request, response) => {
     });
 });
 
+
 app.get("/buscar", (request, response) => {
     let buscar = request.query.text;
 
@@ -109,12 +110,12 @@ app.get("/buscar", (request, response) => {
         puntos: 50
     }
 
-    daoUsuario.busquedaPorNombre(text, (err, resultado) => {
+    daoUsuario.busquedaPorNombre(buscar, (err, resultado) => {
         if (err) {
             console.log(err);
             response.end();
         } else {
-            response.render("search", { resultado: resultado, user: user });
+            response.render("search", { resultado: resultado, user: user, busqueda: buscar });
         }
     });
 });
@@ -130,7 +131,7 @@ app.post("/procesar_login", (request, response) => {
             response.status(500);
             response.end();
         } else {
-            user.edad=calcularEdad(new Date(), user.fecha_nacimiento);
+            user.edad = calcularEdad(new Date(), user.fecha_nacimiento);
             response.render("profile", { user: user });
         }
     })
@@ -157,50 +158,47 @@ app.post("/procesar_registro", (request, response) => {
         } else {
             //console.log(u);
             let currentDate = new Date();
-            u.edad=calcularEdad(new Date(), u.fecha_nacimiento);
+            u.edad = calcularEdad(new Date(), u.fecha_nacimiento);
             response.render("profile", { user: u });
         }
     })
 });
 
-app.get("/profile", (request,response) => {
-    daoUsuario.getUsuario("alberto@gmail.com", (err, u) =>{
-        if(err){
+app.get("/profile", (request, response) => {
+    daoUsuario.getUsuario("alberto@gmail.com", (err, u) => {
+        if (err) {
             console.log(err);
             response.status(500);
             response.end();
-        }else{
-            u.edad=calcularEdad(new Date(), u.fecha_nacimiento);
+        } else {
+            u.edad = calcularEdad(new Date(), u.fecha_nacimiento);
             response.render("profile", { user: u });
         }
     });
 });
 
-function calcularEdad(currentDate, birth){
+function calcularEdad(currentDate, birth) {
     let birthDate = birth.split("/");
-    if(birthDate[1] < (currentDate.getMonth() + 1)){
+    if (birthDate[1] < (currentDate.getMonth() + 1)) {
         return currentDate.getFullYear() - birthDate[2];
-    }
-    else if(birthDate[1] == (currentDate.getMonth() + 1)){
-        if(birthDate[0] <= currentDate.getDate()){
+    } else if (birthDate[1] == (currentDate.getMonth() + 1)) {
+        if (birthDate[0] <= currentDate.getDate()) {
             return currentDate.getFullYear() - birthDate[2];
-        }
-        else{
+        } else {
             return currentDate.getFullYear() - birthDate[2] - 1;
         }
-    }
-    else if(birthDate[1] > (currentDate.getMonth() + 1)){
+    } else if (birthDate[1] > (currentDate.getMonth() + 1)) {
         return currentDate.getFullYear() - birthDate[2] - 1;
     }
 }
 
 app.post("/addFriend/:id", (request, response) => {
-    daoUsuario.crearSolicitudDeAmistad("alberto@gmail.com", request.params.id, (err, success)=>{
-        if(err){
+    daoUsuario.crearSolicitudDeAmistad("alberto@gmail.com", request.params.id, (err, success) => {
+        if (err) {
             console.log(err);
             response.status(500);
             response.end();
-        }else{
+        } else {
             response.redirect("/");
         }
     });
