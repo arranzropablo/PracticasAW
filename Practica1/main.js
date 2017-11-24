@@ -170,7 +170,7 @@ app.get("/profile", (request,response) => {
             response.status(500);
             response.end();
         }else{
-            u.edad=calcularEdad(new Date(), u.fecha_nacimiento);
+            u.edad=Number(calcularEdad(new Date(), u.fecha_nacimiento));
             response.render("profile", { user: u });
         }
     });
