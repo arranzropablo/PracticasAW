@@ -16,29 +16,26 @@
             <a href="friends.html"> Amigos </a>
             <a href="#"> Preguntas </a>
             <a href="index.html"> Desconectar </a>
-            <!--Dinamico-->
-            <span> 50 pts </span>
-            <!--Acaba dinamico-->
+            <span><%= user.puntos %></span>
         </div>
     </div>
     <div class="body-content">
-        <div class="section-message">Resultados de búsqueda: 'alber'</div>
-        <!--Dinamico aqui se muestran los resultados de la búsqueda-->
+        <div class="section-message">Resultados de búsqueda: '<%=busqueda%>'</div>
         <div class="search_table">
             <table>
-                <tr>
-                    <td><img class="friend_image" src="icons/Vampire Bat-01.png" alt="Friend_image"></td>
-                    <td><span class="friend_name"> Pablo Arranz Ropero </span></td>
-                    <td><button class="profile_buttons" onclick = "location='#'">Solicitar amistad</button></td>
-                </tr>
-                <tr>
-                    <td><img class="friend_image" src="icons/Devil-01.png" alt="Friend_image"></td>
-                    <td><span class="friend_name"> Alberto Camino </span></td>
-                    <td><button class="profile_buttons" onclick = "location='#'">Solicitar amistad</button></td>
-                </tr>
+                <% resultado.forEach(elem =>{%>
+                    <tr>
+                        <td><img class="friend_image" src="icons/Vampire Bat-01.png" alt="Friend_image"></td>
+                        <td><span class="friend_name"> <%= elem.nombre %> </span></td>
+                        <td>
+                            <form action="/addFriend/<%=elem.id%>" method="POST" >
+                                <input class="profile_buttons" type="submit" value="Solicitar amistad"/>
+                            </form>
+                        </td>
+                    </tr>
+                <% });%>
             </table>
         </div>
-        <!--Acaba dinamico-->
     </div>
 </body>
 

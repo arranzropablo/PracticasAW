@@ -16,48 +16,39 @@
             <a href="friends.html"> Amigos </a>
             <a href="#"> Preguntas </a>
             <a href="index.html"> Desconectar </a>
-            <!--Dinamico-->
             <span> <%= user.puntos %> puntos</span>
-            <!--Acaba dinamico-->
         </div>
     </div>
     <div class="body-content">
-        <!--Dinamico (aqui puede poner tu perfil o perfil de nosequien, dependiendo si es la vista del usuario logueado o de otro usuario-->
-        <div class="section-message">Tu perfil</div>
-        <!--Acaba dinamico-->
+        <% if (true){%>
+            <!--Aqui hay que mirar las cookies, si estas logeado es esto-->
+            <div class="section-message">Tu perfil</div>
+        <%} else{%>
+            <!-- <div class="section-message">Perfil de <%= user.nombre %></div>             -->
+        <% };%>
+                
+
         <div class="profile_info">
-            <!--Dinamico-->
             <img class="profile_image" src="icons/Devil-01.png" alt="Profile_image">
             <ul class="profile_data">
-                <li class="profile_name">
-                    Nombre:
-                    <%= user.nombre %>
-                </li>
-                <!-- En teoria aqui va la edad, pero no esta en la info. Ya lo pondremos <li>
-                    Edad: <%= user.edad %>> </li> -->
+                <li class="profile_name"><%= user.nombre %></li>
+                <li> <%= user.edad %> años</li>
                 <% if (user.sexo === 'H') { %>
-                    <li>Sexo: Hombre</li>
-                    <% } else if (user.sexo === 'M') { %>
-                        <li>Sexo: Mujer</li>
-                        <% } else { %>
-                            <li>Sexo: Desconocido</li>
-                            <% } %>
-                                <li>
-                                    Nacimiento:
-                                    <%= user.fecha_nacimiento %>
-                                </li>
-                                <li>
-                                    Puntos:
-                                    <%= user.puntos %>
-                                </li>
+                    <li>Hombre</li>
+                <% } else if (user.sexo === 'M') { %>
+                    <li>Mujer</li>
+                <% } else { %>
+                    <li>Desconocido</li>
+                <% } %>
+                <li><%= user.puntos %> puntos</li>
             </ul>
-            <!--Acaba dinamico-->
         </div>
-        <!--Dinamico: Esto solo aparecera si la vista del perfil es la del usuario logueado (ya que no puedes modificar el perfil de otros)-->
+        <% if(true) {%>
+        <!--Si la vista del perfil es la del usuario logueado-->
         <div class="modify_profile">
             <button class="profile_buttons" onclick="location='#'">Modificar perfil</button>
         </div>
-        <!--Acaba dinamico-->
+        <% } %>
     </div>
 </body>
 

@@ -59,12 +59,12 @@ app.post("/procesar_login", (request, response) => {
             response.status(500);
             response.end();
         } else {
-            //console.log(user);
-            //response.redirect(path.join(__dirname, "/profile.html"));
+            user.edad=calcularEdad(new Date(), user.fecha_nacimiento);
             response.render("profile", { user: user });
         }
     })
 });
+
 /**
  * Procesa el formulario de registro del usuario
  */
@@ -85,18 +85,55 @@ app.post("/procesar_registro", (request, response) => {
             response.end();
         } else {
             //console.log(u);
+            let currentDate = new Date();
+            u.edad=calcularEdad(new Date(), u.fecha_nacimiento);
             response.render("profile", { user: u });
         }
     })
 });
 
-/*app.get("/", (request, response) => {
-    response.end("Hola!");
+app.get("/profile", (request,response) => {
+    daoUsuario.getUsuario("alberto@gmail.com", (err, u) =>{
+        if(err){
+            console.log(err);
+            response.status(500);
+            response.end();
+        }else{
+            u.edad=calcularEdad(new Date(), u.fecha_nacimiento);
+            response.render("profile", { user: u });
+        }
+    });
 });
 
-app.get("/index.html", (request, response) => {
-    response.end("Te han redirigido");
-});*/
+function calcularEdad(currentDate, birth){
+    let birthDate = birth.split("/");
+    if(birthDate[1] < (currentDate.getMonth() + 1)){
+        return currentDate.getFullYear() - birthDate[2];
+    }
+    else if(birthDate[1] == (currentDate.getMonth() + 1)){
+        if(birthDate[0] <= currentDate.getDate()){
+            return currentDate.getFullYear() - birthDate[2];
+        }
+        else{
+            return currentDate.getFullYear() - birthDate[2] - 1;
+        }
+    }
+    else if(birthDate[1] > (currentDate.getMonth() + 1)){
+        return currentDate.getFullYear() - birthDate[2] - 1;
+    }
+}
+
+app.post("/addFriend/:id", (request, response) => {
+    daoUsuario.crearSolicitudDeAmistad("alberto@gmail.com", request.params.id, (err, success)=>{
+        if(err){
+            console.log(err);
+            response.status(500);
+            response.end();
+        }else{
+            response.redirect("/");
+        }
+    });
+});
 
 app.listen(3000, (err) => {
     if (err) {
