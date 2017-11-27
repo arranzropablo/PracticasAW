@@ -12,11 +12,11 @@
     <div class="header">
         <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
         <div class="options-user">
-            <a href="profile.html"> Perfil</a>
-            <a href="friends.html"> Amigos </a>
+            <a href="/profile/<%=user.email%>"> Perfil</a>
+            <a href="/friends"> Amigos </a>
             <a href="#"> Preguntas </a>
-            <a href="index.html"> Desconectar </a>
-            <span><%= user.puntos %></span>
+            <a href="/desconectar"> Desconectar </a>
+            <span><%= user.puntos %> puntos</span>
         </div>
     </div>
     <div class="body-content">
@@ -33,9 +33,16 @@
                             </a>
                         </td>
                         <td>
-                            <form action="/addFriend/<%=elem.email%>" method="POST">
-                                <input class="profile_buttons" type="submit" value="Solicitar amistad" />
-                            </form>
+                            <% if (elem.relacion === null) { %>
+                                <form action="/addFriend/<%=elem.email%>" method="POST">
+                                    <input class="profile_buttons" type="submit" value="Solicitar amistad" />
+                                </form>
+                            <% } else { %>
+                                <% if (elem.relacion) { %>
+                                    <span> Solicitud de amistad pendiente </span>
+                                <% } else { %>
+                                    <span> Amigo </span>
+                            <% } }%>
                         </td>
                     </tr>
                     <% });%>

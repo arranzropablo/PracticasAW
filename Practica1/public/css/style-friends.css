@@ -12,13 +12,6 @@ table {
     margin-bottom: 20px;
 }
 
-.friend_search {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /*flex-wrap: nowrap;*/
-}
-
 .friend_image {
     width: 80px;
 }
@@ -27,6 +20,7 @@ table {
     display: flex;
     justify-content: space-around;
     flex-direction: row;
+    padding: 0 33%;
     align-items: center;
 }
 

@@ -12,10 +12,10 @@
     <div class="header">
         <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
         <div class="options-user">
-            <a href="profile.html"> Perfil</a>
-            <a href="friends.html"> Amigos </a>
+            <a href="/profile/<%=user.email%>"> Perfil</a>
+            <a href="/friends"> Amigos </a>
             <a href="#"> Preguntas </a>
-            <a href="index.html"> Desconectar </a>
+            <a href="/desconectar"> Desconectar </a>
             <span> <%= user.puntos %> puntos</span>
         </div>
     </div>
@@ -50,13 +50,12 @@
             </table>
         </div>
         <div class="section-message">Búsqueda de amigos</div>
-        <div class="friend_search">
-            <form action="/buscar" method="get" id="friend_search_form">
-                <label for="email">Búsqueda por nombre:</label>
-                <input type="text" name="text" />
-                <input class="submit" type="submit" value="Buscar" />
-            </form>
-        </div>
+
+        <form action="/buscar" method="get" class="friend_search_form">
+            <label for="email">Búsqueda por nombre:</label>
+            <input type="text" name="text" />
+            <input class="submit" type="submit" value="Buscar" />
+        </form>
 
         <div class="section-message">Mis amigos</div>
         <div class="friend_table">

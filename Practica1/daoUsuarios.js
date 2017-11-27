@@ -216,14 +216,17 @@ class DaoUsuarios {
      * @param {String} nombre cadena de texto para buscar en el nombre de los usuarios
      * @param {Function} callback Funcion que informa del éxito o error
      */
-    busquedaPorNombre(nombre, callback) {
+    busquedaPorNombre(nombre, loguedUser, callback) {
         this.pool.getConnection((err, connection) => {
             if (err) {
                 callback(`Error al obtener la conexión: ${err.message}`, undefined)
             } else {
                 connection.query(
                     //busca que el nombre esté en cualquier posicion del nombre del usuario por ejemplo si metes "lo" te podría devolver "lorena" y "pablo" porque tienen "lo"
-                    "SELECT email, nombre FROM usuarios WHERE nombre LIKE ?", ["%" + nombre + "%"],
+                    "SELECT email, nombre FROM usuarios WHERE email != ? and nombre LIKE ?", [loguedUser, "%" + nombre + "%"],
+                    /*"SELECT email, nombre, pendiente FROM usuarios LEFT JOIN amigos on email=origen or email=destino " +
+                    "WHERE (origen = ? or destino = ? or origen is null or destino is null) " +
+                    "and email != ? and nombre LIKE ?", [loguedUser, loguedUser, loguedUser, "%" + nombre + "%"],*/
                     (err, filas) => {
                         connection.release();
                         if (err) {
@@ -231,8 +234,7 @@ class DaoUsuarios {
                         } else {
                             let usuarios = [];
                             filas.forEach(fila => {
-                                usuarios.push({ nombre: fila.nombre, email: fila.email });
-
+                                usuarios.push({ nombre: fila.nombre, email: fila.email, relacion: null });
                             });
                             callback(null, usuarios);
                         }

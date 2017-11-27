@@ -6,7 +6,8 @@ const daoUsuarios = require("./daoUsuarios");
 const path = require("path");
 const express = require("express");
 const app = express();
-let bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
+const session = require("express-session");
 
 const ficherosEstaticos = path.join(__dirname, "public");
 
@@ -15,6 +16,22 @@ const pool = mysql.createPool({
     user: config.user,
     password: config.password,
     database: config.database
+});
+
+const mysqlSession = require("express-mysql-session");
+const MySQLStore = mysqlSession(session);
+const sessionStore = new MySQLStore({
+    host: "91.121.109.58",
+    user: "usuariop1",
+    password: "accesop1",
+    database: "practica1"
+});
+
+const middlewareSession = session({
+    saveUninitialized: false,
+    secret: "ultrasecretkey",
+    resave: false,
+    store: sessionStore
 });
 
 let daoUsuario = new daoUsuarios.DaoUsuarios(pool);
@@ -32,24 +49,42 @@ let usuario = {
 //Middlewares
 
 function usuarioConectado(request, response, next) {
-    console.log("hola");
-    let conectado = false;
-    if (!conectado) {
+    if (request.session.loguedUser) {
         //response.redirect("/profile.html");
-        response.redirect("/index.html");
+        next()
     } else {
-        next();
+        response.render("/index");
     }
 }
+
+
+//Plantillas
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+//Manejadores de rutas
+
 //app.use(usuarioConectado);
+app.use(middlewareSession);
+
+app.get("/", (request, response) => {
+    response.redirect("/index");
+});
+
 app.use(express.static(ficherosEstaticos));
 
+app.get("/index", (request, response) => {
+    response.render("index");
+});
+
+app.get("/registro", (request, response) => {
+    response.render("registro");
+});
+
 app.get("/friends", (request, response) => {
-    let usuario = "alberto@gmail.com";
+    //let usuario = "alberto@gmail.com";
+    let usuario = request.session.loguedUser;
 
     let user = {
         email: usuario,
@@ -76,19 +111,15 @@ app.get("/friends", (request, response) => {
 });
 
 app.get("/profile/:user", (request, response) => {
-    daoUsuario.getUsuario(request.params.user, (err, user) => {
-        if (err) {
-            console.log(err);
-            response.end();
-        } else {
-            response.render("profile", { user: user });
-        }
-    });
+
+    request.session.profile = request.params.user;
+    response.redirect("/profile");
 });
 
 app.get("/resolver_solicitud", (request, response) => {
     let aceptada = Number(request.query.aceptada);
-    let receptor = "alberto@gmail.com";
+    //let receptor = "alberto@gmail.com";
+    let receptor = request.session.loguedUser;
     let emisor = request.query.email;
 
     daoUsuario.resolverSolicitud(emisor, receptor, aceptada, (err, exito) => {
@@ -103,14 +134,18 @@ app.get("/resolver_solicitud", (request, response) => {
 
 
 app.get("/buscar", (request, response) => {
-    let buscar = request.query.text;
 
+    let buscar = request.query.text;
+    /*if (!buscar) {
+        buscar = request.query.text;
+        request.session.searchtext = buscar;
+    }*/
     let user = {
-        email: "alberto@gmail.com",
-        puntos: 50
+        email: request.session.loguedUser,
+        puntos: request.session.puntos
     }
 
-    daoUsuario.busquedaPorNombre(buscar, (err, resultado) => {
+    daoUsuario.busquedaPorNombre(buscar, request.session.loguedUser, (err, resultado) => {
         if (err) {
             console.log(err);
             response.end();
@@ -118,6 +153,11 @@ app.get("/buscar", (request, response) => {
             response.render("search", { resultado: resultado, user: user, busqueda: buscar });
         }
     });
+});
+
+app.get("/desconectar", (request, response) => {
+    request.session.loguedUser = null;
+    response.redirect("/index");
 });
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -131,8 +171,13 @@ app.post("/procesar_login", (request, response) => {
             response.status(500);
             response.end();
         } else {
-            user.edad = calcularEdad(new Date(), user.fecha_nacimiento);
-            response.render("profile", { user: user });
+            user.edad = Number(calcularEdad(new Date(), user.fecha_nacimiento));
+            request.session.loguedUser = user.email;
+            request.session.puntos = user.puntos;
+            user.myprofile = true;
+            request.session.profile = user.email;
+            response.redirect("/profile");
+            //response.render("profile", { user: user });
         }
     })
 });
@@ -158,20 +203,26 @@ app.post("/procesar_registro", (request, response) => {
         } else {
             //console.log(u);
             let currentDate = new Date();
-            u.edad = calcularEdad(new Date(), u.fecha_nacimiento);
-            response.render("profile", { user: u });
+            u.edad = Number(calcularEdad(new Date(), u.fecha_nacimiento));
+            request.session.loguedUser = u.email;
+            request.session.puntos = user.puntos;
+            request.session.profile = user.email;
+            user.myprofile = true;
+            response.redirect("/profile");
+            //response.render("profile", { user: u });
         }
     })
 });
 
 app.get("/profile", (request, response) => {
-    daoUsuario.getUsuario("alberto@gmail.com", (err, u) => {
+    daoUsuario.getUsuario(request.session.profile, (err, u) => {
         if (err) {
             console.log(err);
             response.status(500);
             response.end();
         } else {
             u.edad = Number(calcularEdad(new Date(), u.fecha_nacimiento));
+            u.myprofile = u.email === request.session.loguedUser;
             response.render("profile", { user: u });
         }
     });
@@ -199,7 +250,7 @@ app.post("/addFriend/:id", (request, response) => {
             response.status(500);
             response.end();
         } else {
-            response.redirect("/");
+            response.redirect("/friends");
         }
     });
 });

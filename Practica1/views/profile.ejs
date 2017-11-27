@@ -12,19 +12,19 @@
     <div class="header">
         <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
         <div class="options-user">
-            <a href="profile.html"> Perfil</a>
-            <a href="friends.html"> Amigos </a>
+            <a href="/profile/<%=user.email%>"> Perfil</a>
+            <a href="/friends"> Amigos </a>
             <a href="#"> Preguntas </a>
-            <a href="index.html"> Desconectar </a>
+            <a href="/desconectar"> Desconectar </a>
             <span> <%= user.puntos %> puntos</span>
         </div>
     </div>
     <div class="body-content">
-        <% if (true){%>
+        <% if (user.myprofile){%>
             <!--Aqui hay que mirar las cookies, si estas logeado es esto-->
             <div class="section-message">Tu perfil</div>
         <%} else{%>
-            <!-- <div class="section-message">Perfil de <%= user.nombre %></div>             -->
+            <div class="section-message">Perfil de <%= user.nombre %></div>
         <% };%>
                 
 
@@ -43,7 +43,7 @@
                 <li><%= user.puntos %> puntos</li>
             </ul>
         </div>
-        <% if(true) {%>
+        <% if(user.myprofile) {%>
         <!--Si la vista del perfil es la del usuario logueado-->
         <div class="modify_profile">
             <button class="profile_buttons" onclick="location='#'">Modificar perfil</button>

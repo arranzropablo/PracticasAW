@@ -1,0 +1,23 @@
+Esta busqueda hay que cambiarla en la busqueda por nombre del dao usuarios: no te busca a ti mismo, y ademas, recoge si
+el usuario que coincide con la búsqueda es tu amigo, tiene una solicitud de amistad pendiente (ya sea tuya o suya) o si
+no son amigos (para que en la plantilla aparezca una cosa u otra)
+
+SELECT email, nombre, pendiente 
+
+FROM usuarios LEFT JOIN amigos on email=origen or email=destino 
+
+WHERE (origen = '?' or destino = '?' or origen is null or destino is null) and email != '?' and nombre LIKE '%?%';
+
+[usuariologueado, usuariologueado, usuariologueado, textoabuscar]
+
+
+Por ejemplo, si buscas 'o' como nombre, logueado como alberto@gmail.com, te devuelve esto:
+
+alalala@gmail.com	Juanjo Perez	null
+jajajaja@gmail.com	Nacho	        null
+jalbe@ergo.com		Juan Gomez	1
+lololo@gmail.com	lololo martin	null
+pero@gmail.com		Pedro Martinez	null
+
+null es que no son amigos ni hay solicitudes de amistad, 0 es que sois amigos y 1 es que o alberto o el otro ha enviado
+la petición de amistad
