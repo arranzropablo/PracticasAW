@@ -29,22 +29,12 @@ const sessionStore = new MySQLStore({
 
 const middlewareSession = session({
     saveUninitialized: false,
-    secret: "ultrasecretkey",
+    secret: "af512FSaw4A",
     resave: false,
     store: sessionStore
 });
 
 let daoUsuario = new daoUsuarios.DaoUsuarios(pool);
-
-let usuario = {
-    email: "jajajaja@gmail.com",
-    nombre: "Nacho",
-    password: "funciona",
-    sexo: "H",
-    fecha_nacimiento: '19/04/1996',
-    imagen_perfil: 'imagen.jpg',
-    puntos: 50
-};
 
 //Plantillas
 
@@ -65,7 +55,7 @@ function restrictLoginTemplate(request, response, next){
 }
 //////////////////////////////////////////////////////////////
 
-app.get("/", restrictLoginTemplate, (request, response) => {
+app.get("", restrictLoginTemplate, (request, response) => {
     response.redirect("/login");
 });
 
@@ -74,16 +64,15 @@ app.get("/login", restrictLoginTemplate, (request, response) => {
 });
 
 app.post("/procesar_login", restrictLoginTemplate, (request, response) => {
-    daoUsuario.loginSuccessful(request.body.email, request.body.password, (err, user) => {
-        if (err) {
-            console.log(err);
-            response.status(500);
-            response.end();
-        } else {
-            request.session.loguedUser = user.email;
-            request.session.profile = user.email;
-            //hacer que loginsuccessful devuelva el email
-            response.redirect("/profile");
+    daoUsuario.login(request.body.email, request.body.password, (err, email) => {
+        if(email){
+            request.session.loguedUser = email;
+            request.session.profile = email;
+            response.redirect("/profile"); 
+        }
+        else {
+            //aqui redirigimos a login pero molaria hacerlo con errorMessage (lo qe viene en err) como en el ej 7
+            response.redirect("/login")
         }
     })
 });
@@ -92,6 +81,7 @@ app.get("/registro", restrictLoginTemplate, (request, response) => {
     response.render("registro");
 });
 
+//no funciona el procesar registro
 app.post("/procesar_registro", restrictLoginTemplate, (request, response) => {
     let user = {
         email: request.body.email,
@@ -132,7 +122,6 @@ app.use((request, response, next) =>{
 ////////////////////////////////////////////////
 
 app.get("/friends", (request, response) => {
-    //let usuario = "alberto@gmail.com";
     let usuario = request.session.loguedUser;
 
     let user = {
@@ -167,7 +156,6 @@ app.get("/profile/:user", (request, response) => {
 
 app.get("/resolver_solicitud", (request, response) => {
     let aceptada = Number(request.query.aceptada);
-    //let receptor = "alberto@gmail.com";
     let receptor = request.session.loguedUser;
     let emisor = request.query.email;
 
@@ -205,7 +193,7 @@ app.get("/buscar", (request, response) => {
 });
 
 app.get("/desconectar", (request, response) => {
-    request.session.loguedUser = null;
+    request.session.destroy();
     response.redirect("/login");
 });
 
