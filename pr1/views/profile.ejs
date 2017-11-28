@@ -1,0 +1,55 @@
+<html lang="es">
+
+<head>
+    <title>Perfil: FaceBluff</title>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="/css/style-profile.css" rel="stylesheet" type="text/css" media="screen">
+</head>
+
+<body>
+    <div class="header">
+        <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
+        <div class="options-user">
+            <a href="/profile/<%=loguedUser%>"> Perfil</a>
+            <a href="/friends"> Amigos </a>
+            <a href="#"> Preguntas </a>
+            <a href="/desconectar"> Desconectar </a>
+            <span> <%= user.puntos %> puntos</span>
+        </div>
+    </div>
+    <div class="body-content">
+        <% if (user.myprofile){%>
+            <!--Aqui hay que mirar las cookies, si estas logeado es esto-->
+            <div class="section-message">Tu perfil</div>
+        <%} else{%>
+            <div class="section-message">Perfil de <%= user.nombre %></div>
+        <% };%>
+                
+
+        <div class="profile_info">
+            <img class="profile_image" src="/icons/Devil-01.png" alt="Profile_image">
+            <ul class="profile_data">
+                <li class="profile_name"><%= user.nombre %></li>
+                <li> <%= user.edad %> años</li>
+                <% if (user.sexo === 'H') { %>
+                    <li>Hombre</li>
+                <% } else if (user.sexo === 'M') { %>
+                    <li>Mujer</li>
+                <% } else { %>
+                    <li>Desconocido</li>
+                <% } %>
+                <li><%= user.puntos %> puntos</li>
+            </ul>
+        </div>
+        <% if(user.myprofile) {%>
+        <!--Si la vista del perfil es la del usuario logueado-->
+        <div class="modify_profile">
+            <button class="profile_buttons" onclick="location='#'">Modificar perfil</button>
+        </div>
+        <% } %>
+    </div>
+</body>
+
+</html>
