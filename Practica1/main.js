@@ -223,7 +223,7 @@ app.get("/profile", (request, response) => {
         } else {
             u.edad = Number(calcularEdad(new Date(), u.fecha_nacimiento));
             u.myprofile = u.email === request.session.loguedUser;
-            response.render("profile", { user: u });
+            response.render("profile", { user: u, loguedUser: request.session.loguedUser });
         }
     });
 });
@@ -244,7 +244,7 @@ function calcularEdad(currentDate, birth) {
 }
 
 app.post("/addFriend/:id", (request, response) => {
-    daoUsuario.crearSolicitudDeAmistad("alberto@gmail.com", request.params.id, (err, success) => {
+    daoUsuario.crearSolicitudDeAmistad(request.session.loguedUser, request.params.id, (err, success) => {
         if (err) {
             console.log(err);
             response.status(500);
