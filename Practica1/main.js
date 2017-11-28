@@ -51,9 +51,9 @@ let usuario = {
 function usuarioConectado(request, response, next) {
     if (request.session.loguedUser) {
         //response.redirect("/profile.html");
-        next()
+        next();
     } else {
-        response.render("/index");
+        response.redirect("/index");
     }
 }
 
@@ -111,6 +111,15 @@ app.get("/friends", (request, response) => {
 });
 
 app.get("/profile/:user", (request, response) => {
+    //Esto porque lo has borrado si si que es así??
+    // daoUsuario.getUsuario(request.params.user, (err, user) => {
+    //     if (err) {
+    //         console.log(err);
+    //         response.end();
+    //     } else {
+    //         response.render("profile", { user: user });
+    //     }
+    // });
 
     request.session.profile = request.params.user;
     response.redirect("/profile");
@@ -140,6 +149,7 @@ app.get("/buscar", (request, response) => {
         buscar = request.query.text;
         request.session.searchtext = buscar;
     }*/
+
     let user = {
         email: request.session.loguedUser,
         puntos: request.session.puntos
@@ -174,6 +184,8 @@ app.post("/procesar_login", (request, response) => {
             user.edad = Number(calcularEdad(new Date(), user.fecha_nacimiento));
             request.session.loguedUser = user.email;
             request.session.puntos = user.puntos;
+
+            //PARA QUE QUIERES EL MYPROFILE??? si luego no haces la comprobación en ningún lado????? 
             user.myprofile = true;
             request.session.profile = user.email;
             response.redirect("/profile");
