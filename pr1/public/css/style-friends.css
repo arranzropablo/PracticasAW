@@ -1,0 +1,31 @@
+.request_table,
+.friend_table {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+}
+
+table {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.friend_image {
+    width: 80px;
+}
+
+.friend_search_form {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    padding: 0 33%;
+    align-items: center;
+}
+
+a[href="friends.html"] {
+    color: #b4aebb;
+    cursor: default;
+    pointer-events: none;
+}

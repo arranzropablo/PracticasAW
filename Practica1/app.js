@@ -51,9 +51,9 @@ let usuario = {
 function usuarioConectado(request, response, next) {
     if (request.session.loguedUser) {
         //response.redirect("/profile.html");
-        next();
+        next()
     } else {
-        response.redirect("/index");
+        response.render("/index");
     }
 }
 
@@ -111,15 +111,6 @@ app.get("/friends", (request, response) => {
 });
 
 app.get("/profile/:user", (request, response) => {
-    //Esto porque lo has borrado si si que es así??
-    // daoUsuario.getUsuario(request.params.user, (err, user) => {
-    //     if (err) {
-    //         console.log(err);
-    //         response.end();
-    //     } else {
-    //         response.render("profile", { user: user });
-    //     }
-    // });
 
     request.session.profile = request.params.user;
     response.redirect("/profile");
@@ -149,7 +140,6 @@ app.get("/buscar", (request, response) => {
         buscar = request.query.text;
         request.session.searchtext = buscar;
     }*/
-
     let user = {
         email: request.session.loguedUser,
         puntos: request.session.puntos
@@ -184,8 +174,6 @@ app.post("/procesar_login", (request, response) => {
             user.edad = Number(calcularEdad(new Date(), user.fecha_nacimiento));
             request.session.loguedUser = user.email;
             request.session.puntos = user.puntos;
-
-            //PARA QUE QUIERES EL MYPROFILE??? si luego no haces la comprobación en ningún lado????? 
             user.myprofile = true;
             request.session.profile = user.email;
             response.redirect("/profile");
@@ -235,7 +223,7 @@ app.get("/profile", (request, response) => {
         } else {
             u.edad = Number(calcularEdad(new Date(), u.fecha_nacimiento));
             u.myprofile = u.email === request.session.loguedUser;
-            response.render("profile", { user: u });
+            response.render("profile", { user: u, loguedUser: request.session.loguedUser });
         }
     });
 });
@@ -256,7 +244,7 @@ function calcularEdad(currentDate, birth) {
 }
 
 app.post("/addFriend/:id", (request, response) => {
-    daoUsuario.crearSolicitudDeAmistad("alberto@gmail.com", request.params.id, (err, success) => {
+    daoUsuario.crearSolicitudDeAmistad(request.session.loguedUser, request.params.id, (err, success) => {
         if (err) {
             console.log(err);
             response.status(500);
@@ -267,7 +255,7 @@ app.post("/addFriend/:id", (request, response) => {
     });
 });
 
-app.listen(3000, (err) => {
+app.listen(3001, (err) => {
     if (err) {
         console.error("No se pudo inicializar el servidor: " +
             err.message);

@@ -1,0 +1,20 @@
+{
+  "name": "practica1",
+  "version": "1.0.0",
+  "description": "Practica 1 de AW",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon main.js",
+    "test": "mocha"
+  },
+  "author": "Alberto Camino & Pablo Arranz",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "express-mysql-session": "^1.2.3",
+    "express-session": "^1.15.6",
+    "mysql": "^2.15.0"
+  }
+}
