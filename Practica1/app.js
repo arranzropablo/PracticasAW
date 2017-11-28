@@ -46,41 +46,90 @@ let usuario = {
     puntos: 50
 };
 
-//Middlewares
-
-function usuarioConectado(request, response, next) {
-    if (request.session.loguedUser) {
-        //response.redirect("/profile.html");
-        next()
-    } else {
-        response.render("/index");
-    }
-}
-
-
 //Plantillas
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-
-//Manejadores de rutas
-
-//app.use(usuarioConectado);
-app.use(middlewareSession);
-
-app.get("/", (request, response) => {
-    response.redirect("/index");
-});
-
 app.use(express.static(ficherosEstaticos));
+app.use(middlewareSession);
+app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get("/index", (request, response) => {
-    response.render("index");
+//Middleware que restringe el acceso a login si estas logeado
+function restrictLoginTemplate(request, response, next){
+    if(request.session.loguedUser){
+        response.redirect("/profile");
+    }
+    else{
+        next();
+    }
+}
+//////////////////////////////////////////////////////////////
+
+app.get("/", restrictLoginTemplate, (request, response) => {
+    response.redirect("/login");
 });
 
-app.get("/registro", (request, response) => {
+app.get("/login", restrictLoginTemplate, (request, response) => {
+    response.render("login");
+});
+
+app.post("/procesar_login", restrictLoginTemplate, (request, response) => {
+    daoUsuario.loginSuccessful(request.body.email, request.body.password, (err, user) => {
+        if (err) {
+            console.log(err);
+            response.status(500);
+            response.end();
+        } else {
+            request.session.loguedUser = user.email;
+            request.session.profile = user.email;
+            //hacer que loginsuccessful devuelva el email
+            response.redirect("/profile");
+        }
+    })
+});
+
+app.get("/registro", restrictLoginTemplate, (request, response) => {
     response.render("registro");
 });
+
+app.post("/procesar_registro", restrictLoginTemplate, (request, response) => {
+    let user = {
+        email: request.body.email,
+        nombre: request.body.complete_name,
+        password: request.body.password,
+        sexo: request.body.gender,
+        fecha_nacimiento: request.body.birth_date,
+        imagen_perfil: 'imagen.jpg',
+        puntos: 50
+    }
+    daoUsuario.nuevoUsuario(user, (err, u) => {
+        if (err) {
+            console.log(err);
+            response.status(500);
+            response.end();
+        } else {
+            //console.log(u);
+            let currentDate = new Date();
+            u.edad = Number(calcularEdad(new Date(), u.fecha_nacimiento));
+            request.session.loguedUser = u;
+            request.session.profile = u;
+            user.myprofile = true;
+            response.redirect("/profile");
+            //response.render("profile", { user: u });
+        }
+    })
+});
+
+//Middleware que restringe el acceso sin logear
+app.use((request, response, next) =>{
+        if (request.session.loguedUser) {
+            response.locals.user = request.session.loguedUser;            
+            next();
+        } else {
+            response.redirect("/login");
+        }
+    });
+////////////////////////////////////////////////
 
 app.get("/friends", (request, response) => {
     //let usuario = "alberto@gmail.com";
@@ -157,61 +206,7 @@ app.get("/buscar", (request, response) => {
 
 app.get("/desconectar", (request, response) => {
     request.session.loguedUser = null;
-    response.redirect("/index");
-});
-
-app.use(bodyParser.urlencoded({ extended: false }));
-/**
- * Procesa el formulario de login del usuario
- */
-app.post("/procesar_login", (request, response) => {
-    daoUsuario.loginSuccessful(request.body.email, request.body.password, (err, user) => {
-        if (err) {
-            console.log(err);
-            response.status(500);
-            response.end();
-        } else {
-            user.edad = Number(calcularEdad(new Date(), user.fecha_nacimiento));
-            request.session.loguedUser = user.email;
-            request.session.puntos = user.puntos;
-            user.myprofile = true;
-            request.session.profile = user.email;
-            response.redirect("/profile");
-            //response.render("profile", { user: user });
-        }
-    })
-});
-
-/**
- * Procesa el formulario de registro del usuario
- */
-app.post("/procesar_registro", (request, response) => {
-    let user = {
-        email: request.body.email,
-        nombre: request.body.complete_name,
-        password: request.body.password,
-        sexo: request.body.genre,
-        fecha_nacimiento: request.body.birth_date,
-        imagen_perfil: 'imagen.jpg',
-        puntos: 50
-    }
-    daoUsuario.nuevoUsuario(user, (err, u) => {
-        if (err) {
-            console.log(err);
-            response.status(500);
-            response.end();
-        } else {
-            //console.log(u);
-            let currentDate = new Date();
-            u.edad = Number(calcularEdad(new Date(), u.fecha_nacimiento));
-            request.session.loguedUser = u.email;
-            request.session.puntos = user.puntos;
-            request.session.profile = user.email;
-            user.myprofile = true;
-            response.redirect("/profile");
-            //response.render("profile", { user: u });
-        }
-    })
+    response.redirect("/login");
 });
 
 app.get("/profile", (request, response) => {
@@ -255,7 +250,7 @@ app.post("/addFriend/:id", (request, response) => {
     });
 });
 
-app.listen(3001, (err) => {
+app.listen(3000, (err) => {
     if (err) {
         console.error("No se pudo inicializar el servidor: " +
             err.message);

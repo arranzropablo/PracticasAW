@@ -4,7 +4,7 @@
   "description": "Practica 1 de AW",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon main.js",
+    "start": "nodemon app.js",
     "test": "mocha"
   },
   "author": "Alberto Camino & Pablo Arranz",
