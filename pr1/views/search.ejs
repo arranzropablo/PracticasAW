@@ -12,11 +12,11 @@
     <div class="header">
         <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
         <div class="options-user">
-            <a href="/profile/<%=user.email%>"> Perfil</a>
+            <a href="/profile/<%=loguedUser.email%>"> Perfil</a>
             <a href="/friends"> Amigos </a>
             <a href="#"> Preguntas </a>
             <a href="/desconectar"> Desconectar </a>
-            <span><%= user.puntos %> puntos</span>
+            <span><%= loguedUser.puntos %> puntos</span>
         </div>
     </div>
     <div class="body-content">

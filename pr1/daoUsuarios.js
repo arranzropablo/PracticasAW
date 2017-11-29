@@ -29,11 +29,28 @@ class DaoUsuarios {
                     ],
                     (err, filas) => {
                         connection.release();
-                        if (err) { callback("No se puede añadir el usuario", undefined); } else { callback(null, usuario); }
+                        if (err) { callback("No se puede añadir el usuario", undefined); } else { callback(null, usuario.email); }
                     }
                 );
             }
 
+        });
+    }
+
+    /**
+     * Comprueba el login
+     * @param {String} email email del user
+     * @param {String} password password del user
+     * @param {Function} callback 
+     */
+    login(email, password, callback) {
+        this.getUsuario(email, (err, data) => {
+            if (err) { callback(err, undefined); return; }
+            if (data.password === password) {
+                callback(null, data.email);
+            } else {
+                callback("La password es incorrecta", undefined);
+            }
         });
     }
 
@@ -61,23 +78,6 @@ class DaoUsuarios {
                         if (err) { callback("No se puede modificar el usuario", undefined); } else { callback(null, usuario); }
                     }
                 );
-            }
-        });
-    }
-
-    /**
-     * Comprueba el login
-     * @param {String} email email del user
-     * @param {String} password password del user
-     * @param {Function} callback 
-     */
-    login(email, password, callback) {
-        this.getUsuario(email, (err, data) => {
-            if (err) { callback(err, undefined); return; }
-            if (data.password === password) {
-                callback(null, data.email);
-            } else {
-                callback("La password es incorrecta", undefined);
             }
         });
     }

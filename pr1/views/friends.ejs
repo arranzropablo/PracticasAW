@@ -12,16 +12,15 @@
     <div class="header">
         <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
         <div class="options-user">
-            <a href="/profile/<%=user.email%>"> Perfil</a>
+            <a href="/profile/<%=loguedUser.email%>"> Perfil</a>
             <a href="/friends"> Amigos </a>
             <a href="#"> Preguntas </a>
             <a href="/desconectar"> Desconectar </a>
-            <span> <%= user.puntos %> puntos</span>
+            <span> <%= loguedUser.puntos %> puntos</span>
         </div>
     </div>
     <div class="body-content">
         <div class="section-message">Solicitudes de amistad</div>
-        <!--Dinamico Aquí se muestran las solicitudes de amistad-->
         <div class="request_table">
             <table>
                 <% if (requests.length === 0) { %>
@@ -35,12 +34,12 @@
                                     <%= request.nombre %>
                                 </a>
                             </td>
-                            <form action="/resolver_solicitud" method="GET">
+                            <form action="/resolver_solicitud" method="POST">
                                 <input type="hidden" name="email" value="<%= request.email %>">
                                 <input type="hidden" name="aceptada" value="1">
                                 <td><input class="profile_buttons" type="submit" value="Aceptar"></td>
                             </form>
-                            <form action="/resolver_solicitud" method="GET">
+                            <form action="/resolver_solicitud" method="POST">
                                 <input type="hidden" name="email" value="<%= request.email %>">
                                 <input type="hidden" name="aceptada" value="0">
                                 <td><input class="profile_buttons" type="submit" value="Rechazar"></td>
