@@ -71,13 +71,13 @@ class DaoUsuarios {
      * @param {String} password password del user
      * @param {Function} callback 
      */
-    loginSuccessful(email, password, callback) {
+    login(email, password, callback) {
         this.getUsuario(email, (err, data) => {
-            if (err) { callback(err, false); return; }
+            if (err) { callback(err, undefined); return; }
             if (data.password === password) {
-                callback(null, data);
+                callback(null, data.email);
             } else {
-                callback("La password es incorrecta", false);
+                callback("La password es incorrecta", undefined);
             }
         });
     }
@@ -139,11 +139,11 @@ class DaoUsuarios {
                 }
             });
         }
-        /**
-         * Busca y recoge los amigos que tiene un usuario en concreto
-         * @param {String} email email del usuario logueado que busca a sus amigos
-         * @param {Function} callback Funcion que informa del éxito o error
-         */
+    /**
+     * Busca y recoge los amigos que tiene un usuario en concreto
+     * @param {String} email email del usuario logueado que busca a sus amigos
+     * @param {Function} callback Funcion que informa del éxito o error
+     */
     getAmigosUsuario(email, callback) {
         this.pool.getConnection((err, connection) => {
             if (err) {
@@ -222,7 +222,6 @@ class DaoUsuarios {
                 callback(`Error al obtener la conexión: ${err.message}`, undefined)
             } else {
                 connection.query(
-                    //busca que el nombre esté en cualquier posicion del nombre del usuario por ejemplo si metes "lo" te podría devolver "lorena" y "pablo" porque tienen "lo"
                     "SELECT email, nombre FROM usuarios WHERE email != ? and nombre LIKE ?", [loguedUser, "%" + nombre + "%"],
                     /*"SELECT email, nombre, pendiente FROM usuarios LEFT JOIN amigos on email=origen or email=destino " +
                     "WHERE (origen = ? or destino = ? or origen is null or destino is null) " +

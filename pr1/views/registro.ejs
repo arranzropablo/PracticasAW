@@ -12,7 +12,7 @@
     <div class="header">
         <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
         <div class="options-user">
-            <a href="/index"> Entrar</a>
+            <a href="/login"> Entrar</a>
             <a href="/registro"> Registrarse </a>
         </div>
     </div>
@@ -20,7 +20,7 @@
         <div class="content">
             <div class="section-message">Registro</div>
             <div class="section-box">
-                <form action="procesar_registro" method="post" id="section-form">
+                <form action="/procesar_registro" method="post" id="section-form">
                     <table>
                         <tr>
                             <td><label for="email">Email:</label></td>
@@ -35,11 +35,11 @@
                             <td><input type="text" name="complete_name"></td>
                         </tr>
                         <tr>
-                            <td><label for="genre">Sexo:</label></td>
+                            <td><label for="gender">Sexo:</label></td>
                             <td>
-                                <input type="radio" name="genre" value="man">Hombre
-                                <input type="radio" name="genre" value="woman">Mujer
-                                <input type="radio" name="genre" value="other">Otro
+                                <input type="radio" name="gender" value="man">Hombre
+                                <input type="radio" name="gender" value="woman">Mujer
+                                <input type="radio" name="gender" value="other">Otro
                             </td>
                         </tr>
                         <tr>
