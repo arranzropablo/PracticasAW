@@ -75,7 +75,7 @@ class DaoUsuarios {
                     ],
                     (err, filas) => {
                         connection.release();
-                        if (err) { callback("No se puede modificar el usuario", undefined); } else { callback(null, usuario); }
+                        if (err) { callback("No se puede modificar el usuario", undefined); } else { callback(null, usuario.email); }
                     }
                 );
             }
@@ -222,7 +222,10 @@ class DaoUsuarios {
                 callback(`Error al obtener la conexión: ${err.message}`, undefined)
             } else {
                 connection.query(
-                    "SELECT email, nombre FROM usuarios WHERE email != ? and nombre LIKE ?", [loguedUser, "%" + nombre + "%"],
+                    "SELECT email, nombre FROM usuarios WHERE email != ? and nombre LIKE ? and email not in "+
+                    "(select origen from amigos where destino=?) and email not in "+
+                    "(select destino from amigos where origen=?)"
+                    ,[loguedUser, "%" + nombre + "%", loguedUser, loguedUser],
                     /*"SELECT email, nombre, pendiente FROM usuarios LEFT JOIN amigos on email=origen or email=destino " +
                     "WHERE (origen = ? or destino = ? or origen is null or destino is null) " +
                     "and email != ? and nombre LIKE ?", [loguedUser, loguedUser, loguedUser, "%" + nombre + "%"],*/

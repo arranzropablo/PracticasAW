@@ -10,6 +10,8 @@
 }
 
 body {
+    background: url("../img/body-background.png");
+    background-repeat: no-repeat;
     margin: 0;
 }
 
@@ -19,8 +21,6 @@ body {
 }
 
 .body-content {
-    background: url("../img/body-background.png");
-    /*height: 75%;*/
     width: 100%;
     position: absolute;
 }

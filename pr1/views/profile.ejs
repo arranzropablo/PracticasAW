@@ -44,10 +44,12 @@
             </ul>
         </div>
         <% if(loguedUser.email == user.email) {%>
-        <!--Si la vista del perfil es la del usuario logueado-->
-        <div class="modify_profile">
-            <button class="profile_buttons" onclick="location='#'">Modificar perfil</button>
-        </div>
+            <!--Si la vista del perfil es la del usuario logueado-->
+            <div class="modify_profile">
+                <form action="modificar_perfil" method="get">
+                    <input class="profile_buttons submit" type="submit" value="Modificar perfil"/>                        
+                </form>
+            </div>
         <% } %>
     </div>
 </body>

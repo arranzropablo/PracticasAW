@@ -1,0 +1,77 @@
+<html lang="es">
+
+<head>
+    <title>Modificar: FaceBluff</title>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="/css/style-register.css" rel="stylesheet" type="text/css" media="screen">
+</head>
+
+<body>
+    <div class="header">
+        <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
+        <div class="options-user">
+            <a href="/profile/<%=loguedUser.email%>"> Perfil</a>
+            <a href="/friends"> Amigos </a>
+            <a href="#"> Preguntas </a>
+            <a href="/desconectar"> Desconectar </a>
+            <span><%= loguedUser.puntos %> puntos</span>
+        </div>
+    </div>
+    <div class="body-content">
+        <div class="content">
+            <div class="section-message">Modificar perfil</div>
+            <div class="section-box">
+                <form action="/modificar_perfil" method="post" id="section-form">
+                    <table>
+                        <tr>
+                            <td><label for="email">Email:</label></td>
+                            <td><input type="text" name="email" value="<%=user.email%>" readonly></td>
+                        </tr>
+                        <tr>
+                            <td><label for="password">Contraseña:</label></td>
+                            <td><input type="password" name="password" value="<%=user.password%>"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="complete_name">Nombre completo:</label></td>
+                            <td><input type="text" name="complete_name" value="<%=user.nombre%>"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="gender">Sexo:</label></td>
+                            <td>
+                                <% if(user.sexo == 'H'){%>
+                                    <input type="radio" name="gender" value="man" checked="checked">Hombre
+                                    <input type="radio" name="gender" value="woman">Mujer
+                                    <input type="radio" name="gender" value="other">Otro
+                                <% } else if(user.sexo == 'M'){%>
+                                    <input type="radio" name="gender" value="man">Hombre
+                                    <input type="radio" name="gender" value="woman" checked="checked">Mujer
+                                    <input type="radio" name="gender" value="other">Otro
+                                <% } else {%>
+                                    <input type="radio" name="gender" value="man">Hombre
+                                    <input type="radio" name="gender" value="woman">Mujer
+                                    <input type="radio" name="gender" value="other" checked="checked">Otro
+                                <% } %>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="birth_date">Fecha nacimiento:</label></td>
+                            <td><input type="text" name="birth_date" placeholder="dd/mm/aaaa" value="<%=user.fecha_nacimiento%>"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="profile_image">Imagen de perfil:</label></td>
+                            <td><input type="file" name="profile_image"></td>
+                        </tr>
+
+                    </table>
+                    <input class="submit" type="submit" value="Modificar">
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>

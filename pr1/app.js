@@ -158,6 +158,44 @@ app.get("/profile", (request, response) => {
     });
 });
 
+app.get("/modificar_perfil", (request, response) => {
+    daoUsuario.getUsuario(app.locals.loguedUser.email, (err, user) => {
+        if (user) {
+            app.locals.loguedUser ={
+                email: user.email,
+                puntos: user.puntos
+            }
+            response.render("modificar", { user: user });
+        } else {
+            console.log(err);
+            response.status(500);
+            response.end();
+            //aqui estaria guay redirigir a error
+            //response.redirect("/error")
+        }
+    });
+});
+
+app.post("/modificar_perfil", (request, response) => {
+    let user = {
+        email: request.body.email,
+        nombre: request.body.complete_name,
+        password: request.body.password,
+        sexo: request.body.gender,
+        fecha_nacimiento: request.body.birth_date,
+        imagen_perfil: 'imagen.jpg',
+    }
+    daoUsuario.modificarUsuario(user, (err, email) => {
+        if (email) {
+            request.session.profile = email;
+            response.redirect("/profile");
+        } else {
+            //aqui redirigimos a modificar perfil pero molaria hacerlo con errorMessage (lo qe viene en err) como en el ej 7
+            response.redirect("/modificar_perfil")
+        }
+    })
+});
+
 app.get("/friends", (request, response) => {
     
     daoUsuario.getUsuario(app.locals.loguedUser.email, (err, user) => {
@@ -213,9 +251,10 @@ app.post("/resolver_solicitud", (request, response) => {
 app.get("/buscar", (request, response) => {
 
     let buscar = request.query.text;
-    if(buscar){
+    if(buscar && buscar != " "){
         daoUsuario.busquedaPorNombre(buscar, app.locals.loguedUser.email, (err, resultado) => {
-            //hacer que esta funcion no muestre los usuarios que ya tenemos agregados o pendientes
+            //preguntar si solo tenemos qe mostrar los usuarios a los que podemos hacer una petición
+
             if (err) {
                 console.log(err);
                 response.end();
@@ -227,6 +266,7 @@ app.get("/buscar", (request, response) => {
     else{
         //aqui lo mismo, molaria renderizar con error msg
         console.log("Introduce algo que buscar");
+        response.redirect("/friends");
     }
 });
 
@@ -243,6 +283,8 @@ app.post("/addFriend/:id", (request, response) => {
 });
 
 app.get("/desconectar", (request, response) => {
+    //preguntar si se puede hacer un borrado de sesión en cierre "forzado" de la aplicación o como manejamos eso
+    //aunqe creo qe teniendo el logued user siempre en locals no pasa nada, seria si estuviera en sesion
     request.session.destroy();
     app.locals.loguedUser = null;
     response.redirect("/login");
@@ -271,42 +313,3 @@ function calcularEdad(currentDate, birth) {
         return currentDate.getFullYear() - birthDate[2] - 1;
     }
 }
-
-//daoUsuario.nuevoUsuario(usuario, x => { console.log(x) });
-//modificarUsuario(usuario, x => {
-//    console.log(x);
-//});
-
-/*getUsuario("alberto@gmail.com", (x, y) => {
-    console.log(x);
-    console.log(y);
-});*/
-
-/*sumarPuntos("alberto@gmail.com", 100, (x, y) => {
-    console.log(x);
-    console.log(y);
-});*/
-
-/*crearSolicitudDeAmistad("nacho@gmail.com", "julia@gmail.com", (x, y) => {
-    console.log(x + " " + y);
-});*/
-
-/*getSolicitudesDeAmistad("julia@gmail.com", (x, y) => {
-    console.log(x);
-    console.log(y);
-});*/
-
-/*resolverSolicitud("nacho@gmail.com", "alberto@gmail.com", 0, (x, y) => {
-    console.log(x);
-    console.log(y);
-});*/
-
-/*busquedaPorNombre("o", (x, y) => {
-    console.log(x);
-    console.log(y);
-});*/
-
-/*getAmigosUsuario("julia@gmail.com", (x, y) => {
-    console.log(x);
-    console.log(y);
-});*/
