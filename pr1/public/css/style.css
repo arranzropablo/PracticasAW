@@ -108,3 +108,11 @@ a:hover {
     font-family: GloriaHallelujah;
     font-size: large;
 }
+
+.generic_table {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+}

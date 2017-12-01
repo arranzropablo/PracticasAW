@@ -1,0 +1,18 @@
+.question{
+    background-color: #d1ad86a8;
+    color: #AA68B3;
+    width: 40%;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+table {
+    margin-bottom: 20px;
+}
+
+a[href="/questions"] {
+    color: #b4aebb;
+    cursor: default;
+    pointer-events: none;
+}

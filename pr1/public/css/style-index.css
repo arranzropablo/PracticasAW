@@ -10,7 +10,7 @@ label{
     color: white;
 }
 
-a[href="index.html"]{
+a[href="/index"]{
     color: #b4aebb;
     cursor: default;
     pointer-events: none;

@@ -21,7 +21,7 @@
 	align-items: center;
 }
 
-a[href="profile.html"]{
+a[href="/profile"]{
     color: #b4aebb;
     cursor: default;
     pointer-events: none;

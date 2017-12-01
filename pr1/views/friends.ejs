@@ -14,14 +14,14 @@
         <div class="options-user">
             <a href="/profile/<%=loguedUser.email%>"> Perfil</a>
             <a href="/friends"> Amigos </a>
-            <a href="#"> Preguntas </a>
+            <a href="/questions"> Preguntas </a>
             <a href="/desconectar"> Desconectar </a>
             <span> <%= loguedUser.puntos %> puntos</span>
         </div>
     </div>
     <div class="body-content">
         <div class="section-message">Solicitudes de amistad</div>
-        <div class="request_table">
+        <div class="generic_table">
             <table>
                 <% if (requests.length === 0) { %>
                     <span> No tienes nuevas solicitudes de amistad </span>
@@ -57,7 +57,7 @@
         </form>
 
         <div class="section-message">Mis amigos</div>
-        <div class="friend_table">
+        <div class="generic_table">
             <table>
                 <% if (friends.length === 0) { %>
                     <span> No tienes amigos :/ </span>

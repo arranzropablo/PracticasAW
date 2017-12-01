@@ -36,8 +36,6 @@ const middlewareSession = session({
 
 let daoUsuario = new daoUsuarios.DaoUsuarios(pool);
 
-//Plantillas
-
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(ficherosEstaticos));
@@ -46,7 +44,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //Middleware que restringe el acceso a login si estas logeado
 function restrictLoginTemplate(request, response, next) {
-    if (app.locals.loguedUser) {
+    if (request.session.loguedUser) {
         response.redirect("/profile");
     } else {
         next();
@@ -65,7 +63,7 @@ app.get("/login", restrictLoginTemplate, (request, response) => {
 app.post("/procesar_login", restrictLoginTemplate, (request, response) => {
     daoUsuario.login(request.body.email, request.body.password, (err, email) => {
         if (email) {
-            app.locals.loguedUser ={
+            request.session.loguedUser ={
                 email: email,
                 puntos: 0   
             };
@@ -95,12 +93,11 @@ app.post("/procesar_registro", restrictLoginTemplate, (request, response) => {
     }
     daoUsuario.nuevoUsuario(user, (err, email) => {
         if (email) {
-            app.locals.loguedUser = {
+            request.session.loguedUser = {
                 email: email,
                 puntos: 50
                 //se pone a 50 que son los iniciales
             };
-            //preguntar si esta bien qe el logued user este siempre en local
             request.session.profile = email;
             response.redirect("/profile");
         } else {
@@ -112,7 +109,7 @@ app.post("/procesar_registro", restrictLoginTemplate, (request, response) => {
 
 //Middleware que restringe el acceso sin logear
 app.use((request, response, next) => {
-    if (app.locals.loguedUser) {
+    if (request.session.loguedUser) {
         next();
     } else {
         response.redirect("/login");
@@ -130,16 +127,16 @@ app.get("/profile", (request, response) => {
     //y viene con 0 puntos porque no hay de donde sacarlo (antes también) por lo qe hace falta pillar los pntos
     //si quieres ahorrarte esta consulta podemos hacer que login en vez de solo correo devuelva un usuario con
     //correo y puntos (asegurarse despues de que funciona)
-    daoUsuario.getUsuario(app.locals.loguedUser.email, (err, user) => {
+    daoUsuario.getUsuario(request.session.loguedUser.email, (err, user) => {
         if (user) {
-            app.locals.loguedUser ={
+            request.session.loguedUser ={
                 email: user.email,
                 puntos: user.puntos
             }
             daoUsuario.getUsuario(request.session.profile, (err, user) => {
                 if (user) {
                     user.edad = Number(calcularEdad(new Date(), user.fecha_nacimiento));
-                    response.render("profile", { user: user });
+                    response.render("profile", { user: user, loguedUser: request.session.loguedUser });
                 } else {
                     console.log(err);
                     response.status(500);
@@ -159,13 +156,13 @@ app.get("/profile", (request, response) => {
 });
 
 app.get("/modificar_perfil", (request, response) => {
-    daoUsuario.getUsuario(app.locals.loguedUser.email, (err, user) => {
+    daoUsuario.getUsuario(request.session.loguedUser.email, (err, user) => {
         if (user) {
-            app.locals.loguedUser ={
+            request.session.loguedUser ={
                 email: user.email,
                 puntos: user.puntos
             }
-            response.render("modificar", { user: user });
+            response.render("modificar", { user: user, loguedUser: request.session.loguedUser });
         } else {
             console.log(err);
             response.status(500);
@@ -174,6 +171,15 @@ app.get("/modificar_perfil", (request, response) => {
             //response.redirect("/error")
         }
     });
+});
+
+app.get("/questions", (request, response) =>{
+    let preguntas = [{texto: "hola"}];
+    response.render("questions", { loguedUser: request.session.loguedUser, resultado: preguntas});    
+});
+
+app.get("/addQuestion", (request, response)=>{
+    response.render("questions", { loguedUser: request.session.loguedUser });        
 });
 
 app.post("/modificar_perfil", (request, response) => {
@@ -198,24 +204,24 @@ app.post("/modificar_perfil", (request, response) => {
 
 app.get("/friends", (request, response) => {
     
-    daoUsuario.getUsuario(app.locals.loguedUser.email, (err, user) => {
+    daoUsuario.getUsuario(request.session.loguedUser.email, (err, user) => {
         if (user) {
-            app.locals.loguedUser ={
+            request.session.loguedUser ={
                 email: user.email,
                 puntos: user.puntos
             }
             
-            daoUsuario.getSolicitudesDeAmistad(app.locals.loguedUser.email, (err, requests) => {
+            daoUsuario.getSolicitudesDeAmistad(request.session.loguedUser.email, (err, requests) => {
                 if (err) {
                     console.log(err);
                     response.end();
                 } else {
-                    daoUsuario.getAmigosUsuario(app.locals.loguedUser.email, (err, friends) => {
+                    daoUsuario.getAmigosUsuario(request.session.loguedUser.email, (err, friends) => {
                         if (err) {
                             console.log(err);
                             response.end();
                         } else {
-                            response.render("friends", { requests: requests, friends: friends });
+                            response.render("friends", { requests: requests, friends: friends, loguedUser: request.session.loguedUser });
                         }
                     });
         
@@ -234,7 +240,7 @@ app.get("/friends", (request, response) => {
 
 app.post("/resolver_solicitud", (request, response) => {
     let aceptada = Number(request.body.aceptada);
-    let receptor = app.locals.loguedUser.email;
+    let receptor = request.session.loguedUser.email;
     let emisor = request.body.email;
 
     daoUsuario.resolverSolicitud(emisor, receptor, aceptada, (err, exito) => {
@@ -252,14 +258,14 @@ app.get("/buscar", (request, response) => {
 
     let buscar = request.query.text;
     if(buscar && buscar != " "){
-        daoUsuario.busquedaPorNombre(buscar, app.locals.loguedUser.email, (err, resultado) => {
+        daoUsuario.busquedaPorNombre(buscar, request.session.loguedUser.email, (err, resultado) => {
             //preguntar si solo tenemos qe mostrar los usuarios a los que podemos hacer una petición
 
             if (err) {
                 console.log(err);
                 response.end();
             } else {
-                response.render("search", { resultado: resultado, busqueda: buscar });
+                response.render("search", { resultado: resultado, busqueda: buscar, loguedUser: request.session.loguedUser });
             }
         });
     }
@@ -271,7 +277,7 @@ app.get("/buscar", (request, response) => {
 });
 
 app.post("/addFriend/:id", (request, response) => {
-    daoUsuario.crearSolicitudDeAmistad(app.locals.loguedUser.email, request.params.id, (err, success) => {
+    daoUsuario.crearSolicitudDeAmistad(request.session.loguedUser.email, request.params.id, (err, success) => {
         if (err) {
             console.log(err);
             response.status(500);
@@ -283,10 +289,7 @@ app.post("/addFriend/:id", (request, response) => {
 });
 
 app.get("/desconectar", (request, response) => {
-    //preguntar si se puede hacer un borrado de sesión en cierre "forzado" de la aplicación o como manejamos eso
-    //aunqe creo qe teniendo el logued user siempre en locals no pasa nada, seria si estuviera en sesion
     request.session.destroy();
-    app.locals.loguedUser = null;
     response.redirect("/login");
 });
 
