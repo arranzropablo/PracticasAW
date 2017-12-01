@@ -3,6 +3,7 @@
 const config = require("./config");
 const mysql = require("mysql");
 const daoUsuarios = require("./daoUsuarios");
+const daoPreguntas = require("./daoPreguntas");
 const path = require("path");
 const express = require("express");
 const app = express();
@@ -35,6 +36,7 @@ const middlewareSession = session({
 });
 
 let daoUsuario = new daoUsuarios.DaoUsuarios(pool);
+let daoPregunta = new daoPreguntas.DaoPreguntas(pool);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -65,7 +67,7 @@ app.post("/procesar_login", restrictLoginTemplate, (request, response) => {
         if (email) {
             request.session.loguedUser ={
                 email: email,
-                puntos: 0   
+                puntos: 0
             };
             //se pone a 0 porque no sabemos cuantos puntos tiene al hacer login, lo buscamos luego en /profile
             request.session.profile = email;
@@ -96,7 +98,7 @@ app.post("/procesar_registro", restrictLoginTemplate, (request, response) => {
             request.session.loguedUser = {
                 email: email,
                 puntos: 50
-                //se pone a 50 que son los iniciales
+                    //se pone a 50 que son los iniciales
             };
             request.session.profile = email;
             response.redirect("/profile");
@@ -121,7 +123,7 @@ app.get("/profile/:user", (request, response) => {
     request.session.profile = request.params.user;
     response.redirect("/profile");
 });
-    
+
 app.get("/profile", (request, response) => {
     //necesitamos hacer este getusuario porque login redirige aqui despues de logear
     //y viene con 0 puntos porque no hay de donde sacarlo (antes también) por lo qe hace falta pillar los pntos
@@ -224,7 +226,7 @@ app.get("/friends", (request, response) => {
                             response.render("friends", { requests: requests, friends: friends, loguedUser: request.session.loguedUser });
                         }
                     });
-        
+
                 }
             });
         } else {
@@ -268,8 +270,7 @@ app.get("/buscar", (request, response) => {
                 response.render("search", { resultado: resultado, busqueda: buscar, loguedUser: request.session.loguedUser });
             }
         });
-    }
-    else{
+    } else {
         //aqui lo mismo, molaria renderizar con error msg
         console.log("Introduce algo que buscar");
         response.redirect("/friends");
