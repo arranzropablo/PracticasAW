@@ -3,6 +3,7 @@
 const config = require("./config");
 const mysql = require("mysql");
 const daoUsuarios = require("./daoUsuarios");
+const daoPreguntas = require("./daoPreguntas");
 const path = require("path");
 const express = require("express");
 const app = express();
@@ -35,6 +36,7 @@ const middlewareSession = session({
 });
 
 let daoUsuario = new daoUsuarios.DaoUsuarios(pool);
+let daoPregunta = new daoPreguntas.DaoPreguntas(pool);
 
 //Plantillas
 
@@ -65,9 +67,9 @@ app.get("/login", restrictLoginTemplate, (request, response) => {
 app.post("/procesar_login", restrictLoginTemplate, (request, response) => {
     daoUsuario.login(request.body.email, request.body.password, (err, email) => {
         if (email) {
-            app.locals.loguedUser ={
+            app.locals.loguedUser = {
                 email: email,
-                puntos: 0   
+                puntos: 0
             };
             //se pone a 0 porque no sabemos cuantos puntos tiene al hacer login, lo buscamos luego en /profile
             request.session.profile = email;
@@ -98,7 +100,7 @@ app.post("/procesar_registro", restrictLoginTemplate, (request, response) => {
             app.locals.loguedUser = {
                 email: email,
                 puntos: 50
-                //se pone a 50 que son los iniciales
+                    //se pone a 50 que son los iniciales
             };
             //preguntar si esta bien qe el logued user este siempre en local
             request.session.profile = email;
@@ -124,7 +126,7 @@ app.get("/profile/:user", (request, response) => {
     request.session.profile = request.params.user;
     response.redirect("/profile");
 });
-    
+
 app.get("/profile", (request, response) => {
     //necesitamos hacer este getusuario porque login redirige aqui despues de logear
     //y viene con 0 puntos porque no hay de donde sacarlo (antes también) por lo qe hace falta pillar los pntos
@@ -132,7 +134,7 @@ app.get("/profile", (request, response) => {
     //correo y puntos (asegurarse despues de que funciona)
     daoUsuario.getUsuario(app.locals.loguedUser.email, (err, user) => {
         if (user) {
-            app.locals.loguedUser ={
+            app.locals.loguedUser = {
                 email: user.email,
                 puntos: user.puntos
             }
@@ -161,7 +163,7 @@ app.get("/profile", (request, response) => {
 app.get("/modificar_perfil", (request, response) => {
     daoUsuario.getUsuario(app.locals.loguedUser.email, (err, user) => {
         if (user) {
-            app.locals.loguedUser ={
+            app.locals.loguedUser = {
                 email: user.email,
                 puntos: user.puntos
             }
@@ -197,14 +199,14 @@ app.post("/modificar_perfil", (request, response) => {
 });
 
 app.get("/friends", (request, response) => {
-    
+
     daoUsuario.getUsuario(app.locals.loguedUser.email, (err, user) => {
         if (user) {
-            app.locals.loguedUser ={
+            app.locals.loguedUser = {
                 email: user.email,
                 puntos: user.puntos
             }
-            
+
             daoUsuario.getSolicitudesDeAmistad(app.locals.loguedUser.email, (err, requests) => {
                 if (err) {
                     console.log(err);
@@ -218,7 +220,7 @@ app.get("/friends", (request, response) => {
                             response.render("friends", { requests: requests, friends: friends });
                         }
                     });
-        
+
                 }
             });
         } else {
@@ -251,7 +253,7 @@ app.post("/resolver_solicitud", (request, response) => {
 app.get("/buscar", (request, response) => {
 
     let buscar = request.query.text;
-    if(buscar && buscar != " "){
+    if (buscar && buscar != " ") {
         daoUsuario.busquedaPorNombre(buscar, app.locals.loguedUser.email, (err, resultado) => {
             //preguntar si solo tenemos qe mostrar los usuarios a los que podemos hacer una petición
 
@@ -262,8 +264,7 @@ app.get("/buscar", (request, response) => {
                 response.render("search", { resultado: resultado, busqueda: buscar });
             }
         });
-    }
-    else{
+    } else {
         //aqui lo mismo, molaria renderizar con error msg
         console.log("Introduce algo que buscar");
         response.redirect("/friends");
