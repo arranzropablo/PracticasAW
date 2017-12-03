@@ -176,8 +176,35 @@ app.get("/modificar_perfil", (request, response) => {
 });
 
 app.get("/questions", (request, response) =>{
-    let preguntas = [{texto: "hola"}];
-    response.render("questions", { loguedUser: request.session.loguedUser, resultado: preguntas});    
+    let preguntasRandom = [];
+    daoPregunta.getPreguntas(request.session.loguedUser.email, (err, preguntas) =>{
+        if (err){
+            console.log(err);
+            response.status(500);
+            response.end();
+            //aqui estaria guay redirigir a error
+            //response.redirect("/error")
+        }
+        else{
+            if(preguntas.length < 6){
+                preguntas.forEach(pregunta=>{
+                    preguntasRandom.push(pregunta);
+                });
+            }else{
+                let randomIndexAdded = [];
+                let i;
+                for(i = 0; i < 5; i++){
+                    let random;
+                    do{
+                        random = Math.floor(Math.random() * (preguntas.length - 0)) + 0;
+                    }while(randomIndexAdded.includes(Number(random)))
+                    randomIndexAdded.push(random);                    
+                    preguntasRandom.push(preguntas[random]);
+                }
+            }
+            response.render("questions", { loguedUser: request.session.loguedUser, resultado: preguntasRandom});                
+        }
+    });
 });
 
 app.get("/addQuestion", (request, response)=>{
