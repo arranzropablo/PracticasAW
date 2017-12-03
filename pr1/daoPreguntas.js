@@ -85,7 +85,7 @@ class DaoPreguntas {
      *          texto: texto con la respuesta
      * }
      */
-    getPreguntas(email, callback) {
+    /*getPreguntas(email, callback) {
         this.pool.getConnection((err, connection) => {
             if (err) {
                 callback(`Error al obtener la conexión: ${err.message}`, undefined)
@@ -123,8 +123,71 @@ class DaoPreguntas {
                     });
             }
         });
+    }*/
+
+    /**
+     * Obtiene todas las preguntas de la base de datos (solo el id y el titulo, no las respuestas)
+     * @param {String} email email del usuario conectado, para que no devuelva preguntas que ha respondido ya
+     * @param {Function} callback funcion que devuelve los errores o la lista de preguntas
+     */
+    getPreguntas(email, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`, undefined)
+            } else {
+                connection.query(
+                    "SELECT texto AS pregunta, id FROM preguntas" +
+                    " WHERE id NOT IN (SELECT idPregunta FROM respuestas_usuario WHERE email = ?)" +
+                    " ORDER BY id ASC", [email],
+                    (err, filas) => {
+                        if (err) {
+                            callback(err, undefined);
+                        } else {
+                            let preguntas = [];
+                            filas.forEach(fila => {
+                                preguntas.push({ id: fila.id, texto: fila.pregunta });
+                            });
+                            callback(null, preguntas);
+                        }
+                    });
+            }
+        });
+    }
+
+    /**
+     * Funcion que devuelve una pregunta y sus respuestas asociadas dado un identificador de pregunta
+     * @param {int} id id de la pregunta que se quiere obtener
+     * @param {*} callback funcion que devuelve los errores o la pregunta con sus respuestas
+     */
+    getPregunta(id, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`, undefined)
+            } else {
+                connection.query(
+                    "SELECT idPregunta, preguntas.texto AS pregunta, respuestas.texto AS respuesta, idRespuesta " +
+                    "FROM preguntas JOIN respuestas ON id=idPregunta WHERE idPregunta = ?", [id],
+                    (err, filas) => {
+                        if (err) {
+                            callback(err, undefined);
+                        } else {
+                            let pregunta = {
+                                id: filas[0].idPregunta,
+                                texto: filas[0].pregunta,
+                                respuestas: []
+                            }
+                            filas.forEach(fila => {
+                                pregunta.respuestas.push({ id: fila.idRespuesta, texto: fila.respuesta });
+                            });
+                            callback(null, pregunta);
+                        }
+                    });
+            }
+        });
     }
 }
+
+
 
 module.exports = {
     DaoPreguntas: DaoPreguntas

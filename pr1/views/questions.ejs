@@ -4,8 +4,8 @@
     <title>Preguntas: FaceBluff</title>
     <meta charset="utf-8" />
     <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
-    <link href="/css/style.css" rel="stylesheet" type="text/css" media="screen"/>
-    <link href="/css/style-questions.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="/css/style-questions.css" rel="stylesheet" type="text/css" media="screen" />
 </head>
 
 <body>
@@ -23,15 +23,20 @@
         <div class="section-message">Preguntas seleccionadas aleatoriamente</div>
         <div class="generic_table">
             <%if(resultado){%>
-                <% resultado.forEach(elem => {%>
-                    <a class="question"><%=elem.texto%></a>
-                <% });%>
-            <%}%>
+                <% if (resultado.length == 0) {%>
+                    <span>No te quedan preguntas por responder. ¡Crea una nueva!</span>
+                    <%} %>
+                        <% resultado.forEach(elem => {%>
+                            <a class="question" href="/getpregunta/<%=elem.id%>">
+                                <%=elem.texto%>
+                            </a>
+                            <% });%>
+                                <%}%>
         </div>
         <div class="section-message">¡Añade tus preguntas!</div>
         <div class="generic_table">
             <form action="addQuestion" method="get">
-                <input type="submit" class="submit" value="Crear nueva pregunta"/>
+                <input type="submit" class="submit" value="Crear nueva pregunta" />
             </form>
         </div>
     </div>

@@ -65,7 +65,7 @@ app.get("/login", restrictLoginTemplate, (request, response) => {
 app.post("/procesar_login", restrictLoginTemplate, (request, response) => {
     daoUsuario.login(request.body.email, request.body.password, (err, email) => {
         if (email) {
-            request.session.loguedUser ={
+            request.session.loguedUser = {
                 email: email,
                 puntos: 0
             };
@@ -131,7 +131,7 @@ app.get("/profile", (request, response) => {
     //correo y puntos (asegurarse despues de que funciona)
     daoUsuario.getUsuario(request.session.loguedUser.email, (err, user) => {
         if (user) {
-            request.session.loguedUser ={
+            request.session.loguedUser = {
                 email: user.email,
                 puntos: user.puntos
             }
@@ -160,7 +160,7 @@ app.get("/profile", (request, response) => {
 app.get("/modificar_perfil", (request, response) => {
     daoUsuario.getUsuario(request.session.loguedUser.email, (err, user) => {
         if (user) {
-            request.session.loguedUser ={
+            request.session.loguedUser = {
                 email: user.email,
                 puntos: user.puntos
             }
@@ -175,43 +175,58 @@ app.get("/modificar_perfil", (request, response) => {
     });
 });
 
-app.get("/questions", (request, response) =>{
+app.get("/questions", (request, response) => {
     let preguntasRandom = [];
-    daoPregunta.getPreguntas(request.session.loguedUser.email, (err, preguntas) =>{
-        if (err){
+    daoPregunta.getPreguntas(request.session.loguedUser.email, (err, preguntas) => {
+        if (err) {
             console.log(err);
             response.status(500);
             response.end();
             //aqui estaria guay redirigir a error
             //response.redirect("/error")
-        }
-        else{
-            if(preguntas.length < 6){
-                preguntas.forEach(pregunta=>{
+        } else {
+            if (preguntas.length < 6) {
+                preguntas.forEach(pregunta => {
                     preguntasRandom.push(pregunta);
                 });
-            }else{
+            } else {
                 let randomIndexAdded = [];
                 let i;
-                for(i = 0; i < 5; i++){
+                for (i = 0; i < 5; i++) {
                     let random;
-                    do{
+                    do {
                         random = Math.floor(Math.random() * (preguntas.length - 0)) + 0;
-                    }while(randomIndexAdded.includes(Number(random)))
-                    randomIndexAdded.push(random);                    
+                    } while (randomIndexAdded.includes(Number(random)))
+                    randomIndexAdded.push(random);
                     preguntasRandom.push(preguntas[random]);
                 }
             }
-            response.render("questions", { loguedUser: request.session.loguedUser, resultado: preguntasRandom});                
+            response.render("questions", { loguedUser: request.session.loguedUser, resultado: preguntasRandom });
         }
     });
 });
 
-app.get("/addQuestion", (request, response)=>{
-    response.render("questions", { loguedUser: request.session.loguedUser });        
+app.get("/getpregunta/:id", (request, response) => {
+    let id = request.params.id;
+
+    daoPregunta.getPregunta(id, (err, pregunta) => {
+        if (err) {
+            console.log(err);
+            response.status = 500;
+            response.end();
+        } else {
+            //response.render("question", {question: pregunta});
+            response.end("correcto");
+        }
+    })
+
 });
 
-app.post("/modificar_perfil", (request, response) => {
+app.get("/addQuestion", (request, response) => {
+    response.render("questions", { loguedUser: request.session.loguedUser });
+});
+
+app.post("/modificar", (request, response) => {
     let user = {
         email: request.body.email,
         nombre: request.body.complete_name,
@@ -232,14 +247,14 @@ app.post("/modificar_perfil", (request, response) => {
 });
 
 app.get("/friends", (request, response) => {
-    
+
     daoUsuario.getUsuario(request.session.loguedUser.email, (err, user) => {
         if (user) {
-            request.session.loguedUser ={
+            request.session.loguedUser = {
                 email: user.email,
                 puntos: user.puntos
             }
-            
+
             daoUsuario.getSolicitudesDeAmistad(request.session.loguedUser.email, (err, requests) => {
                 if (err) {
                     console.log(err);
@@ -286,7 +301,7 @@ app.post("/resolver_solicitud", (request, response) => {
 app.get("/buscar", (request, response) => {
 
     let buscar = request.query.text;
-    if(buscar && buscar != " "){
+    if (buscar && buscar != " ") {
         daoUsuario.busquedaPorNombre(buscar, request.session.loguedUser.email, (err, resultado) => {
             //preguntar si solo tenemos qe mostrar los usuarios a los que podemos hacer una petición
 

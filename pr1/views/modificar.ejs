@@ -23,7 +23,7 @@
         <div class="content">
             <div class="section-message">Modificar perfil</div>
             <div class="section-box">
-                <form action="/modificar_perfil" method="post" id="section-form">
+                <form action="/modificar" method="post" id="section-form">
                     <table>
                         <tr>
                             <td><label for="email">Email:</label></td>
@@ -41,19 +41,19 @@
                             <td><label for="gender">Sexo:</label></td>
                             <td>
                                 <% if(user.sexo == 'H'){%>
-                                    <input type="radio" name="gender" value="man" checked="checked">Hombre
-                                    <input type="radio" name="gender" value="woman">Mujer
-                                    <input type="radio" name="gender" value="other">Otro
-                                <% } else if(user.sexo == 'M'){%>
-                                    <input type="radio" name="gender" value="man">Hombre
-                                    <input type="radio" name="gender" value="woman" checked="checked">Mujer
-                                    <input type="radio" name="gender" value="other">Otro
-                                <% } else {%>
-                                    <input type="radio" name="gender" value="man">Hombre
-                                    <input type="radio" name="gender" value="woman">Mujer
-                                    <input type="radio" name="gender" value="other" checked="checked">Otro
-                                <% } %>
-                                
+                                    <input type="radio" name="gender" value="H" checked="checked">Hombre
+                                    <input type="radio" name="gender" value="M">Mujer
+                                    <input type="radio" name="gender" value="O">Otro
+                                    <% } else if(user.sexo == 'M'){%>
+                                        <input type="radio" name="gender" value="H">Hombre
+                                        <input type="radio" name="gender" value="M" checked="checked">Mujer
+                                        <input type="radio" name="gender" value="O">Otro
+                                        <% } else {%>
+                                            <input type="radio" name="gender" value="H">Hombre
+                                            <input type="radio" name="gender" value="M">Mujer
+                                            <input type="radio" name="gender" value="O" checked="checked">Otro
+                                            <% } %>
+
                             </td>
                         </tr>
                         <tr>
