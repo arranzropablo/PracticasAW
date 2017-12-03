@@ -12,7 +12,7 @@
     <div class="header">
         <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
         <div class="options-user">
-            <a href="/profile/<%=loguedUser.email%>"> Perfil</a>
+            <a href="/profile/user/<%=loguedUser.email%>"> Perfil</a>
             <a href="/friends"> Amigos </a>
             <a href="/questions"> Preguntas </a>
             <a href="/desconectar"> Desconectar </a>
@@ -46,7 +46,7 @@
         <% if(loguedUser.email == user.email) {%>
             <!--Si la vista del perfil es la del usuario logueado-->
             <div class="modify_profile">
-                <form action="modificar_perfil" method="get">
+                <form action="profile/modificar" method="get">
                     <input class="profile_buttons submit" type="submit" value="Modificar perfil"/>                        
                 </form>
             </div>

@@ -21,7 +21,7 @@
 	align-items: center;
 }
 
-a[href="/profile"]{
+a[href^="/profile/user"]{
     color: #b4aebb;
     cursor: default;
     pointer-events: none;
