@@ -139,11 +139,11 @@ class DaoUsuarios {
                 }
             });
         }
-    /**
-     * Busca y recoge los amigos que tiene un usuario en concreto
-     * @param {String} email email del usuario logueado que busca a sus amigos
-     * @param {Function} callback Funcion que informa del éxito o error
-     */
+        /**
+         * Busca y recoge los amigos que tiene un usuario en concreto
+         * @param {String} email email del usuario logueado que busca a sus amigos
+         * @param {Function} callback Funcion que informa del éxito o error
+         */
     getAmigosUsuario(email, callback) {
         this.pool.getConnection((err, connection) => {
             if (err) {
@@ -164,8 +164,8 @@ class DaoUsuarios {
                             connection.query(
                                 "SELECT destino, nombre FROM amigos JOIN usuarios ON destino=email WHERE pendiente=0 AND origen=?", [email],
                                 (err, resultado) => {
+                                    connection.release();
                                     if (err) {
-                                        connection.release();
                                         callback(`Ha habido un error ${err.message}`, undefined);
                                     } else {
                                         resultado.forEach(fila => {
@@ -222,10 +222,9 @@ class DaoUsuarios {
                 callback(`Error al obtener la conexión: ${err.message}`, undefined)
             } else {
                 connection.query(
-                    "SELECT email, nombre FROM usuarios WHERE email != ? and nombre LIKE ? and email not in "+
-                    "(select origen from amigos where destino=?) and email not in "+
-                    "(select destino from amigos where origen=?)"
-                    ,[loguedUser, "%" + nombre + "%", loguedUser, loguedUser],
+                    "SELECT email, nombre FROM usuarios WHERE email != ? and nombre LIKE ? and email not in " +
+                    "(select origen from amigos where destino=?) and email not in " +
+                    "(select destino from amigos where origen=?)", [loguedUser, "%" + nombre + "%", loguedUser, loguedUser],
                     /*"SELECT email, nombre, pendiente FROM usuarios LEFT JOIN amigos on email=origen or email=destino " +
                     "WHERE (origen = ? or destino = ? or origen is null or destino is null) " +
                     "and email != ? and nombre LIKE ?", [loguedUser, loguedUser, loguedUser, "%" + nombre + "%"],*/

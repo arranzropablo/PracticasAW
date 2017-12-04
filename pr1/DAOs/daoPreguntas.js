@@ -22,6 +22,7 @@ class DaoPreguntas {
                         "INSERT INTO preguntas (texto) VALUES (?)", [pregunta.texto],
                         (err, result) => {
                             if (err) {
+                                connection.release();
                                 callback(err);
                             } else {
                                 let lastId = result.insertId;
@@ -63,6 +64,7 @@ class DaoPreguntas {
                 callback(`Error al obtener la conexión: ${err.message}`)
             } else {
                 connection.query("INSERT INTO respuestas_usuario VALUES(?, ?, ?)", [email, idPregunta, idRespuestaElegida], err => {
+                    connection.release();
                     if (err) {
                         callback(err);
                     } else {
@@ -140,6 +142,7 @@ class DaoPreguntas {
                     " WHERE id NOT IN (SELECT idPregunta FROM respuestas_usuario WHERE email = ?)" +
                     " ORDER BY id ASC", [email],
                     (err, filas) => {
+                        connection.release();
                         if (err) {
                             callback(err, undefined);
                         } else {
@@ -168,6 +171,7 @@ class DaoPreguntas {
                     "SELECT idPregunta, preguntas.texto AS pregunta, respuestas.texto AS respuesta, idRespuesta " +
                     "FROM preguntas JOIN respuestas ON id=idPregunta WHERE idPregunta = ?", [id],
                     (err, filas) => {
+                        connection.release();
                         if (err) {
                             callback(err, undefined);
                         } else {

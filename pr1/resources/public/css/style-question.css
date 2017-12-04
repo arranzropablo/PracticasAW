@@ -1,0 +1,9 @@
+ul {
+	list-style-type: none;
+}
+
+.respuestas {
+	background-color: lightgreen;
+	border-radius: 15px;
+	padding: 3% 10%;
+}

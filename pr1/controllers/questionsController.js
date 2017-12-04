@@ -48,10 +48,26 @@ questionsController.get("/nuevapregunta", middlewares.areYouLoged, (request, res
             response.status(500);
             response.end();
         } else {
-            response.redirect("/friends");
+            response.redirect("/questions");
         }
     });
 
+});
+
+questionsController.get("/contestarpregunta", middlewares.areYouLoged, (request, response) => {
+    let idPregunta = Number(request.query.pregunta);
+    let idRespuesta = Number(request.query.respuesta);
+    let email = request.session.loguedUser.email;
+
+    request.daoPreguntas.contestarPregunta(email, idPregunta, idRespuesta, err => {
+        if (err) {
+            console.log(err);
+            response.status = 500;
+            response.end();
+        } else {
+            response.redirect("/questions");
+        }
+    });
 });
 
 questionsController.get("/:id", middlewares.areYouLoged, (request, response) => {
@@ -64,15 +80,13 @@ questionsController.get("/:id", middlewares.areYouLoged, (request, response) => 
             response.end();
         } else {
             //response.render("question", {question: pregunta});
-            response.end("correcto");
+            response.render("question", { loguedUser: request.session.loguedUser, question: pregunta });
         }
     })
 
 
 });
 
-questionsController.get("/add", middlewares.areYouLoged, (request, response) => {
-    response.render("questions", { loguedUser: request.session.loguedUser });
-});
+
 
 module.exports = questionsController;

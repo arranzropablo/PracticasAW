@@ -35,7 +35,7 @@ friendsController.get("/", middlewares.areYouLoged, (request, response) => {
         }
     });
 });
-    
+
 friendsController.post("/resolver", middlewares.areYouLoged, (request, response) => {
     let aceptada = Number(request.body.aceptada);
     let receptor = request.session.loguedUser.email;
@@ -52,7 +52,7 @@ friendsController.post("/resolver", middlewares.areYouLoged, (request, response)
 });
 
 friendsController.get("/buscar", middlewares.areYouLoged, (request, response) => {
-    
+
     let buscar = request.query.text;
     if (buscar && buscar != " ") {
         request.daoUsuarios.busquedaPorNombre(buscar, request.session.loguedUser.email, (err, resultado) => {
@@ -69,7 +69,7 @@ friendsController.get("/buscar", middlewares.areYouLoged, (request, response) =>
         response.redirect("/friends");
     }
 });
-    
+
 friendsController.post("/add/:id", middlewares.areYouLoged, (request, response) => {
     request.daoUsuarios.crearSolicitudDeAmistad(request.session.loguedUser.email, request.params.id, (err, success) => {
         if (err) {

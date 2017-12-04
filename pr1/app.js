@@ -32,16 +32,16 @@ app.use("", authController);
 
 app.use("/profile", userController);
 
-app.use("/questions", questionsController)
+app.use("/questions", questionsController);
 
-app.use("/friends", friendsController)
+app.use("/friends", friendsController);
 
-app.use("/addq", (request, response) => {
+app.use("/ques", (request, response) => {
     let user = {
         email: "alberto@gmail.com",
-        puntos: 200
+        puntos: 300
     };
-    response.render("newQuestion", { loguedUser: user });
+    response.render("question", { loguedUser: user });
 });
 
 app.listen(3000, (err) => {
