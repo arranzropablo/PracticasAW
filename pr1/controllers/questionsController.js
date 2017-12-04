@@ -33,6 +33,27 @@ questionsController.get("/", middlewares.areYouLoged, (request, response) => {
     });
 });
 
+questionsController.get("/nueva", middlewares.areYouLoged, (request, response) => {
+    response.render("newQuestion", { loguedUser: request.session.loguedUser });
+});
+
+questionsController.get("/nuevapregunta", middlewares.areYouLoged, (request, response) => {
+    let pregunta = {
+        texto: request.query.pregunta,
+        respuestas: request.query.respuestas.split("\n")
+    }
+    request.daoPreguntas.anadirPregunta(pregunta, (err) => {
+        if (err) {
+            console.log(err);
+            response.status(500);
+            response.end();
+        } else {
+            response.redirect("/friends");
+        }
+    });
+
+});
+
 questionsController.get("/:id", middlewares.areYouLoged, (request, response) => {
     let id = request.params.id;
 
@@ -46,6 +67,7 @@ questionsController.get("/:id", middlewares.areYouLoged, (request, response) => 
             response.end("correcto");
         }
     })
+
 
 });
 

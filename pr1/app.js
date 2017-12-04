@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, "resources/public")));
 app.use(database.middlewareSession);
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use((request, response, next) =>{
+app.use((request, response, next) => {
     request.daoPreguntas = daoPregunta;
     request.daoUsuarios = daoUsuario;
     next();
@@ -35,6 +35,14 @@ app.use("/profile", userController);
 app.use("/questions", questionsController)
 
 app.use("/friends", friendsController)
+
+app.use("/addq", (request, response) => {
+    let user = {
+        email: "alberto@gmail.com",
+        puntos: 200
+    };
+    response.render("newQuestion", { loguedUser: user });
+});
 
 app.listen(3000, (err) => {
     if (err) {

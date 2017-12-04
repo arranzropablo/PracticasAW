@@ -1,0 +1,42 @@
+<html lang="es">
+
+<head>
+    <title>Perfil: FaceBluff</title>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="/css/style-addQuestion.css" rel="stylesheet" type="text/css" media="screen">
+</head>
+
+<body>
+    <div class="header">
+        <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
+        <div class="options-user">
+            <a href="/profile/user/<%=loguedUser.email%>"> Perfil</a>
+            <a href="/friends"> Amigos </a>
+            <a href="/questions"> Preguntas </a>
+            <a href="/desconectar"> Desconectar </a>
+            <span> <%= loguedUser.puntos %> puntos</span>
+        </div>
+    </div>
+    <div class="body-content">
+        <div class="section-message">¡Añade una nueva pregunta!</div>
+        <div class="instructions"> Añade la pregunta y cada respuesta en una linea</div>
+        <div class="question"> 
+            <form action="/questions/nuevapregunta" method="GET" id="section-form">
+                <table>
+                    <tr>
+                        <td> <label for="pregunta">Pregunta</label> </td>
+                        <td> <input name="pregunta" type="text" size="40" id="pregunta"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="respuestas">Respuestas </label></td>
+                        <td><textarea type="text" rows="10" cols="60" name="respuestas"></textarea>
+                    </tr>
+                </table>
+                <input class="submit" type="submit" value="Guardar pregunta"/>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
