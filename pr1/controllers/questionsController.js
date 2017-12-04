@@ -70,7 +70,7 @@ questionsController.get("/contestarpregunta", middlewares.areYouLoged, (request,
     });
 });
 
-questionsController.get("/:id", middlewares.areYouLoged, (request, response) => {
+questionsController.get("/vistapregunta/:id", middlewares.areYouLoged, (request, response) => {
     let id = request.params.id;
 
     request.daoPreguntas.getPregunta(id, (err, pregunta) => {
