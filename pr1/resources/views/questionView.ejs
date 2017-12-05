@@ -1,0 +1,65 @@
+<html lang="es">
+
+<head>
+    <title>Perfil: FaceBluff</title>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="/css/style-questionView.css" rel="stylesheet" type="text/css" media="screen">
+</head>
+
+<body>
+    <div class="header">
+        <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
+        <div class="options-user">
+            <a href="/profile/user/<%=loguedUser.email%>"> Perfil</a>
+            <a href="/friends"> Amigos </a>
+            <a href="/questions"> Preguntas </a>
+            <a href="/desconectar"> Desconectar </a>
+            <span> <%= loguedUser.puntos %> puntos</span>
+        </div>
+    </div>
+    <div class="body-content">
+        <div class="section-message"><%=question.texto%></div>
+        <div class="answer_question">
+            <% if (!question.contestada) { %>
+                <p> Aun no has respondido a esta pregunta </p>
+                <form action="/questions/vistapregunta/<%=question.id %>" method="GET">
+                    <input class="submit" type="submit" value="Responder"/>
+                </form>
+            <% } else { %>
+                <p> Ya has respondido a esta pregunta </p>
+            <% } %>
+        </div>
+        <div class="section-message">Respuestas de amigos</div>
+        <div class="generic_table">
+            <% if(respuestas.length ===0) { %>
+                <p>Ningun amigo ha respondido a esta pregunta</p>
+            <% } else { %>
+            <table>
+                <% respuestas.forEach(respuesta => { %>
+                <tr>
+                    <td><img class="friend_image" src="/icons/Devil-01.png" alt="Friend_image"></td>
+                    <td><%=respuesta.email%></td>
+                    <td></td>
+                    <% if(respuesta.acertado === undefined) { %>
+                    <form action="/questions/adivinarpregunta/" method="POST">
+                        <input type="hidden" name="email" value="<%=respuesta.email%>">
+                        <input type="hidden" name="pregunta" value="<%=question.id%>">
+                        <td><input class="submit" type="submit" value="Adivinar"/></td>
+                    </form>
+                    <% } else { %>
+                        <% if (respuesta.acertado) { %>
+                            <td class="acertado">Has acertado</td>
+                        <% } else { %>
+                            <td class="fallado">Has fallado</td>
+                        <% } %>
+                    <% } %>
+                </tr>
+                <% }); %>
+            </table>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

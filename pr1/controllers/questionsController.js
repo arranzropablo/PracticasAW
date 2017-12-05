@@ -70,8 +70,68 @@ questionsController.get("/contestarpregunta", middlewares.areYouLoged, (request,
     });
 });
 
+questionsController.get("/pregunta/:id", middlewares.areYouLoged, (request, response) => {
+    let id = Number(request.params.id);
+    let email = request.session.loguedUser.email;
+
+    request.daoPreguntas.getPreguntaSinRespuestas(email, id, (err, pregunta) => {
+        if (err) {
+            console.log(err);
+            response.status(500);
+            response.end();
+        } else {
+            request.daoPreguntas.getAdivinados(email, id, (err, respuestas) => {
+                if (err) {
+                    console.log(err);
+                    response.status(500);
+                    response.end();
+                } else {
+                    response.render("questionView", { loguedUser: request.session.loguedUser, question: pregunta, respuestas: respuestas });
+                }
+            });
+        }
+    });
+
+});
+
+questionsController.post("/adivinarpregunta", (request, response) => {
+    let friend = request.body.email;
+    let pregunta = request.body.pregunta;
+
+    request.daoPreguntas.getPregunta(pregunta, (err, pregunta) => {
+        if (err) {
+            console.log(err);
+            response.status(500);
+            response.end();
+        } else {
+            response.render("adivinarQuestion", {
+                loguedUser: request.session.loguedUser,
+                question: pregunta,
+                email: friend
+            });
+        }
+    });
+});
+
+questionsController.post("/resolveradivinar", (request, response) => {
+    let pregunta = request.body.pregunta;
+    let friend = request.body.friend;
+    let respuesta = request.body.respuesta;
+    let email = request.session.loguedUser.email;
+
+    request.daoPreguntas.adivinarRespuesta(email, friend, pregunta, respuesta, (err, callback) => {
+        if (err) {
+            console.log(err);
+            response.status(500);
+            response.end();
+        } else {
+            response.redirect("/questions/pregunta/" + pregunta);
+        }
+    });
+});
+
 questionsController.get("/vistapregunta/:id", middlewares.areYouLoged, (request, response) => {
-    let id = request.params.id;
+    let id = Number(request.params.id);
 
     request.daoPreguntas.getPregunta(id, (err, pregunta) => {
         if (err) {

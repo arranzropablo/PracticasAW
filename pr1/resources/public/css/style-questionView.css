@@ -1,0 +1,21 @@
+.friend_image {
+    width: 80px;
+}
+
+.answer_question {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+}
+
+.acertado {
+	color:green;
+	font-weight: bold;
+}
+
+.fallado {
+	color:red;
+	font-weight: bold;
+}

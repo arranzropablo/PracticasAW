@@ -139,7 +139,7 @@ class DaoPreguntas {
             } else {
                 connection.query(
                     "SELECT texto AS pregunta, id FROM preguntas" +
-                    " WHERE id NOT IN (SELECT idPregunta FROM respuestas_usuario WHERE email = ?)" +
+                    //" WHERE id NOT IN (SELECT idPregunta FROM respuestas_usuario WHERE email = ?)" +
                     " ORDER BY id ASC", [email],
                     (err, filas) => {
                         connection.release();
@@ -184,6 +184,98 @@ class DaoPreguntas {
                                 pregunta.respuestas.push({ id: fila.idRespuesta, texto: fila.respuesta });
                             });
                             callback(null, pregunta);
+                        }
+                    });
+            }
+        });
+    }
+
+    getPreguntaSinRespuestas(email, id, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`, undefined)
+            } else {
+                connection.query(
+                    "SELECT id, texto, (SELECT idPregunta FROM respuestas_usuario WHERE email = ? and idPregunta = ?) AS contestada " +
+                    "FROM preguntas WHERE id = ?;", [email, id, id],
+                    (err, filas) => {
+                        connection.release();
+                        if (err) {
+                            callback(err, undefined);
+                        } else {
+                            let pregunta = {
+                                id: filas[0].id,
+                                texto: filas[0].texto,
+                                contestada: filas[0].contestada !== null
+                            }
+                            callback(null, pregunta);
+                        }
+                    });
+            }
+        });
+    }
+
+    /**
+     * Registra una respuesta en nombre de otro usuario por parte del usuario logueado
+     * @param {String} email email del usuario logueado
+     * @param {String} emailAmigo email del amigo del que quiere adivinar la respuesta
+     * @param {int} idPregunta id de la pregunta a adivinar
+     * @param {int} idRespuesta id de la respuesta seleccionada por el usuario (no tiene por que ser correcta)
+     * @param {Function} callback funcion que devuelve un error en caso de que algo vaya mal
+     */
+    adivinarRespuesta(email, emailAmigo, idPregunta, idRespuesta, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`)
+            } else {
+                connection.query(
+                    "INSERT INTO respuestas_adivinar VALUES(?, ?, ?, ?)", [email, emailAmigo, idPregunta, idRespuesta],
+                    (err, filas) => {
+                        connection.release();
+                        if (err) {
+                            callback(err);
+                        } else {
+                            callback(null);
+                        }
+                    });
+            }
+        });
+    }
+
+    /**
+     * Devuelve una lista de los amigos que han respondido una pregunta, y si el usuario ha aceptado, ha fallado, o aun no ha respondido por un amigo
+     * @param {String} email email del usuario logueado
+     * @param {*} idPregunta id de la pregunta
+     * @param {*} callback funcion que devuelve el error o un array de objetos de la siguiente forma:
+     * email: email del amigo que ha respondido la pregunta
+     * acertado: null: no hay datos, o un booleano que indica si ha acertado o fallado la respuesta
+     */
+    getAdivinados(email, idPregunta, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`, undefined)
+            } else {
+                connection.query(
+                    "SELECT respuestas_usuario.email AS email, idRespuestaElegida AS respuestaAmigo, idRespuesta AS respuestaUsuario " +
+                    "FROM respuestas_usuario LEFT JOIN respuestas_adivinar USING (idPregunta) " +
+                    "WHERE idPregunta = ? AND respuestas_usuario.email != ? AND " +
+                    "(respuestas_usuario.email IN " +
+                    "(SELECT origen FROM amigos WHERE destino = ? AND pendiente = 0) OR respuestas_usuario.email IN " +
+                    "(SELECT destino FROM amigos WHERE origen = ? AND pendiente = 0))", [idPregunta, email, email, email],
+                    (err, filas) => {
+                        connection.release();
+                        if (err) {
+                            callback(err, undefined);
+                        } else {
+                            let amigos = [];
+                            filas.forEach(fila => {
+                                let acertado;
+                                if (fila.respuestaUsuario) {
+                                    acertado = fila.respuestaUsuario === fila.respuestaAmigo;
+                                }
+                                amigos.push({ email: fila.email, acertado: acertado });
+                            });
+                            callback(null, amigos);
                         }
                     });
             }

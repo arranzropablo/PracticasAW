@@ -1,0 +1,38 @@
+<html lang="es">
+
+<head>
+    <title>Perfil: FaceBluff</title>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="/css/style-question.css" rel="stylesheet" type="text/css" media="screen">
+</head>
+
+<body>
+    <div class="header">
+        <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
+        <div class="options-user">
+            <a href="/profile/user/<%=loguedUser.email%>"> Perfil</a>
+            <a href="/friends"> Amigos </a>
+            <a href="/questions"> Preguntas </a>
+            <a href="/desconectar"> Desconectar </a>
+            <span> <%= loguedUser.puntos %> puntos</span>
+        </div>
+    </div>
+    <div class="body-content">
+        <div class="section-message"><%=question.texto%></div>
+        <div>
+            <form action="/questions/resolveradivinar" method="POST" id="section-form">
+                <input type="hidden" name="pregunta" value="<%=question.id%>"/>
+                <input type="hidden" name="friend" value="<%=email%>"/>
+                <ul class="respuestas">
+                    <% question.respuestas.forEach(respuesta => { %>
+                        <li><input type="radio" name="respuesta" value="<%=respuesta.id%>"><%=respuesta.texto%></li>
+                    <% }); %>
+                </ul>
+                <input class="submit" type="submit" value="Responder Pregunta"/>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

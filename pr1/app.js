@@ -36,15 +36,28 @@ app.use("/questions", questionsController);
 
 app.use("/friends", friendsController);
 
-app.use("/ques", (request, response) => {
+app.use("/ques1", (request, response) => {
     let user = {
         email: "alberto@gmail.com",
         puntos: 300
     };
-    response.render("question", { loguedUser: user });
+    let question = {
+        id: 4,
+        texto: "Hola como estas?",
+        contestada: 1
+    };
+    request.daoPreguntas.getAdivinados("pablo@gmail.com", 4, (err, respuestas) => {
+        if (err) {
+            console.log(err);
+            response.status(500);
+            response.end();
+        } else {
+            response.render("questionView", { loguedUser: user, question: question, respuestas: respuestas });
+        }
+    });
 });
 
-app.listen(3000, (err) => {
+app.listen(3001, (err) => {
     if (err) {
         console.error("No se pudo inicializar el servidor: " +
             err.message);
