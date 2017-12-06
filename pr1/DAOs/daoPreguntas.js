@@ -282,20 +282,37 @@ class DaoPreguntas {
                 callback(`Error al obtener la conexión: ${err.message}`, undefined)
             } else {
                 connection.query(
-                    "SELECT respuestas_usuario.email as emailAmigo, acertada as acertada " +
-                    "FROM amigos JOIN respuestas_usuario ON (respuestas_usuario.email = amigos.origen and amigos.destino = ?) OR (respuestas_usuario.email = amigos.destino and amigos.origen = ?) " +
-                    "LEFT JOIN respuestas_adivinar on emailAmigo = respuestas_usuario.email " +
-                    "WHERE respuestas_usuario.idPregunta = ?", [email, email, idPregunta],
-                    (err, filas) => {
-                        connection.release();
+                    "SELECT email FROM respuestas_usuario WHERE idPregunta = ? AND " +
+                    "email != ? AND (email IN (SELECT origen FROM amigos WHERE destino = ? AND pendiente = 0) " +
+                    "OR email IN (SELECT destino FROM amigos WHERE origen = ? AND pendiente = 0)) " +
+                    "ORDER BY email ASC;", [idPregunta, email, email, email],
+                    (err, filasAmigos) => {
                         if (err) {
-                            callback(err, undefined);
+                            connection.release();
+                            callback(err, undefined)
                         } else {
-                            let amigos = [];
-                            filas.forEach(fila => {
-                                amigos.push({ email: fila.emailAmigo, acertado: fila.acertada });
-                            });
-                            callback(null, amigos);
+                            connection.query(
+                                "SELECT emailAmigo, acertada FROM respuestas_adivinar WHERE email = ? AND idPregunta = ? ORDER BY emailAmigo ASC;", [email, idPregunta],
+                                (err, filasAdivinar) => {
+                                    connection.release();
+                                    if (err) {
+                                        callback(err, undefined);
+                                    } else {
+                                        let j = 0;
+                                        let adivinados = [];
+                                        let acertada;
+                                        for (let i = 0; i < filasAmigos.length; ++i) {
+                                            if (j < filasAdivinar.length && filasAmigos[i].email === filasAdivinar[j].emailAmigo) {
+                                                acertada = filasAdivinar[j].acertada;
+                                            } else {
+                                                acertada = null;
+                                            }
+                                            adivinados.push({ email: filasAmigos[i].email, acertado: acertada });
+                                            if (acertada !== null) { j++; }
+                                        }
+                                        callback(null, adivinados);
+                                    }
+                                });
                         }
                     });
             }
