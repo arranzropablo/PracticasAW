@@ -196,7 +196,7 @@ class DaoPreguntas {
                 callback(`Error al obtener la conexión: ${err.message}`, undefined)
             } else {
                 connection.query(
-                    "SELECT id, texto, (SELECT idPregunta FROM respuestas_usuario WHERE email = ? and idPregunta = ?) AS contestada " +
+                    "SELECT id, (SELECT idPregunta FROM respuestas_usuario WHERE email = ? and idPregunta = ?) AS contestada " +
                     "FROM preguntas WHERE id = ?;", [email, id, id],
                     (err, filas) => {
                         connection.release();
@@ -205,7 +205,6 @@ class DaoPreguntas {
                         } else {
                             let pregunta = {
                                 id: filas[0].id,
-                                texto: filas[0].texto,
                                 contestada: filas[0].contestada !== null
                             }
                             callback(null, pregunta);
@@ -223,19 +222,46 @@ class DaoPreguntas {
      * @param {int} idRespuesta id de la respuesta seleccionada por el usuario (no tiene por que ser correcta)
      * @param {Function} callback funcion que devuelve un error en caso de que algo vaya mal
      */
-    adivinarRespuesta(email, emailAmigo, idPregunta, idRespuesta, callback) {
+    adivinarRespuesta(email, emailAmigo, idPregunta, acertada, callback) {
         this.pool.getConnection((err, connection) => {
             if (err) {
                 callback(`Error al obtener la conexión: ${err.message}`)
             } else {
                 connection.query(
-                    "INSERT INTO respuestas_adivinar VALUES(?, ?, ?, ?)", [email, emailAmigo, idPregunta, idRespuesta],
+                    "INSERT INTO respuestas_adivinar VALUES(?, ?, ?, ?)", [email, emailAmigo, idPregunta, acertada],
                     (err, filas) => {
                         connection.release();
                         if (err) {
                             callback(err);
                         } else {
                             callback(null);
+                        }
+                    });
+            }
+        });
+    }
+
+    /**
+     * Registra una respuesta en nombre de otro usuario por parte del usuario logueado
+     * @param {String} email email del usuario logueado
+     * @param {String} emailAmigo email del amigo del que quiere adivinar la respuesta
+     * @param {int} idPregunta id de la pregunta a adivinar
+     * @param {int} idRespuesta id de la respuesta seleccionada por el usuario (no tiene por que ser correcta)
+     * @param {Function} callback funcion que devuelve un error en caso de que algo vaya mal
+     */
+    getRespuestaUsuario(email, idPregunta, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`)
+            } else {
+                connection.query(
+                    "select idRespuestaElegida from respuestas_usuario where idPregunta = ? and email = ?", [idPregunta, email],
+                    (err, filas) => {
+                        connection.release();
+                        if (err) {
+                            callback(err, undefined);
+                        } else {
+                            callback(null, filas[0].idRespuestaElegida);
                         }
                     });
             }
@@ -256,12 +282,10 @@ class DaoPreguntas {
                 callback(`Error al obtener la conexión: ${err.message}`, undefined)
             } else {
                 connection.query(
-                    "SELECT respuestas_usuario.email AS email, idRespuestaElegida AS respuestaAmigo, idRespuesta AS respuestaUsuario " +
-                    "FROM respuestas_usuario LEFT JOIN respuestas_adivinar USING (idPregunta) " +
-                    "WHERE idPregunta = ? AND respuestas_usuario.email != ? AND " +
-                    "(respuestas_usuario.email IN " +
-                    "(SELECT origen FROM amigos WHERE destino = ? AND pendiente = 0) OR respuestas_usuario.email IN " +
-                    "(SELECT destino FROM amigos WHERE origen = ? AND pendiente = 0))", [idPregunta, email, email, email],
+                    "SELECT respuestas_usuario.email as emailAmigo, acertada as acertada " +
+                    "FROM amigos JOIN respuestas_usuario ON (respuestas_usuario.email = amigos.origen and amigos.destino = ?) OR (respuestas_usuario.email = amigos.destino and amigos.origen = ?) " +
+                    "LEFT JOIN respuestas_adivinar on emailAmigo = respuestas_usuario.email " +
+                    "WHERE respuestas_usuario.idPregunta = ?", [email, email, idPregunta],
                     (err, filas) => {
                         connection.release();
                         if (err) {
@@ -269,11 +293,7 @@ class DaoPreguntas {
                         } else {
                             let amigos = [];
                             filas.forEach(fila => {
-                                let acertado;
-                                if (fila.respuestaUsuario) {
-                                    acertado = fila.respuestaUsuario === fila.respuestaAmigo;
-                                }
-                                amigos.push({ email: fila.email, acertado: acertado });
+                                amigos.push({ email: fila.emailAmigo, acertado: fila.acertada });
                             });
                             callback(null, amigos);
                         }

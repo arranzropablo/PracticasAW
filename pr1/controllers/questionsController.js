@@ -94,7 +94,7 @@ questionsController.get("/pregunta/:id", middlewares.areYouLoged, (request, resp
 
 });
 
-questionsController.post("/adivinarpregunta", (request, response) => {
+questionsController.post("/adivinarpregunta", middlewares.areYouLoged, (request, response) => {
     let friend = request.body.email;
     let pregunta = request.body.pregunta;
 
@@ -113,21 +113,25 @@ questionsController.post("/adivinarpregunta", (request, response) => {
     });
 });
 
-questionsController.post("/resolveradivinar", (request, response) => {
+questionsController.post("/resolveradivinar", middlewares.areYouLoged, (request, response) => {
     let pregunta = request.body.pregunta;
     let friend = request.body.friend;
     let respuesta = request.body.respuesta;
     let email = request.session.loguedUser.email;
 
-    request.daoPreguntas.adivinarRespuesta(email, friend, pregunta, respuesta, (err, callback) => {
-        if (err) {
-            console.log(err);
-            response.status(500);
-            response.end();
-        } else {
-            response.redirect("/questions/pregunta/" + pregunta);
-        }
+    request.daoPreguntas.getRespuestaUsuario(friend, pregunta, (err, callback) => {
+        acertada = Number(respuesta) == callback;
+        request.daoPreguntas.adivinarRespuesta(email, friend, pregunta, acertada, (err, callback) => {
+            if (err) {
+                console.log(err);
+                response.status(500);
+                response.end();
+            } else {
+                response.redirect("/questions/pregunta/" + pregunta);
+            }
+        });
     });
+
 });
 
 questionsController.get("/vistapregunta/:id", middlewares.areYouLoged, (request, response) => {
@@ -139,7 +143,6 @@ questionsController.get("/vistapregunta/:id", middlewares.areYouLoged, (request,
             response.status = 500;
             response.end();
         } else {
-            //response.render("question", {question: pregunta});
             response.render("question", { loguedUser: request.session.loguedUser, question: pregunta });
         }
     })
