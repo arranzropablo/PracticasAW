@@ -28,6 +28,8 @@
                     <% question.respuestas.forEach(respuesta => { %>
                         <li><input type="radio" name="respuesta" value="<%=respuesta.id%>"><%=respuesta.texto%></li>
                     <% }); %>
+                        <li><input type="radio" name="respuesta" value="otra"/><input type="text" name="otro" placeholder="Escribe otra respuesta"/>
+                        <input type="hidden" name="numRespuestas" value="<%=question.respuestas.length%>"/>
                 </ul>
                 <input class="submit" type="submit" value="Responder Pregunta"/>
             </form>
