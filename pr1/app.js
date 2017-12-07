@@ -12,6 +12,7 @@ const middlewares = require("./utils/middlewares");
 const database = require("./utils/database")
 const daoUsuarios = require("./DAOs/daoUsuarios");
 const daoPreguntas = require("./DAOs/daoPreguntas");
+const expressValidator = require("express-validator");
 
 let daoUsuario = new daoUsuarios.DaoUsuarios(database.pool);
 let daoPregunta = new daoPreguntas.DaoPreguntas(database.pool);
@@ -21,6 +22,13 @@ app.set("views", path.join(__dirname, "resources/views"));
 app.use(express.static(path.join(__dirname, "resources/public")));
 app.use(database.middlewareSession);
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressValidator({
+    customValidators:{
+        respuestasNoVacias: respuestas => {
+            return respuestas.split("\n").filter(elem => elem.length > 0 && elem.trim()).length > 0;
+        }
+    }
+}));
 
 app.use((request, response, next) => {
     request.daoPreguntas = daoPregunta;

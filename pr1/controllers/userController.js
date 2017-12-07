@@ -56,23 +56,35 @@ userController.get("/modificar", middlewares.areYouLoged, (request, response) =>
 });
 
 userController.post("/modificar", middlewares.areYouLoged, (request, response) => {
-    let user = {
-        email: request.body.email,
-        nombre: request.body.complete_name,
-        password: request.body.password,
-        sexo: request.body.gender,
-        fecha_nacimiento: request.body.birth_date,
-        imagen_perfil: 'imagen.jpg',
-    }
-    request.daoUsuarios.modificarUsuario(user, (err, email) => {
-        if (email) {
-            request.session.profile = email;
-            response.redirect("/profile");
-        } else {
+    request.checkBody("email", "Email no valido").isEmail();
+    request.checkBody("password", "Contraseña no valida").isLength({min: 4, max: 20});
+    request.checkBody("complete_name", "Nombre no valido").notEmpty();
+    request.checkBody("birth_date", "Fecha de nacimiento no valida").isBefore(new Date().toDateString());
+    request.checkBody("gender", "Selecciona un genero").notEmpty();
+    request.getValidationResult().then(result =>{
+        if(result.isEmpty()){
+            let user = {
+                email: request.body.email,
+                nombre: request.body.complete_name,
+                password: request.body.password,
+                sexo: request.body.gender,
+                fecha_nacimiento: request.body.birth_date,
+                imagen_perfil: 'imagen.jpg',
+            }
+            request.daoUsuarios.modificarUsuario(user, (err, email) => {
+                if (email) {
+                    request.session.profile = email;
+                    response.redirect("/profile");
+                } else {
+                    //aqui redirigimos a modificar perfil pero molaria hacerlo con errorMessage (lo qe viene en err) como en el ej 7
+                    response.redirect("/profile/modificar")
+                }
+            })
+        }else{
             //aqui redirigimos a modificar perfil pero molaria hacerlo con errorMessage (lo qe viene en err) como en el ej 7
             response.redirect("/profile/modificar")
         }
-    })
+    });
 });
 
 module.exports = userController;

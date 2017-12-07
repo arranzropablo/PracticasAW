@@ -38,16 +38,24 @@ questionsController.get("/nueva", middlewares.areYouLoged, (request, response) =
 });
 
 questionsController.get("/nuevapregunta", middlewares.areYouLoged, (request, response) => {
-    let pregunta = {
-        texto: request.query.pregunta,
-        respuestas: request.query.respuestas.split("\n")
-    }
-    request.daoPreguntas.anadirPregunta(pregunta, (err) => {
-        if (err) {
-            console.log(err);
-            response.status(500);
-            response.end();
-        } else {
+    request.checkQuery("pregunta", "Pregunta no valida").isLength({min: 4, max: 20});
+    request.checkQuery("respuestas", "Respuestas no validas").respuestasNoVacias();
+    request.getValidationResult().then(result =>{
+        if(result.isEmpty()){
+            let pregunta = {
+                texto: request.query.pregunta,
+                respuestas: request.query.respuestas.split("\n").filter(elem => elem.length > 0 && elem.trim())
+            }
+            request.daoPreguntas.anadirPregunta(pregunta, (err) => {
+                if (err) {
+                    console.log(err);
+                    response.status(500);
+                    response.end();
+                } else {
+                    response.redirect("/questions");
+                }
+            });
+        }else{
             response.redirect("/questions");
         }
     });
@@ -58,13 +66,20 @@ questionsController.get("/contestarpregunta", middlewares.areYouLoged, (request,
     let idPregunta = Number(request.query.pregunta);
     let idRespuesta = Number(request.query.respuesta);
     let email = request.session.loguedUser.email;
-
-    request.daoPreguntas.contestarPregunta(email, idPregunta, idRespuesta, err => {
-        if (err) {
-            console.log(err);
-            response.status = 500;
-            response.end();
-        } else {
+    request.checkQuery("respuesta", "Selecciona una respuesta").notEmpty();        
+    request.getValidationResult().then(result =>{
+        if(result.isEmpty()){
+            request.daoPreguntas.contestarPregunta(email, idPregunta, idRespuesta, err => {
+                if (err) {
+                    console.log(err);
+                    response.status = 500;
+                    response.end();
+                } else {
+                    response.redirect("/questions");
+                }
+            });
+        }else{
+            //añadir errores etc
             response.redirect("/questions");
         }
     });
@@ -118,20 +133,26 @@ questionsController.post("/resolveradivinar", middlewares.areYouLoged, (request,
     let friend = request.body.friend;
     let respuesta = request.body.respuesta;
     let email = request.session.loguedUser.email;
-
-    request.daoPreguntas.getRespuestaUsuario(friend, pregunta, (err, callback) => {
-        acertada = Number(respuesta) == callback;
-        request.daoPreguntas.adivinarRespuesta(email, friend, pregunta, acertada, (err, callback) => {
-            if (err) {
-                console.log(err);
-                response.status(500);
-                response.end();
-            } else {
-                response.redirect("/questions/pregunta/" + pregunta);
-            }
-        });
+    request.checkBody("respuesta", "Selecciona una respuesta").notEmpty();    
+    request.getValidationResult().then(result =>{
+        if(result.isEmpty()){
+            request.daoPreguntas.getRespuestaUsuario(friend, pregunta, (err, callback) => {
+                acertada = Number(respuesta) == callback;
+                request.daoPreguntas.adivinarRespuesta(email, friend, pregunta, acertada, (err, callback) => {
+                    if (err) {
+                        console.log(err);
+                        response.status(500);
+                        response.end();
+                    } else {
+                        response.redirect("/questions/pregunta/" + pregunta);
+                    }
+                });
+            });
+        }else{
+            //errores y tal
+            response.redirect("/questions/pregunta/" + pregunta);
+        }
     });
-
 });
 
 questionsController.get("/vistapregunta/:id", middlewares.areYouLoged, (request, response) => {
