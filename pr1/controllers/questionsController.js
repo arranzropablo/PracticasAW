@@ -42,6 +42,7 @@ questionsController.get("/nuevapregunta", middlewares.areYouLoged, (request, res
         texto: request.query.pregunta,
         respuestas: request.query.respuestas.split("\n")
     }
+    pregunta.numrespuestas = pregunta.respuestas.length;
     request.daoPreguntas.anadirPregunta(pregunta, (err) => {
         if (err) {
             console.log(err);
@@ -56,10 +57,17 @@ questionsController.get("/nuevapregunta", middlewares.areYouLoged, (request, res
 
 questionsController.get("/contestarpregunta", middlewares.areYouLoged, (request, response) => {
     let idPregunta = Number(request.query.pregunta);
-    let idRespuesta = Number(request.query.respuesta);
+    let otra;
+    let idRespuesta;
+    if (request.query.respuesta === "otra") {
+        otra = request.query.otro;
+        idRespuesta = Number(request.query.numRespuestas) + 1;
+    } else {
+        idRespuesta = Number(request.query.respuesta);
+    }
     let email = request.session.loguedUser.email;
 
-    request.daoPreguntas.contestarPregunta(email, idPregunta, idRespuesta, err => {
+    request.daoPreguntas.contestarPregunta(email, idPregunta, idRespuesta, otra, err => {
         if (err) {
             console.log(err);
             response.status = 500;
@@ -149,7 +157,5 @@ questionsController.get("/vistapregunta/:id", middlewares.areYouLoged, (request,
 
 
 });
-
-
 
 module.exports = questionsController;

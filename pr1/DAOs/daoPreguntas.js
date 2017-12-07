@@ -19,7 +19,7 @@ class DaoPreguntas {
                     callback(`Error al obtener la conexión: ${err.message}`)
                 } else {
                     connection.query(
-                        "INSERT INTO preguntas (texto) VALUES (?)", [pregunta.texto],
+                        "INSERT INTO preguntas (texto, numrespuestas) VALUES (?, ?)", [pregunta.texto, pregunta.numrespuestas],
                         (err, result) => {
                             if (err) {
                                 connection.release();
@@ -58,19 +58,38 @@ class DaoPreguntas {
          * @param {int} idRespuestaElegida id de la respuesta elegida por el usuario
          * @param {Function} callback funcion que devuelve si ha tenido un error la acción
          */
-    contestarPregunta(email, idPregunta, idRespuestaElegida, callback) {
+    contestarPregunta(email, idPregunta, idRespuestaElegida, nuevaRespuesta, callback) {
         this.pool.getConnection((err, connection) => {
             if (err) {
                 callback(`Error al obtener la conexión: ${err.message}`)
             } else {
-                connection.query("INSERT INTO respuestas_usuario VALUES(?, ?, ?)", [email, idPregunta, idRespuestaElegida], err => {
-                    connection.release();
-                    if (err) {
-                        callback(err);
-                    } else {
-                        callback(null);
-                    }
-                });
+                if (nuevaRespuesta) {
+                    connection.query("INSERT INTO respuestas VALUES (?, ?, ?)", [idPregunta, idRespuestaElegida, nuevaRespuesta],
+                        err => {
+                            if (err) {
+                                connection.release();
+                                callback(err);
+                            } else {
+                                connection.query("INSERT INTO respuestas_usuario VALUES(?, ?, ?)", [email, idPregunta, idRespuestaElegida], err => {
+                                    connection.release();
+                                    if (err) {
+                                        callback(err);
+                                    } else {
+                                        callback(null);
+                                    }
+                                });
+                            }
+                        });
+                } else {
+                    connection.query("INSERT INTO respuestas_usuario VALUES(?, ?, ?)", [email, idPregunta, idRespuestaElegida], err => {
+                        connection.release();
+                        if (err) {
+                            callback(err);
+                        } else {
+                            callback(null);
+                        }
+                    });
+                }
             }
         });
     }
