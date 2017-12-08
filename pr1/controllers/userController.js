@@ -20,19 +20,13 @@ userController.get("/", middlewares.areYouLoged, (request, response) => {
                     user.edad = Number(utils.calcularEdad(new Date(), user.fecha_nacimiento));
                     response.render("profile", { user: user, loguedUser: request.session.loguedUser });
                 } else {
-                    console.log(err);
-                    response.status(500);
-                    response.end();
-                    //aqui estaria guay redirigir a error
-                    //response.redirect("/error")
+                    request.session.errors = ["Ha habido un problema", err];
+                    response.redirect("/error");
                 }
             });
         } else {
-            console.log(err);
-            response.status(500);
-            response.end();
-            //aqui estaria guay redirigir a error
-            //response.redirect("/error")
+            request.session.errors = ["Ha habido un problema", err];
+            response.redirect("/error");
         }
     });
 });
@@ -46,11 +40,8 @@ userController.get("/modificar", middlewares.areYouLoged, (request, response) =>
             }
             response.render("modificar", { user: user, loguedUser: request.session.loguedUser });
         } else {
-            console.log(err);
-            response.status(500);
-            response.end();
-            //aqui estaria guay redirigir a error
-            //response.redirect("/error")
+            request.session.errors = ["Ha habido un problema", err];
+            response.redirect("/error");
         }
     });
 });
@@ -76,13 +67,16 @@ userController.post("/modificar", middlewares.areYouLoged, (request, response) =
                     request.session.profile = email;
                     response.redirect("/profile");
                 } else {
-                    //aqui redirigimos a modificar perfil pero molaria hacerlo con errorMessage (lo qe viene en err) como en el ej 7
-                    response.redirect("/profile/modificar")
+                    request.session.errors = ["Ha habido un problema", err];
+                    response.redirect("/error");
                 }
             })
         }else{
-            //aqui redirigimos a modificar perfil pero molaria hacerlo con errorMessage (lo qe viene en err) como en el ej 7
-            response.redirect("/profile/modificar")
+            request.session.errors = [];
+            result.array().forEach(error =>{
+                request.session.errors.push(error.msg);
+            });
+            response.redirect("/error");
         }
     });
 });

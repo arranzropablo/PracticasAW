@@ -10,7 +10,7 @@ const userController = require("./controllers/userController");
 const friendsController = require("./controllers/friendsController");
 const questionsController = require("./controllers/questionsController");
 const middlewares = require("./utils/middlewares");
-const database = require("./utils/databaseLocal")
+const database = require("./utils/database")
 const daoUsuarios = require("./DAOs/daoUsuarios");
 const daoPreguntas = require("./DAOs/daoPreguntas");
 const expressValidator = require("express-validator");
@@ -27,6 +27,9 @@ app.use(expressValidator({
     customValidators: {
         respuestasNoVacias: respuestas => {
             return respuestas.split("\n").filter(elem => elem.length > 0 && elem.trim()).length > 0;
+        },
+        notEmptySearch: text => {
+            return text.trim().length > 0;
         }
     }
 }));
@@ -44,6 +47,10 @@ app.use("/profile", userController);
 app.use("/questions", questionsController);
 
 app.use("/friends", friendsController);
+
+app.get("/error", (request, response) => {
+    response.render("error", {errorMsgs: request.session.errors, loguedUser: request.session.loguedUser});
+});
 
 app.listen(config.port, (err) => {
     if (err) {

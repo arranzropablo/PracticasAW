@@ -24,13 +24,16 @@ authController.post("/procesar_login", middlewares.restrictLoginTemplate, (reque
                     request.session.profile = email;
                     response.redirect("/profile");
                 } else {
-                    //aqui redirigimos a login pero molaria hacerlo con errorMessage (lo qe viene en err) como en el ej 7
-                    response.redirect("/login")
+                    request.session.errors = ["Ha habido un problema durante el registro", err];
+                    response.redirect("/error");
                 }
             })
         }else{
-            //aqui redirigimos a login pero molaria hacerlo con errorMessage (lo qe viene en err) como en el ej 7
-            response.redirect("/login")
+            request.session.errors = [];
+            result.array().forEach(error =>{
+                request.session.errors.push(error.msg);
+            });
+            response.redirect("/error");
         }
     });
 });
@@ -62,18 +65,20 @@ authController.post("/procesar_registro", middlewares.restrictLoginTemplate, (re
                     request.session.loguedUser = {
                         email: email,
                         puntos: 50
-                            //se pone a 50 que son los iniciales
                     };
                     request.session.profile = email;
                     response.redirect("/profile");
                 } else {
-                    //aqui redirigimos a registro pero molaria hacerlo con errorMessage (lo qe viene en err) como en el ej 7
-                    response.redirect("/registro")
+                    request.session.errors = ["Ha habido un problema durante el registro", err];
+                    response.redirect("/error");
                 }
             });
         }else{
-            //aqui redirigimos a registro pero molaria hacerlo con errorMessage (lo qe viene en err) como en el ej 7
-            response.redirect("/registro")
+            request.session.errors = [];
+            result.array().forEach(error =>{
+                request.session.errors.push(error.msg);
+            });
+            response.redirect("/error");
         }
     });
 });

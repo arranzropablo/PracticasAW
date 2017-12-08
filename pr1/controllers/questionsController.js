@@ -33,15 +33,18 @@ questionsController.get("/nuevapregunta", middlewares.areYouLoged, (request, res
             pregunta.numrespuestas = pregunta.respuestas.length;
             request.daoPreguntas.anadirPregunta(pregunta, (err) => {
                 if (err) {
-                    console.log(err);
-                    response.status(500);
-                    response.end();
+                    request.session.errors = ["Ha habido un problema", err];
+                    response.redirect("/error");
                 } else {
                     response.redirect("/questions");
                 }
             });
         } else {
-            response.redirect("/questions");
+            request.session.errors = [];
+            result.array().forEach(error =>{
+                request.session.errors.push(error.msg);
+            });
+            response.redirect("/error");
         }
     });
 
@@ -63,16 +66,18 @@ questionsController.get("/contestarpregunta", middlewares.areYouLoged, (request,
         if (result.isEmpty()) {
             request.daoPreguntas.contestarPregunta(email, idPregunta, idRespuesta, otra, err => {
                 if (err) {
-                    console.log(err);
-                    response.status = 500;
-                    response.end();
+                    request.session.errors = ["Ha habido un problema", err];
+                    response.redirect("/error");
                 } else {
                     response.redirect("/questions");
                 }
             });
         } else {
-            //añadir errores etc
-            response.redirect("/questions");
+            request.session.errors = [];
+            result.array().forEach(error =>{
+                request.session.errors.push(error.msg);
+            });
+            response.redirect("/error");
         }
     });
 });
@@ -83,15 +88,13 @@ questionsController.get("/pregunta/:id", middlewares.areYouLoged, (request, resp
 
     request.daoPreguntas.getPreguntaSinRespuestas(email, id, (err, pregunta) => {
         if (err) {
-            console.log(err);
-            response.status(500);
-            response.end();
+            request.session.errors = ["Ha habido un problema", err];
+            response.redirect("/error");
         } else {
             request.daoPreguntas.getAdivinados(email, id, (err, respuestas) => {
                 if (err) {
-                    console.log(err);
-                    response.status(500);
-                    response.end();
+                    request.session.errors = ["Ha habido un problema", err];
+                    response.redirect("/error");
                 } else {
                     response.render("questionView", { loguedUser: request.session.loguedUser, question: pregunta, respuestas: respuestas });
                 }
@@ -107,9 +110,8 @@ questionsController.post("/adivinarpregunta", middlewares.areYouLoged, (request,
 
     request.daoPreguntas.getPreguntaAdivinar(pregunta, friend, (err, pregunta) => {
         if (err) {
-            console.log(err);
-            response.status(500);
-            response.end();
+            request.session.errors = ["Ha habido un problema", err];
+            response.redirect("/error");
         } else {
             response.render("adivinarQuestion", {
                 loguedUser: request.session.loguedUser,
@@ -132,17 +134,19 @@ questionsController.post("/resolveradivinar", middlewares.areYouLoged, (request,
                 acertada = Number(respuesta) == callback;
                 request.daoPreguntas.adivinarRespuesta(email, friend, pregunta, acertada, (err, callback) => {
                     if (err) {
-                        console.log(err);
-                        response.status(500);
-                        response.end();
+                        request.session.errors = ["Ha habido un problema", err];
+                        response.redirect("/error");
                     } else {
                         response.redirect("/questions/pregunta/" + pregunta);
                     }
                 });
             });
         } else {
-            //errores y tal
-            response.redirect("/questions/pregunta/" + pregunta);
+            request.session.errors = [];
+            result.array().forEach(error =>{
+                request.session.errors.push(error.msg);
+            });
+            response.redirect("/error");
         }
     });
 });
@@ -152,9 +156,8 @@ questionsController.get("/vistapregunta/:id", middlewares.areYouLoged, (request,
 
     request.daoPreguntas.getPregunta(id, (err, pregunta) => {
         if (err) {
-            console.log(err);
-            response.status = 500;
-            response.end();
+            request.session.errors = ["Ha habido un problema", err];
+            response.redirect("/error");
         } else {
             response.render("question", { loguedUser: request.session.loguedUser, question: pregunta });
         }
