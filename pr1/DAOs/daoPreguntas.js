@@ -157,6 +157,48 @@ class DaoPreguntas {
         });
     }
 
+    getPreguntaAdivinar(id, email, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`, undefined)
+            } else {
+                connection.query(
+                    "SELECT numrespuestas, idRespuestaElegida FROM preguntas JOIN respuestas_usuario ON id=idPregunta " +
+                    "WHERE id = ? AND email = ?", [id, email],
+                    (err, filas) => {
+                        if (err) {
+                            connection.release();
+                            callback(err, undefined);
+                        } else {
+                            connection.query(
+                                "(SELECT idPregunta, preguntas.texto AS pregunta, respuestas.texto AS respuesta, idRespuesta " +
+                                "FROM preguntas JOIN respuestas ON id=idPregunta WHERE idPregunta = ? " +
+                                "AND idRespuesta = ?) UNION " +
+                                "(SELECT idPregunta, preguntas.texto AS pregunta, respuestas.texto AS respuesta, idRespuesta " +
+                                "FROM preguntas JOIN respuestas ON id=idPregunta WHERE idPregunta = ? AND idRespuesta != ? " +
+                                "ORDER BY rand() LIMIT ?)", [id, filas[0].idRespuestaElegida, id, filas[0].idRespuestaElegida, (filas[0].numrespuestas - 1)],
+                                (err, respuestas) => {
+                                    connection.release();
+                                    if (err) {
+                                        callback(err, undefined);
+                                    } else {
+                                        let pregunta = {
+                                            id: respuestas[0].idPregunta,
+                                            texto: respuestas[0].pregunta,
+                                            respuestas: []
+                                        }
+                                        respuestas.forEach(respuesta => {
+                                            pregunta.respuestas.push({ id: respuesta.idRespuesta, texto: respuesta.respuesta });
+                                        });
+                                        callback(null, pregunta);
+                                    }
+                                });
+                        }
+                    });
+            }
+        });
+    }
+
     /**
      * Obtiene una pregunta identificada por un id (sin respuestas) y si el usuario la ha respondido
      * @param {String} email email del usuario logueado
@@ -215,12 +257,10 @@ class DaoPreguntas {
     }
 
     /**
-     * Registra una respuesta en nombre de otro usuario por parte del usuario logueado
-     * @param {String} email email del usuario logueado
-     * @param {String} emailAmigo email del amigo del que quiere adivinar la respuesta
-     * @param {int} idPregunta id de la pregunta a adivinar
-     * @param {int} idRespuesta id de la respuesta seleccionada por el usuario (no tiene por que ser correcta)
-     * @param {Function} callback funcion que devuelve un error en caso de que algo vaya mal
+     * Recoge el id de respuesta de un usuario a una determinada pregunta
+     * @param {String} email email del usuario
+     * @param {int} idPregunta identificador de la pregunta
+     * @param {Function} callback función que recoge el error o el id de la respuesta elegida
      */
     getRespuestaUsuario(email, idPregunta, callback) {
         this.pool.getConnection((err, connection) => {

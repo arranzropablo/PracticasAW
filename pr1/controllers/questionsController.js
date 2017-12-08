@@ -105,7 +105,7 @@ questionsController.post("/adivinarpregunta", middlewares.areYouLoged, (request,
     let friend = request.body.email;
     let pregunta = request.body.pregunta;
 
-    request.daoPreguntas.getPregunta(pregunta, (err, pregunta) => {
+    request.daoPreguntas.getPreguntaAdivinar(pregunta, friend, (err, pregunta) => {
         if (err) {
             console.log(err);
             response.status(500);
