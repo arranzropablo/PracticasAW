@@ -19,6 +19,8 @@ module.exports = {
     // Nombre de la base de datos
     database: "practica1",
 
-    port: 3307
+    databasePort: 3307,
+
+    port: 3000
 
 }

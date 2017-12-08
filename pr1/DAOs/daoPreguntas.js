@@ -95,59 +95,7 @@ class DaoPreguntas {
     }
 
     /**
-     * Funcion que obtiene todas las preguntas de la base de datos y devuelve 5 de ellas aleatoriamente (de momento devuelve todas)
-     * @param {String} email email del usuario conectado (para que no recoja las preguntas que este usuario haya respondido)
-     * @param {Function} callback funcion que devuelve el error o las preguntas , en un array de objetos con la siguiente forma:
-     * pregunta {
-     *      id: id de la pregunta
-     *      texto: titulo de la pregunta
-     *      respuestas: array de objetos con la siguiente forma:
-     *          id: id de la respuesta
-     *          texto: texto con la respuesta
-     * }
-     */
-    /*getPreguntas(email, callback) {
-        this.pool.getConnection((err, connection) => {
-            if (err) {
-                callback(`Error al obtener la conexión: ${err.message}`, undefined)
-            } else {
-                connection.query(
-                    "SELECT preguntas.texto AS pregunta, respuestas.texto AS respuesta," +
-                    " idPregunta, idRespuesta FROM preguntas JOIN respuestas ON id=idPregunta" +
-                    " WHERE id NOT IN (SELECT idPregunta FROM respuestas_usuario WHERE email = ?)" +
-                    " ORDER BY idPregunta ASC", [email],
-                    (err, filas) => {
-                        if (err) {
-                            callback(err, undefined);
-                        } else {
-                            let preguntas = [];
-                            let respuestas = [];
-                            let idPregunta = 0;
-                            let pregunta;
-                            let insertar = false;
-                            filas.forEach(fila => {
-                                if (idPregunta !== fila.idPregunta) {
-                                    if (insertar) {
-                                        preguntas.push({ id: idPregunta, texto: pregunta, respuestas });
-                                    } else {
-                                        insertar = true;
-                                    }
-                                    idPregunta = fila.idPregunta;
-                                    pregunta = fila.pregunta;
-                                    respuestas = [];
-                                }
-                                respuestas.push({ id: fila.idRespuesta, texto: fila.respuesta });
-                            });
-                            preguntas.push({ id: idPregunta, texto: pregunta, respuestas });
-                            callback(null, preguntas);
-                        }
-                    });
-            }
-        });
-    }*/
-
-    /**
-     * Obtiene todas las preguntas de la base de datos (solo el id y el titulo, no las respuestas)
+     * Obtiene 5 preguntas aleatorias de la base de datos (solo el id y el titulo, no las respuestas)
      * @param {String} email email del usuario conectado, para que no devuelva preguntas que ha respondido ya
      * @param {Function} callback funcion que devuelve los errores o la lista de preguntas
      */
@@ -159,7 +107,7 @@ class DaoPreguntas {
                 connection.query(
                     "SELECT texto AS pregunta, id FROM preguntas" +
                     //" WHERE id NOT IN (SELECT idPregunta FROM respuestas_usuario WHERE email = ?)" +
-                    " ORDER BY id ASC", [email],
+                    " ORDER BY rand() LIMIT 5", [email],
                     (err, filas) => {
                         connection.release();
                         if (err) {
@@ -209,6 +157,12 @@ class DaoPreguntas {
         });
     }
 
+    /**
+     * Obtiene una pregunta identificada por un id (sin respuestas) y si el usuario la ha respondido
+     * @param {String} email email del usuario logueado
+     * @param {int} id identificador de la pregunta
+     * @param {Function} callback Función que devuelve el error de la operación o la pregunta
+     */
     getPreguntaSinRespuestas(email, id, callback) {
         this.pool.getConnection((err, connection) => {
             if (err) {
@@ -301,7 +255,7 @@ class DaoPreguntas {
                 callback(`Error al obtener la conexión: ${err.message}`, undefined)
             } else {
                 connection.query(
-                    "SELECT email FROM respuestas_usuario WHERE idPregunta = ? AND " +
+                    "SELECT email, nombre FROM respuestas_usuario JOIN usuarios USING(email) WHERE idPregunta = ? AND " +
                     "email != ? AND (email IN (SELECT origen FROM amigos WHERE destino = ? AND pendiente = 0) " +
                     "OR email IN (SELECT destino FROM amigos WHERE origen = ? AND pendiente = 0)) " +
                     "ORDER BY email ASC;", [idPregunta, email, email, email],
@@ -326,7 +280,7 @@ class DaoPreguntas {
                                             } else {
                                                 acertada = null;
                                             }
-                                            adivinados.push({ email: filasAmigos[i].email, acertado: acertada });
+                                            adivinados.push({ email: filasAmigos[i].email, nombre: filasAmigos[i].nombre, acertado: acertada });
                                             if (acertada !== null) { j++; }
                                         }
                                         callback(null, adivinados);

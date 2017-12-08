@@ -8,16 +8,16 @@ const pool = mysql.createPool({
     user: config.user,
     password: config.password,
     database: config.database,
-    port: config.port
+    port: config.databasePort
 });
 
 const MySQLStore = mysqlSession(session);
 const sessionStore = new MySQLStore({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "practica1",
-    port: 3307
+    host: config.host,
+    user: config.user,
+    password: config.password,
+    database: config.database,
+    port: config.databasePort
 });
 
 const middlewareSession = session({

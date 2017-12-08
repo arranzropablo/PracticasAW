@@ -12,10 +12,10 @@ const pool = mysql.createPool({
 
 const MySQLStore = mysqlSession(session);
 const sessionStore = new MySQLStore({
-    host: "91.121.109.58",
-    user: "usuariop1",
-    password: "accesop1",
-    database: "practica1"
+    host: config.host,
+    user: config.user,
+    password: config.password,
+    database: config.database
 });
 
 const middlewareSession = session({

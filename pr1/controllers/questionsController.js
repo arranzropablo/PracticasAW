@@ -12,23 +12,7 @@ questionsController.get("/", middlewares.areYouLoged, (request, response) => {
             //aqui estaria guay redirigir a error
             //response.redirect("/error")
         } else {
-            if (preguntas.length < 6) {
-                preguntas.forEach(pregunta => {
-                    preguntasRandom.push(pregunta);
-                });
-            } else {
-                let randomIndexAdded = [];
-                let i;
-                for (i = 0; i < 5; i++) {
-                    let random;
-                    do {
-                        random = Math.floor(Math.random() * (preguntas.length - 0)) + 0;
-                    } while (randomIndexAdded.includes(Number(random)))
-                    randomIndexAdded.push(random);
-                    preguntasRandom.push(preguntas[random]);
-                }
-            }
-            response.render("questions", { loguedUser: request.session.loguedUser, resultado: preguntasRandom });
+            response.render("questions", { loguedUser: request.session.loguedUser, resultado: preguntas });
         }
     });
 });
@@ -38,15 +22,15 @@ questionsController.get("/nueva", middlewares.areYouLoged, (request, response) =
 });
 
 questionsController.get("/nuevapregunta", middlewares.areYouLoged, (request, response) => {
-    request.checkQuery("pregunta", "Pregunta no valida").isLength({min: 4, max: 20});
+    request.checkQuery("pregunta", "Pregunta no valida").isLength({ min: 4, max: 20 });
     request.checkQuery("respuestas", "Respuestas no validas").respuestasNoVacias();
-    request.getValidationResult().then(result =>{
-        if(result.isEmpty()){
+    request.getValidationResult().then(result => {
+        if (result.isEmpty()) {
             let pregunta = {
                 texto: request.query.pregunta,
                 respuestas: request.query.respuestas.split("\n").filter(elem => elem.length > 0 && elem.trim())
             }
-            pregunta.numrespuestas = pregunta.respuestas.length;            
+            pregunta.numrespuestas = pregunta.respuestas.length;
             request.daoPreguntas.anadirPregunta(pregunta, (err) => {
                 if (err) {
                     console.log(err);
@@ -56,7 +40,7 @@ questionsController.get("/nuevapregunta", middlewares.areYouLoged, (request, res
                     response.redirect("/questions");
                 }
             });
-        }else{
+        } else {
             response.redirect("/questions");
         }
     });
@@ -74,10 +58,10 @@ questionsController.get("/contestarpregunta", middlewares.areYouLoged, (request,
         idRespuesta = Number(request.query.respuesta);
     }
     let email = request.session.loguedUser.email;
-    request.checkQuery("respuesta", "Selecciona una respuesta").notEmpty();        
-    request.getValidationResult().then(result =>{
-        if(result.isEmpty()){
-            request.daoPreguntas.contestarPregunta(email, idPregunta, idRespuesta, err => {
+    request.checkQuery("respuesta", "Selecciona una respuesta").notEmpty();
+    request.getValidationResult().then(result => {
+        if (result.isEmpty()) {
+            request.daoPreguntas.contestarPregunta(email, idPregunta, idRespuesta, otra, err => {
                 if (err) {
                     console.log(err);
                     response.status = 500;
@@ -86,7 +70,7 @@ questionsController.get("/contestarpregunta", middlewares.areYouLoged, (request,
                     response.redirect("/questions");
                 }
             });
-        }else{
+        } else {
             //añadir errores etc
             response.redirect("/questions");
         }
@@ -141,9 +125,9 @@ questionsController.post("/resolveradivinar", middlewares.areYouLoged, (request,
     let friend = request.body.friend;
     let respuesta = request.body.respuesta;
     let email = request.session.loguedUser.email;
-    request.checkBody("respuesta", "Selecciona una respuesta").notEmpty();    
-    request.getValidationResult().then(result =>{
-        if(result.isEmpty()){
+    request.checkBody("respuesta", "Selecciona una respuesta").notEmpty();
+    request.getValidationResult().then(result => {
+        if (result.isEmpty()) {
             request.daoPreguntas.getRespuestaUsuario(friend, pregunta, (err, callback) => {
                 acertada = Number(respuesta) == callback;
                 request.daoPreguntas.adivinarRespuesta(email, friend, pregunta, acertada, (err, callback) => {
@@ -156,7 +140,7 @@ questionsController.post("/resolveradivinar", middlewares.areYouLoged, (request,
                     }
                 });
             });
-        }else{
+        } else {
             //errores y tal
             response.redirect("/questions/pregunta/" + pregunta);
         }
