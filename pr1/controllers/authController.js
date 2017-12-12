@@ -1,8 +1,9 @@
 const express = require('express');
+const path = require("path");
 const authController = express.Router();
 const middlewares = require("../utils/middlewares");
 const multer = require("multer");
-const factoryMulter = multer();
+const factoryMulter = multer({ dest: path.join(__dirname, "../uploads") });
 
 authController.get("/", middlewares.restrictLoginTemplate, (request, response) => {
     response.redirect("/login");
@@ -44,7 +45,7 @@ authController.get("/registro", middlewares.restrictLoginTemplate, (request, res
     response.render("registro");
 });
 
-authController.post("/procesar_registro", middlewares.restrictLoginTemplate, factoryMulter.none(), (request, response) => {
+authController.post("/procesar_registro", middlewares.restrictLoginTemplate, factoryMulter.single("profile_image"), (request, response) => {
     request.checkBody("email", "Email no valido").isEmail();
     request.checkBody("password", "Contraseña no valida").isLength({ min: 4, max: 20 });
     request.checkBody("complete_name", "Nombre no valido").notEmpty();
@@ -52,15 +53,18 @@ authController.post("/procesar_registro", middlewares.restrictLoginTemplate, fac
     request.checkBody("gender", "Selecciona un genero").notEmpty();
     request.getValidationResult().then(result => {
         if (result.isEmpty()) {
-
+            let imagen = null;
+            if (request.file) {
+                imagen = request.file.path;
+            }
             let user = {
                 email: request.body.email,
                 nombre: request.body.complete_name,
                 password: request.body.password,
                 sexo: request.body.gender,
                 fecha_nacimiento: request.body.birth_date,
-                imagen_perfil: 'imagen.jpg',
-                puntos: 50
+                imagen_perfil: imagen,
+                puntos: 0
             }
             request.daoUsuarios.nuevoUsuario(user, (err, email) => {
                 if (email) {
