@@ -22,7 +22,7 @@ questionsController.get("/nueva", middlewares.areYouLoged, (request, response) =
 });
 
 questionsController.get("/nuevapregunta", middlewares.areYouLoged, (request, response) => {
-    request.checkQuery("pregunta", "Pregunta no valida").isLength({ min: 4, max: 20 });
+    request.checkQuery("pregunta", "Pregunta no valida").isLength({ min: 4, max: 100 });
     request.checkQuery("respuestas", "Respuestas no validas").respuestasNoVacias();
     request.getValidationResult().then(result => {
         if (result.isEmpty()) {
@@ -41,7 +41,7 @@ questionsController.get("/nuevapregunta", middlewares.areYouLoged, (request, res
             });
         } else {
             request.session.errors = [];
-            result.array().forEach(error =>{
+            result.array().forEach(error => {
                 request.session.errors.push(error.msg);
             });
             response.redirect("/error");
@@ -74,7 +74,7 @@ questionsController.get("/contestarpregunta", middlewares.areYouLoged, (request,
             });
         } else {
             request.session.errors = [];
-            result.array().forEach(error =>{
+            result.array().forEach(error => {
                 request.session.errors.push(error.msg);
             });
             response.redirect("/error");
@@ -143,7 +143,7 @@ questionsController.post("/resolveradivinar", middlewares.areYouLoged, (request,
             });
         } else {
             request.session.errors = [];
-            result.array().forEach(error =>{
+            result.array().forEach(error => {
                 request.session.errors.push(error.msg);
             });
             response.redirect("/error");

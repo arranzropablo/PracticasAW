@@ -10,7 +10,7 @@ const userController = require("./controllers/userController");
 const friendsController = require("./controllers/friendsController");
 const questionsController = require("./controllers/questionsController");
 const middlewares = require("./utils/middlewares");
-const database = require("./utils/database")
+const database = require("./utils/databaseLocal")
 const daoUsuarios = require("./DAOs/daoUsuarios");
 const daoPreguntas = require("./DAOs/daoPreguntas");
 const expressValidator = require("express-validator");
@@ -49,7 +49,7 @@ app.use("/questions", questionsController);
 app.use("/friends", friendsController);
 
 app.get("/error", (request, response) => {
-    response.render("error", {errorMsgs: request.session.errors, loguedUser: request.session.loguedUser});
+    response.render("error", { errorMsgs: request.session.errors, loguedUser: request.session.loguedUser });
 });
 
 app.listen(config.port, (err) => {

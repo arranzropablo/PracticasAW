@@ -1,3 +1,5 @@
+const _ = require("underscore");
+
 class DaoPreguntas {
 
     /**
@@ -142,6 +144,10 @@ class DaoPreguntas {
                         if (err) {
                             callback(err, undefined);
                         } else {
+                            if (filas.length === 0) {
+                                callback("La pregunta que estás buscando no existe", undefined);
+                                return;
+                            }
                             let pregunta = {
                                 id: filas[0].idPregunta,
                                 texto: filas[0].pregunta,
@@ -190,6 +196,7 @@ class DaoPreguntas {
                                         respuestas.forEach(respuesta => {
                                             pregunta.respuestas.push({ id: respuesta.idRespuesta, texto: respuesta.respuesta });
                                         });
+                                        pregunta.respuestas = _.shuffle(pregunta.respuestas);
                                         callback(null, pregunta);
                                     }
                                 });
@@ -218,6 +225,10 @@ class DaoPreguntas {
                         if (err) {
                             callback(err, undefined);
                         } else {
+                            if (filas.length === 0) {
+                                callback("La pregunta que estás buscando no existe", undefined);
+                                return;
+                            }
                             let pregunta = {
                                 id: filas[0].id,
                                 contestada: filas[0].contestada !== null
@@ -268,7 +279,7 @@ class DaoPreguntas {
                 callback(`Error al obtener la conexión: ${err.message}`)
             } else {
                 connection.query(
-                    "select idRespuestaElegida from respuestas_usuario where idPregunta = ? and email = ?", [idPregunta, email],
+                    "SELECT idRespuestaElegida FROM respuestas_usuario WHERE idPregunta = ? AND email = ?", [idPregunta, email],
                     (err, filas) => {
                         connection.release();
                         if (err) {
