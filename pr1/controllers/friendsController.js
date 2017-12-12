@@ -1,6 +1,8 @@
 const express = require('express');
 const friendsController = express.Router();
 const middlewares = require("../utils/middlewares");
+const multer = require("multer");
+const factoryMulter = multer();
 
 friendsController.get("/", middlewares.areYouLoged, (request, response) => {
     request.daoUsuarios.getUsuario(request.session.loguedUser.email, (err, user) => {
@@ -33,7 +35,7 @@ friendsController.get("/", middlewares.areYouLoged, (request, response) => {
     });
 });
 
-friendsController.post("/resolver", middlewares.areYouLoged, (request, response) => {
+friendsController.post("/resolver", middlewares.areYouLoged, factoryMulter.none(), (request, response) => {
     let aceptada = Number(request.body.aceptada);
     let receptor = request.session.loguedUser.email;
     let emisor = request.body.email;
@@ -64,7 +66,7 @@ friendsController.get("/buscar", middlewares.areYouLoged, (request, response) =>
             });
         } else {
             request.session.errors = [];
-            result.array().forEach(error =>{
+            result.array().forEach(error => {
                 request.session.errors.push(error.msg);
             });
             response.redirect("/error");
@@ -72,7 +74,7 @@ friendsController.get("/buscar", middlewares.areYouLoged, (request, response) =>
     });
 });
 
-friendsController.post("/add/:id", middlewares.areYouLoged, (request, response) => {
+friendsController.post("/add/:id", middlewares.areYouLoged, factoryMulter.none(), (request, response) => {
     request.daoUsuarios.crearSolicitudDeAmistad(request.session.loguedUser.email, request.params.id, (err, success) => {
         if (err) {
             request.session.errors = ["Ha habido un problema", err];

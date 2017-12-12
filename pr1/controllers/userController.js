@@ -2,6 +2,8 @@ const express = require('express');
 const userController = express.Router();
 const middlewares = require("../utils/middlewares");
 const utils = require("../utils/utils");
+const multer = require("multer");
+const factoryMulter = multer();
 
 userController.get("/user/:user", middlewares.areYouLoged, (request, response) => {
     request.session.profile = request.params.user;
@@ -46,14 +48,14 @@ userController.get("/modificar", middlewares.areYouLoged, (request, response) =>
     });
 });
 
-userController.post("/modificar", middlewares.areYouLoged, (request, response) => {
+userController.post("/modificar", middlewares.areYouLoged, factoryMulter.none(), (request, response) => {
     request.checkBody("email", "Email no valido").isEmail();
-    request.checkBody("password", "Contraseña no valida").isLength({min: 4, max: 20});
+    request.checkBody("password", "Contraseña no valida").isLength({ min: 4, max: 20 });
     request.checkBody("complete_name", "Nombre no valido").notEmpty();
     request.checkBody("birth_date", "Fecha de nacimiento no valida").isBefore(new Date().toDateString());
     request.checkBody("gender", "Selecciona un genero").notEmpty();
-    request.getValidationResult().then(result =>{
-        if(result.isEmpty()){
+    request.getValidationResult().then(result => {
+        if (result.isEmpty()) {
             let user = {
                 email: request.body.email,
                 nombre: request.body.complete_name,
@@ -71,9 +73,9 @@ userController.post("/modificar", middlewares.areYouLoged, (request, response) =
                     response.redirect("/error");
                 }
             })
-        }else{
+        } else {
             request.session.errors = [];
-            result.array().forEach(error =>{
+            result.array().forEach(error => {
                 request.session.errors.push(error.msg);
             });
             response.redirect("/error");

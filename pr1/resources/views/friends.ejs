@@ -34,12 +34,12 @@
                                     <%= request.nombre %>
                                 </a>
                             </td>
-                            <form action="/friends/resolver" method="POST">
+                            <form action="/friends/resolver" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="email" value="<%= request.email %>">
                                 <input type="hidden" name="aceptada" value="1">
                                 <td><input class="profile_buttons" type="submit" value="Aceptar"></td>
                             </form>
-                            <form action="/friends/resolver" method="POST">
+                            <form action="/friends/resolver" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="email" value="<%= request.email %>">
                                 <input type="hidden" name="aceptada" value="0">
                                 <td><input class="profile_buttons" type="submit" value="Rechazar"></td>

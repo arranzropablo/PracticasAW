@@ -22,7 +22,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "resources/views"));
 app.use(express.static(path.join(__dirname, "resources/public")));
 app.use(database.middlewareSession);
-app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator({
     customValidators: {
         respuestasNoVacias: respuestas => {

@@ -34,7 +34,7 @@
                         </td>
                         <td>
                             <% if (elem.relacion === null) { %>
-                                <form action="/friends/add/<%=elem.email%>" method="POST">
+                                <form action="/friends/add/<%=elem.email%>" method="POST" enctype="multipart/form-data">
                                     <input class="profile_buttons" type="submit" value="Solicitar amistad" />
                                 </form>
                             <% } else { %>

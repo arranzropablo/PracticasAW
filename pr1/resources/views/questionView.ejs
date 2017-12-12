@@ -43,7 +43,7 @@
                     <td class="friend_name"><%=respuesta.nombre%></td>
                     <td></td>
                     <% if(respuesta.acertado === undefined || respuesta.acertado === null) { %>
-                    <form action="/questions/adivinarpregunta/" method="POST">
+                    <form action="/questions/adivinarpregunta/" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="email" value="<%=respuesta.email%>">
                         <input type="hidden" name="pregunta" value="<%=question.id%>">
                         <td><input class="submit" type="submit" value="Adivinar"/></td>

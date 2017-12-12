@@ -22,7 +22,7 @@
     <div class="body-content">
         <div class="section-message"><%=question.texto%></div>
         <div>
-            <form action="/questions/resolveradivinar" method="POST" id="section-form">
+            <form action="/questions/resolveradivinar" method="POST" id="section-form" enctype="multipart/form-data">
                 <input type="hidden" name="pregunta" value="<%=question.id%>"/>
                 <input type="hidden" name="friend" value="<%=email%>"/>
                 <ul class="respuestas">

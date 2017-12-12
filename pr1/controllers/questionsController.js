@@ -1,6 +1,8 @@
 const express = require('express');
 const questionsController = express.Router();
 const middlewares = require("../utils/middlewares");
+const multer = require("multer");
+const factoryMulter = multer();
 
 questionsController.get("/", middlewares.areYouLoged, (request, response) => {
     let preguntasRandom = [];
@@ -104,7 +106,7 @@ questionsController.get("/pregunta/:id", middlewares.areYouLoged, (request, resp
 
 });
 
-questionsController.post("/adivinarpregunta", middlewares.areYouLoged, (request, response) => {
+questionsController.post("/adivinarpregunta", middlewares.areYouLoged, factoryMulter.none(), (request, response) => {
     let friend = request.body.email;
     let pregunta = request.body.pregunta;
 
@@ -122,7 +124,7 @@ questionsController.post("/adivinarpregunta", middlewares.areYouLoged, (request,
     });
 });
 
-questionsController.post("/resolveradivinar", middlewares.areYouLoged, (request, response) => {
+questionsController.post("/resolveradivinar", middlewares.areYouLoged, factoryMulter.none(), (request, response) => {
     let pregunta = request.body.pregunta;
     let friend = request.body.friend;
     let respuesta = request.body.respuesta;
