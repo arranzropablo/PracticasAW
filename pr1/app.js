@@ -33,12 +33,12 @@ app.use(expressValidator({
             return text.trim().length > 0;
         },
         validDate: date => {
-            return utils.calcularEdad(new Date(), date) > 0 && 
-                    date.split("/")[0] >= 1 && 
-                    date.split("/")[0] <= 31 && 
-                    date.split("/")[1] >= 1 && 
-                    date.split("/")[1] <= 12 && 
-                    date.split("/")[2] > 1800;
+            return utils.calcularEdad(new Date(), date) > 0 &&
+                date.split("/")[0] >= 1 &&
+                date.split("/")[0] <= 31 &&
+                date.split("/")[1] >= 1 &&
+                date.split("/")[1] <= 12 &&
+                date.split("/")[2] > 1800;
         }
     }
 }));
@@ -59,6 +59,28 @@ app.use("/friends", friendsController);
 
 app.get("/error", (request, response) => {
     response.render("error", { errorMsgs: request.session.errors, loguedUser: request.session.loguedUser });
+});
+
+app.get("/imagenusuario", (request, response) => {
+    daoUsuario.getUsuario(request.session.loguedUser.email, (err, usuario) => {
+        if (err) {
+            console.log("Error imagen");
+            response.status(500);
+            response.end();
+        } else {
+            if (usuario.imagen_perfil) {
+                let ruta;
+                if (usuario.imagen_perfil) {
+                    ruta = path.join(__dirname, usuario.imagen_perfil);
+                } else {
+                    //ruta = path.join(__dirname, "/profile_images/", "NoPerfil.png");
+                }
+                response.sendFile(ruta);
+            } else {
+
+            }
+        }
+    });
 });
 
 app.listen(config.port, (err) => {

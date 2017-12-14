@@ -3,7 +3,7 @@ const path = require("path");
 const authController = express.Router();
 const middlewares = require("../utils/middlewares");
 const multer = require("multer");
-const factoryMulter = multer({ dest: path.join(__dirname, "../uploads") });
+const factoryMulter = multer({ dest: "./uploads" });
 
 authController.get("/", middlewares.restrictLoginTemplate, (request, response) => {
     response.redirect("/login");

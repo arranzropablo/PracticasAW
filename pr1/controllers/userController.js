@@ -3,7 +3,7 @@ const userController = express.Router();
 const middlewares = require("../utils/middlewares");
 const utils = require("../utils/utils");
 const multer = require("multer");
-const factoryMulter = multer();
+const factoryMulter = multer({ dest: "./uploads" });
 
 userController.get("/user/:user", middlewares.areYouLoged, (request, response) => {
     request.session.profile = request.params.user;
