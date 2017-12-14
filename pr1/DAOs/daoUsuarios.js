@@ -66,11 +66,10 @@ class DaoUsuarios {
                 callback(`Error al obtener la conexión: ${err.message}`, undefined)
             } else {
                 connection.query(
-                    "UPDATE usuarios SET nombre=?,password=?,sexo=?,fecha_nacimiento=?,imagen_perfil=? WHERE email=?", [usuario.nombre,
+                    "UPDATE usuarios SET nombre=?,password=?,sexo=?,fecha_nacimiento=? WHERE email=?", [usuario.nombre,
                         usuario.password,
                         usuario.sexo,
                         usuario.fecha_nacimiento,
-                        usuario.imagen_perfil,
                         usuario.email
                     ],
                     (err, filas) => {
