@@ -27,7 +27,7 @@ authController.post("/procesar_login", middlewares.restrictLoginTemplate, factor
                     request.session.profile = email;
                     response.redirect("/profile");
                 } else {
-                    request.session.errors = ["Ha habido un problema durante el registro", err];
+                    request.session.errors = ["Ha habido un problema durante el login", err];
                     response.redirect("/error");
                 }
             })

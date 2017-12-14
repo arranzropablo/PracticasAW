@@ -61,8 +61,7 @@ userController.post("/modificar", middlewares.areYouLoged, factoryMulter.none(),
                 nombre: request.body.complete_name,
                 password: request.body.password,
                 sexo: request.body.gender,
-                fecha_nacimiento: request.body.birth_date,
-                imagen_perfil: 'imagen.jpg',
+                fecha_nacimiento: request.body.birth_date
             }
             request.daoUsuarios.modificarUsuario(user, (err, email) => {
                 if (email) {
