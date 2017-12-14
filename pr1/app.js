@@ -10,10 +10,11 @@ const userController = require("./controllers/userController");
 const friendsController = require("./controllers/friendsController");
 const questionsController = require("./controllers/questionsController");
 const middlewares = require("./utils/middlewares");
-const database = require("./utils/databaseLocal")
+const database = require("./utils/database")
 const daoUsuarios = require("./DAOs/daoUsuarios");
 const daoPreguntas = require("./DAOs/daoPreguntas");
 const expressValidator = require("express-validator");
+const utils = require("./utils/utils");
 
 let daoUsuario = new daoUsuarios.DaoUsuarios(database.pool);
 let daoPregunta = new daoPreguntas.DaoPreguntas(database.pool);
@@ -22,7 +23,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "resources/views"));
 app.use(express.static(path.join(__dirname, "resources/public")));
 app.use(database.middlewareSession);
-//app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(expressValidator({
     customValidators: {
         respuestasNoVacias: respuestas => {
@@ -30,6 +31,14 @@ app.use(expressValidator({
         },
         notEmptySearch: text => {
             return text.trim().length > 0;
+        },
+        validDate: date => {
+            return utils.calcularEdad(new Date(), date) > 0 && 
+                    date.split("/")[0] >= 1 && 
+                    date.split("/")[0] <= 31 && 
+                    date.split("/")[1] >= 1 && 
+                    date.split("/")[1] <= 12 && 
+                    date.split("/")[2] > 1800;
         }
     }
 }));

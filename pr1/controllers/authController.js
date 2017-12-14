@@ -49,7 +49,7 @@ authController.post("/procesar_registro", middlewares.restrictLoginTemplate, fac
     request.checkBody("email", "Email no valido").isEmail();
     request.checkBody("password", "Contraseña no valida").isLength({ min: 4, max: 20 });
     request.checkBody("complete_name", "Nombre no valido").notEmpty();
-    request.checkBody("birth_date", "Fecha de nacimiento no valida").isBefore(new Date().toDateString());
+    request.checkBody("birth_date", "Fecha de nacimiento no valida").validDate();
     request.checkBody("gender", "Selecciona un genero").notEmpty();
     request.getValidationResult().then(result => {
         if (result.isEmpty()) {
