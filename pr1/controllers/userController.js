@@ -3,7 +3,8 @@ const userController = express.Router();
 const middlewares = require("../utils/middlewares");
 const utils = require("../utils/utils");
 const multer = require("multer");
-const factoryMulter = multer({ dest: "./uploads" });
+const factoryMulter = multer({ dest: "pr1/uploads" });
+const path = require("path");
 
 userController.get("/user/:user", middlewares.areYouLoged, (request, response) => {
     request.session.profile = request.params.user;
@@ -78,6 +79,23 @@ userController.post("/modificar", middlewares.areYouLoged, factoryMulter.none(),
                 request.session.errors.push(error.msg);
             });
             response.redirect("/error");
+        }
+    });
+});
+
+userController.get("/imagen/:id", middlewares.areYouLoged, (request, response) => {
+    request.daoUsuarios.getUsuario(request.params.id, (err, usuario) => {
+        if (err) {
+            request.session.errors = ["Ha habido un problema", err];
+            response.redirect("/error");//ruta
+        } else {
+            let ruta;
+            if (usuario.imagen_perfil) {
+                ruta = path.join(path.parse(path.parse(__dirname).dir).dir, usuario.imagen_perfil);
+            } else {
+                ruta = path.join(path.parse(path.parse(__dirname).dir).dir, "pr1/resources/public/icons/Zombie PVZ-01.png");
+            }
+            response.sendFile(ruta);
         }
     });
 });

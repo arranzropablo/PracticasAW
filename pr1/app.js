@@ -61,28 +61,6 @@ app.get("/error", (request, response) => {
     response.render("error", { errorMsgs: request.session.errors, loguedUser: request.session.loguedUser });
 });
 
-app.get("/imagenusuario", (request, response) => {
-    daoUsuario.getUsuario(request.session.loguedUser.email, (err, usuario) => {
-        if (err) {
-            console.log("Error imagen");
-            response.status(500);
-            response.end();
-        } else {
-            if (usuario.imagen_perfil) {
-                let ruta;
-                if (usuario.imagen_perfil) {
-                    ruta = path.join(__dirname, usuario.imagen_perfil);
-                } else {
-                    //ruta = path.join(__dirname, "/profile_images/", "NoPerfil.png");
-                }
-                response.sendFile(ruta);
-            } else {
-
-            }
-        }
-    });
-});
-
 app.listen(config.port, (err) => {
     if (err) {
         console.error("No se pudo inicializar el servidor: " +

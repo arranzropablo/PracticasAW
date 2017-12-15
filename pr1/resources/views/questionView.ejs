@@ -39,7 +39,7 @@
             <table>
                 <% respuestas.forEach(respuesta => { %>
                 <tr>
-                    <td><img class="friend_image" src="/icons/Devil-01.png" alt="Friend_image"></td>
+                    <td><img class="friend_image" src="/profile/imagen/<%=respuesta.email%>" alt="profile_image"></td>
                     <td class="friend_name"><%=respuesta.nombre%></td>
                     <td></td>
                     <% if(respuesta.acertado === undefined || respuesta.acertado === null) { %>

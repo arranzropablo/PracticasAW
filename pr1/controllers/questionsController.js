@@ -87,20 +87,30 @@ questionsController.get("/contestarpregunta", middlewares.areYouLoged, (request,
 questionsController.get("/pregunta/:id", middlewares.areYouLoged, (request, response) => {
     let id = Number(request.params.id);
     let email = request.session.loguedUser.email;
-
-    request.daoPreguntas.getPreguntaSinRespuestas(email, id, (err, pregunta) => {
-        if (err) {
-            request.session.errors = ["Ha habido un problema", err];
-            response.redirect("/error");
-        } else {
-            request.daoPreguntas.getAdivinados(email, id, (err, respuestas) => {
+    request.daoUsuarios.getUsuario(request.session.loguedUser.email, (err, user) => {
+        if (user) {
+            request.session.loguedUser = {
+                email: user.email,
+                puntos: user.puntos
+            }
+            request.daoPreguntas.getPreguntaSinRespuestas(email, id, (err, pregunta) => {
                 if (err) {
                     request.session.errors = ["Ha habido un problema", err];
                     response.redirect("/error");
                 } else {
-                    response.render("questionView", { loguedUser: request.session.loguedUser, question: pregunta, respuestas: respuestas });
+                    request.daoPreguntas.getAdivinados(email, id, (err, respuestas) => {
+                        if (err) {
+                            request.session.errors = ["Ha habido un problema", err];
+                            response.redirect("/error");
+                        } else {
+                            response.render("questionView", { loguedUser: request.session.loguedUser, question: pregunta, respuestas: respuestas });
+                        }
+                    });
                 }
             });
+        } else {
+            request.session.errors = ["Ha habido un problema", err];
+            response.redirect("/error");
         }
     });
 
@@ -134,14 +144,33 @@ questionsController.post("/resolveradivinar", middlewares.areYouLoged, factoryMu
         if (result.isEmpty()) {
             request.daoPreguntas.getRespuestaUsuario(friend, pregunta, (err, callback) => {
                 acertada = Number(respuesta) == callback;
-                request.daoPreguntas.adivinarRespuesta(email, friend, pregunta, acertada, (err, callback) => {
-                    if (err) {
-                        request.session.errors = ["Ha habido un problema", err];
-                        response.redirect("/error");
-                    } else {
-                        response.redirect("/questions/pregunta/" + pregunta);
-                    }
-                });
+                if(acertada){
+                    request.daoUsuarios.sumarPuntos(email, 50, (err, puntos) => {
+                        if (err){
+                            request.session.errors = ["Ha habido un problema", err];
+                            response.redirect("/error");
+                        } else {
+                            request.daoPreguntas.adivinarRespuesta(email, friend, pregunta, acertada, (err, callback) => {
+                                if (err) {
+                                    request.session.errors = ["Ha habido un problema", err];
+                                    response.redirect("/error");
+                                } else {
+                                    response.redirect("/questions/pregunta/" + pregunta);
+                                }
+                            });
+                        }
+                    });
+                }
+                else{
+                    request.daoPreguntas.adivinarRespuesta(email, friend, pregunta, acertada, (err, callback) => {
+                        if (err) {
+                            request.session.errors = ["Ha habido un problema", err];
+                            response.redirect("/error");
+                        } else {
+                            response.redirect("/questions/pregunta/" + pregunta);
+                        }
+                    });
+                }
             });
         } else {
             request.session.errors = [];
