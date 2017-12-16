@@ -22,10 +22,18 @@
     <div class="body-content">
         <div class="section-message">Imagenes subidas</div>
             <div class="content">
-                
-            </div>
-            
-            <% if(loguedUser.email == user.email) {%>
+                <div class="image-image_container">
+                <% let i = 1; %>   
+                <%imagenes.forEach(imagen => { %>
+                    <img class="imagen" src="/profile/imagensubida/<%=imagen%>" alt="image">
+                    <% if (i % 4 === 0) { %>
+                        </div>
+                        <div class="image_container">
+                    <% } %>
+                    <% i++; %>
+                <% }); %>
+                </div>
+            <% if(loguedUser.email === email) {%>
             <div class="section-message">¡Sube una foto!</div>
             <div class="section-box">
                 <form action="/profile/nuevaimagen" method="post" id="section-form" enctype="multipart/form-data">
@@ -38,6 +46,7 @@
                 </form>
             </div>
             <% } %>
+            </div>
         </div>
     </body>
 </html>

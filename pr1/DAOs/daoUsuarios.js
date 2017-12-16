@@ -331,6 +331,30 @@ class DaoUsuarios {
             }
         });
     }
+
+    getImagenesSubidas(email, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`, undefined)
+            } else {
+                connection.query(
+                    "SELECT imagen FROM imagenes_usuario WHERE email = ?", [email],
+                    (err, filas) => {
+                        connection.release();
+                        if (err) {
+                            callback(`Ha habido un error ${err.message}`, undefined);
+                        } else {
+                            let imagenes = [];
+                            filas.forEach(fila => {
+                                imagenes.push(fila.imagen);
+                            })
+                            callback(null, imagenes);
+                        }
+                    }
+                )
+            }
+        });
+    }
 }
 
 module.exports = {

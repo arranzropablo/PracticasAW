@@ -101,14 +101,33 @@ userController.get("/imagen/:id", middlewares.areYouLoged, (request, response) =
     });
 });
 
+userController.get("/imagensubida/:id", middlewares.areYouLoged, (request, response) => {
+    let ruta;
+    ruta = path.join(__dirname, "../uploads", request.params.id);
+    response.sendFile(ruta);
+});
+
+userController.get("/imagenes/:email", middlewares.areYouLoged, (request, response) => {
+    request.session.profile = request.params.email;
+    response.redirect("/profile/imagenes");
+});
+
 userController.get("/imagenes", middlewares.areYouLoged, (request, response) => {
-    response.render("imagenes", { loguedUser: request.session.loguedUser });
+    let email = request.session.profile;
+    request.daoUsuarios.getImagenesSubidas(email, (err, imagenes) => {
+        if (err) {
+            request.session.errors = ["Ha habido un problema", err];
+            response.redirect("/error"); //ruta
+        } else {
+            response.render("imagenes", { loguedUser: request.session.loguedUser, email: email, imagenes: imagenes });
+        }
+    });
 });
 
 userController.post("/nuevaimagen", middlewares.areYouLoged, factoryMulter.single("image"), (request, response) => {
     if (request.session.loguedUser.puntos >= 100) {
         if (request.file) {
-            imagen = request.file.path.split("uploads")[1];
+            imagen = request.file.path.split("uploads")[1].replace("\\", "").trim();
             request.daoUsuarios.nuevaImagenUsuario(request.session.loguedUser.email, imagen, err => {
                 if (err) {
                     request.session.errors = ["Ha habido un problema", err];

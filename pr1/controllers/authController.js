@@ -55,7 +55,7 @@ authController.post("/procesar_registro", middlewares.restrictLoginTemplate, fac
         if (result.isEmpty()) {
             let imagen = null;
             if (request.file) {
-                imagen = request.file.path.split("uploads")[1];
+                imagen = request.file.path.split("uploads")[1].replace("\\", "").trim();
             }
             let user = {
                 email: request.body.email,
