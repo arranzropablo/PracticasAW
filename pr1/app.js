@@ -1,7 +1,7 @@
 "use strict";
 
 const path = require("path");
-const config = require("./utils/config");
+const config = require("./config");
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
@@ -10,7 +10,7 @@ const userController = require("./controllers/userController");
 const friendsController = require("./controllers/friendsController");
 const questionsController = require("./controllers/questionsController");
 const middlewares = require("./utils/middlewares");
-const database = require("./utils/databaseLocal")
+const database = require("./utils/database")
 const daoUsuarios = require("./DAOs/daoUsuarios");
 const daoPreguntas = require("./DAOs/daoPreguntas");
 const expressValidator = require("express-validator");

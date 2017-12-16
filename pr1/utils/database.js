@@ -1,21 +1,21 @@
-const config = require("./config");
+const config = require("../config");
 const mysql = require("mysql");
 const session = require("express-session");
 const mysqlSession = require("express-mysql-session");
 
 const pool = mysql.createPool({
-    host: config.host,
-    user: config.user,
-    password: config.password,
-    database: config.database
+    host: config.dbHost,
+    user: config.dbUser,
+    password: config.dbPassword,
+    database: config.dbName
 });
 
 const MySQLStore = mysqlSession(session);
 const sessionStore = new MySQLStore({
-    host: config.host,
-    user: config.user,
-    password: config.password,
-    database: config.database
+    host: config.dbHost,
+    user: config.dbUser,
+    password: config.dbPassword,
+    database: config.dbName
 });
 
 const middlewareSession = session({
