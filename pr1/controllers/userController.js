@@ -87,11 +87,11 @@ userController.get("/imagen/:id", middlewares.areYouLoged, (request, response) =
     request.daoUsuarios.getUsuario(request.params.id, (err, usuario) => {
         if (err) {
             request.session.errors = ["Ha habido un problema", err];
-            response.redirect("/error");//ruta
+            response.redirect("/error"); //ruta
         } else {
             let ruta;
             if (usuario.imagen_perfil) {
-                ruta = path.join(path.parse(path.parse(__dirname).dir).dir, usuario.imagen_perfil);
+                ruta = path.join(__dirname, "../uploads", usuario.imagen_perfil);
             } else {
                 ruta = path.join(path.parse(path.parse(__dirname).dir).dir, "pr1/resources/public/icons/Zombie PVZ-01.png");
             }

@@ -3,7 +3,7 @@ const path = require("path");
 const authController = express.Router();
 const middlewares = require("../utils/middlewares");
 const multer = require("multer");
-const factoryMulter = multer({ dest: "pr1/uploads" });
+const factoryMulter = multer({ dest: path.join(__dirname, "../uploads") });
 
 authController.get("/", middlewares.restrictLoginTemplate, (request, response) => {
     response.redirect("/login");
@@ -55,7 +55,7 @@ authController.post("/procesar_registro", middlewares.restrictLoginTemplate, fac
         if (result.isEmpty()) {
             let imagen = null;
             if (request.file) {
-                imagen = request.file.path;
+                imagen = request.file.path.split("uploads")[1];
             }
             let user = {
                 email: request.body.email,
