@@ -311,6 +311,26 @@ class DaoUsuarios {
             }
         });
     }
+
+    nuevaImagenUsuario(email, imagen, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`)
+            } else {
+                connection.query(
+                    "INSERT INTO imagenes_usuario VALUES (?, ?)", [email, imagen],
+                    (err, filas) => {
+                        connection.release();
+                        if (err) {
+                            callback(`Ha habido un error ${err.message}`);
+                        } else {
+                            callback(null);
+                        }
+                    }
+                )
+            }
+        });
+    }
 }
 
 module.exports = {

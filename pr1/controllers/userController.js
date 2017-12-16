@@ -2,9 +2,10 @@ const express = require('express');
 const userController = express.Router();
 const middlewares = require("../utils/middlewares");
 const utils = require("../utils/utils");
-const multer = require("multer");
-const factoryMulter = multer({ dest: "pr1/uploads" });
 const path = require("path");
+const multer = require("multer");
+const factoryMulter = multer({ dest: path.join(__dirname, "../uploads") });
+
 
 userController.get("/user/:user", middlewares.areYouLoged, (request, response) => {
     request.session.profile = request.params.user;
@@ -98,6 +99,35 @@ userController.get("/imagen/:id", middlewares.areYouLoged, (request, response) =
             response.sendFile(ruta);
         }
     });
+});
+
+userController.get("/imagenes", middlewares.areYouLoged, (request, response) => {
+    response.render("imagenes", { loguedUser: request.session.loguedUser });
+});
+
+userController.post("/nuevaimagen", middlewares.areYouLoged, factoryMulter.single("image"), (request, response) => {
+    if (request.session.loguedUser.puntos >= 100) {
+        if (request.file) {
+            imagen = request.file.path.split("uploads")[1];
+            request.daoUsuarios.nuevaImagenUsuario(request.session.loguedUser.email, imagen, err => {
+                if (err) {
+                    request.session.errors = ["Ha habido un problema", err];
+                    response.redirect("/error"); //ruta
+                } else {
+                    request.daoUsuarios.sumarPuntos(request.session.loguedUser.email, -100, (err, puntos) => {
+                        request.session.loguedUser.puntos += puntos;
+                        response.redirect("/profile/imagenes");
+                    });
+                }
+            });
+        } else {
+            request.session.errors = ["Ha habido un problema", "No has subido la imagen"];
+            response.redirect("/error"); //ruta
+        }
+    } else {
+        request.session.errors = ["Ha habido un problema", "No tienes suficientes puntos para subir la imagen (100 puntos)"];
+        response.redirect("/error"); //ruta
+    }
 });
 
 module.exports = userController;
