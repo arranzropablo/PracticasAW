@@ -1,3 +1,14 @@
+CREATE TABLE `usuarios` (
+  `email` varchar(50) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `password` varchar(16) DEFAULT NULL,
+  `sexo` char(1) NOT NULL,
+  `fecha_nacimiento` varchar(12) DEFAULT NULL,
+  `imagen_perfil` varchar(100) DEFAULT NULL,
+  `puntos` int(6) DEFAULT '0',
+  PRIMARY KEY (`email`)
+);
+
 CREATE TABLE `amigos` (
   `origen` varchar(50) NOT NULL DEFAULT '',
   `destino` varchar(50) NOT NULL DEFAULT '',
@@ -11,6 +22,7 @@ CREATE TABLE `amigos` (
 CREATE TABLE `imagenes_usuario` (
   `email` varchar(50) NOT NULL,
   `imagen` varchar(50) NOT NULL,
+  `descripcion` varchar(100),
   PRIMARY KEY (`email`,`imagen`),
   CONSTRAINT `email_imagen` FOREIGN KEY (`email`) REFERENCES `usuarios` (`email`) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -53,13 +65,3 @@ CREATE TABLE `respuestas_usuario` (
   CONSTRAINT `respuestas_usuario_ibfk_1` FOREIGN KEY (`email`) REFERENCES `usuarios` (`email`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE `usuarios` (
-  `email` varchar(50) NOT NULL,
-  `nombre` varchar(50) NOT NULL,
-  `password` varchar(16) DEFAULT NULL,
-  `sexo` char(1) NOT NULL,
-  `fecha_nacimiento` varchar(12) DEFAULT NULL,
-  `imagen_perfil` varchar(100) DEFAULT NULL,
-  `puntos` int(6) DEFAULT '0',
-  PRIMARY KEY (`email`)
-);

@@ -127,8 +127,9 @@ userController.get("/imagenes", middlewares.areYouLoged, (request, response) => 
 userController.post("/nuevaimagen", middlewares.areYouLoged, factoryMulter.single("image"), (request, response) => {
     if (request.session.loguedUser.puntos >= 100) {
         if (request.file) {
-            imagen = request.file.path.split("uploads")[1].replace("\\", "").trim();
-            request.daoUsuarios.nuevaImagenUsuario(request.session.loguedUser.email, imagen, err => {
+            let imagen = request.file.path.split("uploads")[1].replace("\\", "").trim();
+            let descripcion = request.body.descripcion;
+            request.daoUsuarios.nuevaImagenUsuario(request.session.loguedUser.email, imagen, descripcion, err => {
                 if (err) {
                     request.session.errors = ["Ha habido un problema", err];
                     response.redirect("/error"); //ruta

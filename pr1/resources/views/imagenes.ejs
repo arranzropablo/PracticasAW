@@ -22,22 +22,31 @@
     <div class="body-content">
         <div class="section-message">Imagenes subidas</div>
             <div class="content">
-                <div class="image-image_container">
-                <% let i = 1; %>   
-                <%imagenes.forEach(imagen => { %>
-                    <img class="imagen" src="/profile/imagensubida/<%=imagen%>" alt="image">
-                    <% if (i % 4 === 0) { %>
-                        </div>
-                        <div class="image_container">
-                    <% } %>
-                    <% i++; %>
-                <% }); %>
+                <div class="generic_table">
+                    <table>
+                        <tr>
+                        <% let i = 1; %>   
+                        <%imagenes.forEach(imagen => { %>
+                            <td><img class="imagen" src="/profile/imagensubida/<%=imagen.imagen%>" alt="image"></td>
+                            <td><span><%=imagen.descripcion%></span></td>
+                            <% if (i % 3 === 0) { %>
+                                </tr>
+                                <tr>
+                            <% } %>
+                            <% i++; %>
+                        <% }); %>
+                        </tr>
+                    </table>
                 </div>
             <% if(loguedUser.email === email) {%>
             <div class="section-message">¡Sube una foto!</div>
             <div class="section-box">
                 <form action="/profile/nuevaimagen" method="post" id="section-form" enctype="multipart/form-data">
                     <table>
+                        <tr>
+                            <td><label for="descripcion">Descripcion:</label></td>
+                            <td><input type="text" name="descripcion"></td>
+                        </tr>
                         <tr>
                             <td><input type="file" name="image"></td>
                         </tr>

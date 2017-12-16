@@ -312,13 +312,13 @@ class DaoUsuarios {
         });
     }
 
-    nuevaImagenUsuario(email, imagen, callback) {
+    nuevaImagenUsuario(email, imagen, descripcion, callback) {
         this.pool.getConnection((err, connection) => {
             if (err) {
                 callback(`Error al obtener la conexión: ${err.message}`)
             } else {
                 connection.query(
-                    "INSERT INTO imagenes_usuario VALUES (?, ?)", [email, imagen],
+                    "INSERT INTO imagenes_usuario VALUES (?, ?, ?)", [email, imagen, descripcion],
                     (err, filas) => {
                         connection.release();
                         if (err) {
@@ -338,7 +338,7 @@ class DaoUsuarios {
                 callback(`Error al obtener la conexión: ${err.message}`, undefined)
             } else {
                 connection.query(
-                    "SELECT imagen FROM imagenes_usuario WHERE email = ?", [email],
+                    "SELECT imagen, descripcion FROM imagenes_usuario WHERE email = ?", [email],
                     (err, filas) => {
                         connection.release();
                         if (err) {
@@ -346,7 +346,7 @@ class DaoUsuarios {
                         } else {
                             let imagenes = [];
                             filas.forEach(fila => {
-                                imagenes.push(fila.imagen);
+                                imagenes.push({ imagen: fila.imagen, descripcion: fila.descripcion });
                             })
                             callback(null, imagenes);
                         }
