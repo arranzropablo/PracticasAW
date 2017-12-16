@@ -1,0 +1,39 @@
+<html lang="es">
+
+<head>
+    <title>Preguntas: FaceBluff</title>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="/css/style-imagenes.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+
+<body>
+    <div class="header">
+        <img id="app-image" src="/img/logo.png" alt="FaceBluff-logo">
+        <div class="options-user">
+            <a href="/profile/user/<%=loguedUser.email%>"> Perfil</a>
+            <a href="/friends"> Amigos </a>
+            <a href="/questions"> Preguntas </a>
+            <a href="/desconectar"> Desconectar </a>
+            <span> <%=loguedUser.puntos%> puntos</span>
+        </div>
+    </div>
+    <div class="body-content">
+        <div class="section-message">Imagenes subidas</div>
+            <div class="content"> 
+                <div class="section-message">¡Sube una foto!</div>
+                <div class="section-box">
+                    <form action="/profile/nuevaimagen" method="post" id="section-form" enctype="multipart/form-data">
+                        <table>
+                            <tr>
+                                <td><input type="file" name="image"></td>
+                            </tr>
+                        </table>
+                        <input class="submit" type="submit" value="Subir">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
