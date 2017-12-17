@@ -218,7 +218,7 @@ class DaoPreguntas {
                 callback(`Error al obtener la conexión: ${err.message}`, undefined)
             } else {
                 connection.query(
-                    "SELECT id, (SELECT idPregunta FROM respuestas_usuario WHERE email = ? and idPregunta = ?) AS contestada " +
+                    "SELECT id, texto, (SELECT idPregunta FROM respuestas_usuario WHERE email = ? and idPregunta = ?) AS contestada " +
                     "FROM preguntas WHERE id = ?;", [email, id, id],
                     (err, filas) => {
                         connection.release();
@@ -231,6 +231,7 @@ class DaoPreguntas {
                             }
                             let pregunta = {
                                 id: filas[0].id,
+                                texto: filas[0].texto,
                                 contestada: filas[0].contestada !== null
                             }
                             callback(null, pregunta);
