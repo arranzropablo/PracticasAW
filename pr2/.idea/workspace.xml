@@ -2,8 +2,68 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="67f43d91-5134-4f9d-b61f-d2ae5580384a" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/DAOs/daoJuegos.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/DAOs/daoUsuarios.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/controllers/gameController.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/controllers/userController.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/utils/database.js" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
+      <change beforePath="$PROJECT_DIR$/config.js" afterPath="$PROJECT_DIR$/config.js" />
+      <change beforePath="$PROJECT_DIR$/imagenes/10_C.png" afterPath="$PROJECT_DIR$/resources/imagenes/10_C.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/10_D.png" afterPath="$PROJECT_DIR$/resources/imagenes/10_D.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/10_H.png" afterPath="$PROJECT_DIR$/resources/imagenes/10_H.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/10_S.png" afterPath="$PROJECT_DIR$/resources/imagenes/10_S.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/2_C.png" afterPath="$PROJECT_DIR$/resources/imagenes/2_C.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/2_D.png" afterPath="$PROJECT_DIR$/resources/imagenes/2_D.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/2_H.png" afterPath="$PROJECT_DIR$/resources/imagenes/2_H.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/2_S.png" afterPath="$PROJECT_DIR$/resources/imagenes/2_S.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/3_C.png" afterPath="$PROJECT_DIR$/resources/imagenes/3_C.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/3_D.png" afterPath="$PROJECT_DIR$/resources/imagenes/3_D.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/3_H.png" afterPath="$PROJECT_DIR$/resources/imagenes/3_H.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/3_S.png" afterPath="$PROJECT_DIR$/resources/imagenes/3_S.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/4_C.png" afterPath="$PROJECT_DIR$/resources/imagenes/4_C.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/4_D.png" afterPath="$PROJECT_DIR$/resources/imagenes/4_D.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/4_H.png" afterPath="$PROJECT_DIR$/resources/imagenes/4_H.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/4_S.png" afterPath="$PROJECT_DIR$/resources/imagenes/4_S.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/5_C.png" afterPath="$PROJECT_DIR$/resources/imagenes/5_C.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/5_D.png" afterPath="$PROJECT_DIR$/resources/imagenes/5_D.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/5_H.png" afterPath="$PROJECT_DIR$/resources/imagenes/5_H.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/5_S.png" afterPath="$PROJECT_DIR$/resources/imagenes/5_S.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/6_C.png" afterPath="$PROJECT_DIR$/resources/imagenes/6_C.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/6_D.png" afterPath="$PROJECT_DIR$/resources/imagenes/6_D.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/6_H.png" afterPath="$PROJECT_DIR$/resources/imagenes/6_H.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/6_S.png" afterPath="$PROJECT_DIR$/resources/imagenes/6_S.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/7_C.png" afterPath="$PROJECT_DIR$/resources/imagenes/7_C.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/7_D.png" afterPath="$PROJECT_DIR$/resources/imagenes/7_D.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/7_H.png" afterPath="$PROJECT_DIR$/resources/imagenes/7_H.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/7_S.png" afterPath="$PROJECT_DIR$/resources/imagenes/7_S.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/8_C.png" afterPath="$PROJECT_DIR$/resources/imagenes/8_C.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/8_D.png" afterPath="$PROJECT_DIR$/resources/imagenes/8_D.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/8_H.png" afterPath="$PROJECT_DIR$/resources/imagenes/8_H.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/8_S.png" afterPath="$PROJECT_DIR$/resources/imagenes/8_S.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/9_C.png" afterPath="$PROJECT_DIR$/resources/imagenes/9_C.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/9_D.png" afterPath="$PROJECT_DIR$/resources/imagenes/9_D.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/9_H.png" afterPath="$PROJECT_DIR$/resources/imagenes/9_H.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/9_S.png" afterPath="$PROJECT_DIR$/resources/imagenes/9_S.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/A_C.png" afterPath="$PROJECT_DIR$/resources/imagenes/A_C.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/A_D.png" afterPath="$PROJECT_DIR$/resources/imagenes/A_D.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/A_H.png" afterPath="$PROJECT_DIR$/resources/imagenes/A_H.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/A_S.png" afterPath="$PROJECT_DIR$/resources/imagenes/A_S.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/ImagenPortada.jpg" afterPath="$PROJECT_DIR$/resources/imagenes/ImagenPortada.jpg" />
+      <change beforePath="$PROJECT_DIR$/imagenes/J_C.png" afterPath="$PROJECT_DIR$/resources/imagenes/J_C.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/J_D.png" afterPath="$PROJECT_DIR$/resources/imagenes/J_D.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/J_H.png" afterPath="$PROJECT_DIR$/resources/imagenes/J_H.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/J_S.png" afterPath="$PROJECT_DIR$/resources/imagenes/J_S.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/K_C.png" afterPath="$PROJECT_DIR$/resources/imagenes/K_C.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/K_D.png" afterPath="$PROJECT_DIR$/resources/imagenes/K_D.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/K_H.png" afterPath="$PROJECT_DIR$/resources/imagenes/K_H.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/K_S.png" afterPath="$PROJECT_DIR$/resources/imagenes/K_S.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/Q_C.png" afterPath="$PROJECT_DIR$/resources/imagenes/Q_C.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/Q_D.png" afterPath="$PROJECT_DIR$/resources/imagenes/Q_D.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/Q_H.png" afterPath="$PROJECT_DIR$/resources/imagenes/Q_H.png" />
+      <change beforePath="$PROJECT_DIR$/imagenes/Q_S.png" afterPath="$PROJECT_DIR$/resources/imagenes/Q_S.png" />
+      <change beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -17,17 +77,54 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-506">
-              <caret line="31" column="26" lean-forward="false" selection-start-line="31" selection-start-column="25" selection-end-line="31" selection-end-column="26" />
+            <state relative-caret-position="216">
+              <caret line="32" column="32" lean-forward="false" selection-start-line="32" selection-start-column="32" selection-end-line="32" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="daoUsuarios.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DAOs/daoUsuarios.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="23" column="37" lean-forward="false" selection-start-line="23" selection-start-column="37" selection-end-line="23" selection-end-column="37" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="userController.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/controllers/userController.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="885">
+              <caret line="59" column="3" lean-forward="true" selection-start-line="59" selection-start-column="3" selection-end-line="59" selection-end-column="3" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="19" column="22" lean-forward="false" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -36,7 +133,15 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/config.js" />
+        <option value="$PROJECT_DIR$/DAOs/gameDAO.js" />
+        <option value="$PROJECT_DIR$/DAOs/userDAO.js" />
+        <option value="$PROJECT_DIR$/utils/database.js" />
+        <option value="$PROJECT_DIR$/utils/middlewares.js" />
+        <option value="$PROJECT_DIR$/DAOs/daoJuegos.js" />
+        <option value="$PROJECT_DIR$/controllers/gameController.js" />
+        <option value="$PROJECT_DIR$/DAOs/daoUsuarios.js" />
         <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/controllers/userController.js" />
       </list>
     </option>
   </component>
@@ -54,9 +159,14 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/node_modules" />
+  </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1440" />
-    <option name="height" value="900" />
+    <option name="x" value="20" />
+    <option name="y" value="43" />
+    <option name="width" value="1400" />
+    <option name="height" value="787" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -74,7 +184,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -86,12 +195,28 @@
             <path>
               <item name="pr2" type="b2602c69:ProjectViewProjectNode" />
               <item name="pr2" type="462c0819:PsiDirectoryNode" />
-              <item name="imagenes" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pr2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pr2" type="462c0819:PsiDirectoryNode" />
+              <item name="DAOs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pr2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pr2" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pr2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pr2" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -99,6 +224,16 @@
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/resources" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/utils" />
+      <recent name="$PROJECT_DIR$/DAOs" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -111,6 +246,15 @@
         </RuleState>
       </list>
     </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" path-to-js-file="$PROJECT_DIR$/app.js" />
+    <configuration name="app.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="app.js" working-dir="$PROJECT_DIR$" />
+    <recent_temporary>
+      <list size="1">
+        <item index="0" class="java.lang.String" itemvalue="Node.js.app.js" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -127,26 +271,28 @@
       <updated>1514369232060</updated>
       <workItem from="1514369234594" duration="1180000" />
       <workItem from="1514371090883" duration="1885000" />
+      <workItem from="1514481508219" duration="4850000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3065000" />
+    <option name="totallyTimeSpent" value="7915000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24242425" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24242425" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329602" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329602" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329602" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329602" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39925373" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -164,7 +310,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="12" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -177,17 +323,90 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/practica2.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-244">
+          <caret line="11" column="18" lean-forward="true" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/middlewares.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="1" lean-forward="true" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/utils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAOs/daoJuegos.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/gameController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="35" column="20" lean-forward="false" selection-start-line="35" selection-start-column="20" selection-end-line="35" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/database.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="4" lean-forward="false" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/config.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="19" column="22" lean-forward="false" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-506">
-          <caret line="31" column="26" lean-forward="false" selection-start-line="31" selection-start-column="25" selection-end-line="31" selection-end-column="26" />
+        <state relative-caret-position="216">
+          <caret line="32" column="32" lean-forward="false" selection-start-line="32" selection-start-column="32" selection-end-line="32" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAOs/daoUsuarios.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="23" column="37" lean-forward="false" selection-start-line="23" selection-start-column="37" selection-end-line="23" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/userController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="885">
+          <caret line="59" column="3" lean-forward="true" selection-start-line="59" selection-start-column="3" selection-end-line="59" selection-end-column="3" />
           <folding />
         </state>
       </provider>

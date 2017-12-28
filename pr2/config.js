@@ -17,7 +17,7 @@ module.exports = {
     dbPassword: "accesop1",
 
     // Nombre de la base de datos
-    dbName: "practica2",
+    dbName: "practica1",
 
     //puerto donde escucha la aplicacion
     port: 3000

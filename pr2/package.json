@@ -11,5 +11,10 @@
     "AW"
   ],
   "author": "Pablo Arranz Ropero & Juan Alberto Camino Sáez",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-validator": "^4.3.0",
+    "mysql": "^2.15.0"
+  }
 }
