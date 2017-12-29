@@ -3,51 +3,48 @@ module.exports = function (express, passport) {
     const gameController = express.Router();
 
     //TIENE QUE ESTAR IDENTIFICADA CON AUTHORIZATION, SINO 403
-    gameController.get("/status/:id", (request, response) => {
-        request.params.id;
-        //busca en bd los jugadores de una partida
-        let players = [];
-        //si no hay error
-        response.status(200);
-        response.json(JSON.stringify(players));
-        //si la partida no existe
-        response.status(404);
-        response.json(JSON.stringify(new Object()));
-        //si hay error
-        response.status(500);
-        response.json(JSON.stringify(new Object()));
+    gameController.get("/players/:id", passport.authenticate('basic', {session: false}), (request, response) => {
+        request.daoJuegos.getPlayers(request.params.id, (err, players) => {
+            if (err) {
+                response.status(500).json({err});
+            } else if(players.length > 0) {
+                response.status(200).json({players});
+            } else {
+                response.status(404).json({message: "No existe la partida"});
+            }
+        });
     });
 
     //TIENE QUE ESTAR IDENTIFICADA CON AUTHORIZATION, SINO 403
-    gameController.put("/new", (request, response) => {
-        request.body.name;
-        //inserta en bd la partida con ese nombre
-        //inserta el creador de la partida como jugador de la partida
-        //si no hay error
-        response.status(201);
-        //si hay error
-        response.status(500);
-
-        //finally:
-        response.json(JSON.stringify(new Object()));
+    gameController.put("/new", passport.authenticate('basic', {session: false}), (request, response) => {
+        request.daoJuegos.newGame(request.body.name, request.user, (err, result) => {
+            if (err) {
+                response.status(500).json({err});
+            } else {
+                response.status(201).json({});
+            }
+        });
     });
 
     //TIENE QUE ESTAR IDENTIFICADA CON AUTHORIZATION, SINO 403
-    gameController.put("/addUser", (request, response) => {
-        request.body.gameId;
-        request.body.userId;
-        //inserta el usuario en la partida
-        //si no hay error
-        response.status(201);
-        //si la partida esta llena
-        response.status(400);
-        //si la partida no existe
-        response.status(404);
-        //si hay error
-        response.status(500);
-
-        //finally:
-        response.json(JSON.stringify(new Object()));
+    gameController.put("/join/:id", passport.authenticate('basic', {session: false}), (request, response) => {
+        request.daoJuegos.getPlayers(request.params.id, (err, players) => {
+            if (err) {
+                response.status(500).json({err});
+            } else if (players.length >= 4) {
+                response.status(404).json({message: "La partida está completa"});
+            } else if(players.length > 0) {
+                request.daoJuegos.joinGame(request.params.id, request.user, (err, players) => {
+                    if (err) {
+                        response.status(500).json({message: err});
+                    } else {
+                        response.status(201).json({});
+                    }
+                });
+            } else {
+                response.status(404).json({message: "No existe la partida"});
+            }
+        });
     });
 
     return gameController;

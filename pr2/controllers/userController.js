@@ -13,15 +13,15 @@ module.exports = function (express, passport) {
             if (result.isEmpty()) {
                 request.daoUsuario.nuevoUsuario(newUser, (err, added) => {
                     if(err){
-                        response.json(500, {message: new Object()});
+                        response.status(500).json({err});
                     } else if (added) {
-                        response.json(201, {message: new Object()});
+                        response.status(201).json({});
                     } else {
-                        response.json(400, {message: new Object()});
+                        response.status(400).json({});
                     }
                 })
             } else {
-                response.json(400, {message: result.array()});
+                response.status(400).json({message: result.array()});
             }
         });
     });
@@ -38,32 +38,30 @@ module.exports = function (express, passport) {
             if (result.isEmpty()) {
                 request.daoUsuario.login(newUser, (err, correct) => {
                     if(err){
-                        response.json(500, {message: new Object()});
+                        response.status(500).json({err});
                     } else {
                         if (correct){
-                            response.json(200, {message: {exists: true}});
+                            response.status(200).json({exists: true});
                         } else {
-                            response.json(200, {message: {exists: false}});
+                            response.status(200).json({exists: false});
                         }
                     }
                 });
             } else {
-                response.json(400, {message: result.array()});
+                response.status(400).json({message: result.array()});
             }
         });
     });
 
     //TIENE QUE ESTAR IDENTIFICADA CON AUTHORIZATION, SINO 403 (Como hago para qe de un 403 desde el passport?)
-    userController.get("/games/:id", (request, response) => {
-        request.params.id;
-        //busca en bd las partidas del usuario y las guarda en un array
-        let listaPartidas = [];
-        //si no hay error
-        response.status(200);
-        response.json(JSON.stringify(listaPartidas));
-        //si hay error
-        response.status(500);
-        response.json(JSON.stringify(new Object()));
+    userController.get("/games", passport.authenticate('basic', {session: false}), (request, response) => {
+        request.daoUsuario.getGames(request.user, (err, games) => {
+            if(err){
+                response.status(500).json({err});
+            } else {
+                response.status(200).json({games});
+            }
+        });
     });
 
     return userController;

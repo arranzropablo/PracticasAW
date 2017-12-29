@@ -34,7 +34,6 @@ class DaoUsuarios {
                     }
                 );
             }
-
         });
     }
 
@@ -64,6 +63,34 @@ class DaoUsuarios {
                             }
                         } else {
                             callback("Error al realizar la consulta", false)
+                        }
+                    }
+                );
+            }
+
+        });
+    }
+
+    /**
+     * Devuelve una lista de juegos en los que participa el usuario
+     * @param {String} email email del user
+     * @param {String} password password del user
+     * @param {Function} callback
+     */
+    getGames(usuario, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`, null)
+            } else {
+                connection.query("select p.id, p.nombre " +
+                                    "from partidas p join juega_en j on j.idPartida=p.id join usuarios u on u.id=j.idUsuario " +
+                                    "where login=?", [usuario],
+                    (err, filas) => {
+                        connection.release();
+                        if (!err) {
+                            callback(null, filas);
+                        } else {
+                            callback("Error al realizar la consulta", null);
                         }
                     }
                 );
