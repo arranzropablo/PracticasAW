@@ -1,0 +1,13 @@
+.navbar-brand{
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 2rem;
+    margin: auto;
+    width: 50%;
+}
+
+#homeDiv{
+    margin: 100px auto;
+}

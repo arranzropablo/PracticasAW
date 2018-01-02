@@ -17,7 +17,7 @@ module.exports = function (express) {
                     } else if (added) {
                         response.status(201).json({});
                     } else {
-                        response.status(400).json({});
+                        response.status(400).json({message: "El usuario ya existe"});
                     }
                 })
             } else {
