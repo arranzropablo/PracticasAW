@@ -2,64 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="67f43d91-5134-4f9d-b61f-d2ae5580384a" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/resources/public/styles.css" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/controllers/authController.js" afterPath="$PROJECT_DIR$/controllers/authController.js" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/10_C.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/10_C.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/10_D.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/10_D.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/10_H.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/10_H.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/10_S.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/10_S.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/2_C.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/2_C.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/2_D.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/2_D.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/2_H.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/2_H.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/2_S.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/2_S.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/3_C.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/3_C.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/3_D.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/3_D.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/3_H.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/3_H.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/3_S.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/3_S.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/4_C.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/4_C.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/4_D.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/4_D.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/4_H.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/4_H.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/4_S.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/4_S.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/5_C.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/5_C.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/5_D.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/5_D.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/5_H.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/5_H.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/5_S.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/5_S.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/6_C.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/6_C.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/6_D.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/6_D.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/6_H.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/6_H.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/6_S.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/6_S.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/7_C.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/7_C.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/7_D.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/7_D.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/7_H.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/7_H.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/7_S.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/7_S.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/8_C.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/8_C.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/8_D.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/8_D.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/8_H.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/8_H.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/8_S.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/8_S.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/9_C.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/9_C.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/9_D.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/9_D.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/9_H.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/9_H.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/9_S.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/9_S.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/A_C.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/A_C.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/A_D.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/A_D.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/A_H.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/A_H.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/A_S.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/A_S.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/ImagenPortada.jpg" afterPath="$PROJECT_DIR$/resources/public/imagenes/ImagenPortada.jpg" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/J_C.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/J_C.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/J_D.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/J_D.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/J_H.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/J_H.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/J_S.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/J_S.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/K_C.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/K_C.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/K_D.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/K_D.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/K_H.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/K_H.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/K_S.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/K_S.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/Q_C.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/Q_C.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/Q_D.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/Q_D.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/Q_H.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/Q_H.png" />
-      <change beforePath="$PROJECT_DIR$/resources/imagenes/Q_S.png" afterPath="$PROJECT_DIR$/resources/public/imagenes/Q_S.png" />
-      <change beforePath="$PROJECT_DIR$/resources/public/index.html" afterPath="$PROJECT_DIR$/resources/public/index.html" />
-      <change beforePath="$PROJECT_DIR$/resources/public/script.js" afterPath="$PROJECT_DIR$/resources/public/script.js" />
+      <change beforePath="$PROJECT_DIR$/resources/public/imagenes/ImagenPortada.jpg" afterPath="" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -76,7 +19,7 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
+            <state relative-caret-position="960">
               <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
               <folding />
             </state>
@@ -86,8 +29,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/public/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-932">
-              <caret line="15" column="23" lean-forward="true" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
+            <state relative-caret-position="15">
+              <caret line="15" column="23" lean-forward="false" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -111,7 +54,7 @@
       <file leaf-file-name="authController.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controllers/authController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="403">
+            <state relative-caret-position="600">
               <caret line="40" column="50" lean-forward="false" selection-start-line="40" selection-start-column="50" selection-end-line="40" selection-end-column="50" />
               <folding />
             </state>
@@ -121,7 +64,7 @@
       <file leaf-file-name="script.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/public/script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
+            <state relative-caret-position="1050">
               <caret line="70" column="98" lean-forward="false" selection-start-line="70" selection-start-column="98" selection-end-line="70" selection-end-column="98" />
               <folding />
             </state>
@@ -244,6 +187,13 @@
             <path>
               <item name="pr2" type="b2602c69:ProjectViewProjectNode" />
               <item name="pr2" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
+              <item name="imagenes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pr2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pr2" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -318,21 +268,20 @@
       <workItem from="1514895539121" duration="226000" />
       <workItem from="1514895782384" duration="1855000" />
       <workItem from="1514901549767" duration="8718000" />
+      <workItem from="1514911121430" duration="9000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30790000" />
+    <option name="totallyTimeSpent" value="30799000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23467231" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23467231" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329602" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329602" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -345,6 +294,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -388,6 +338,51 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="960">
+          <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/styles.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="1" lean-forward="true" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/authController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="40" column="50" lean-forward="false" selection-start-line="40" selection-start-column="50" selection-end-line="40" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1050">
+          <caret line="70" column="98" lean-forward="false" selection-start-line="70" selection-start-column="98" selection-end-line="70" selection-end-column="98" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="23" lean-forward="true" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#3;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#4;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="750">
           <caret line="50" column="0" lean-forward="true" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
           <folding />
@@ -419,7 +414,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="40" lean-forward="false" selection-start-line="4" selection-start-column="40" selection-end-line="4" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -575,7 +569,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="40" lean-forward="false" selection-start-line="4" selection-start-column="40" selection-end-line="4" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -583,7 +576,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="163">
           <caret line="54" column="51" lean-forward="true" selection-start-line="54" selection-start-column="51" selection-end-line="54" selection-end-column="51" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -591,7 +583,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="5" column="4" lean-forward="false" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -599,13 +590,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="19" column="22" lean-forward="false" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
+        <state relative-caret-position="960">
           <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
           <folding />
         </state>
@@ -618,7 +608,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/authController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
+        <state relative-caret-position="600">
           <caret line="40" column="50" lean-forward="false" selection-start-line="40" selection-start-column="50" selection-end-line="40" selection-end-column="50" />
           <folding />
         </state>
@@ -626,7 +616,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/public/script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
+        <state relative-caret-position="1050">
           <caret line="70" column="98" lean-forward="false" selection-start-line="70" selection-start-column="98" selection-end-line="70" selection-end-column="98" />
           <folding />
         </state>
@@ -642,8 +632,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/public/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-932">
-          <caret line="15" column="23" lean-forward="true" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
+        <state relative-caret-position="15">
+          <caret line="15" column="23" lean-forward="false" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
