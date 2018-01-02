@@ -16,9 +16,9 @@ let daoUsuario = new daoUsuarios.DaoUsuarios(database.pool);
 let daoJuego = new daoJuegos.DaoJuegos(database.pool);
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "resources/views"));
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "resources/public")));
 app.use(bodyParser.json());
 app.use(expressValidator({
     customValidators: {
@@ -57,6 +57,9 @@ app.use((request, response, next) => {
 
 const gameController = require("./controllers/gameController")(express, passport);
 const userController = require("./controllers/userController")(express, passport);
+const authController = require("./controllers/authController")(express);
+
+app.use("", authController);
 
 app.use("/user", userController);
 
