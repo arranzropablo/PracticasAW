@@ -15,9 +15,6 @@ const app = express();
 let daoUsuario = new daoUsuarios.DaoUsuarios(database.pool);
 let daoJuego = new daoJuegos.DaoJuegos(database.pool);
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "resources/views"));
-
 app.use(express.static(path.join(__dirname, "resources/public")));
 app.use(bodyParser.json());
 app.use(expressValidator({
