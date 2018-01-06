@@ -1,3 +1,6 @@
+var loggedUser = "";
+var encriptedAuth = "";
+
 $(document).ready(function(){
     $("#loginbtn").on('click', evt => {
         evt.preventDefault();
@@ -19,6 +22,8 @@ $(document).ready(function(){
                 200: function(data){
                     $("[id$='Error']").html("");
                     if(data.correct){
+                        encriptedAuth = btoa(login + ":" + password);
+                        loggedUser = login;
                         //Cargamos la sig pagina
                     } else {
                         $("#genericError")[0].classList.remove("text-info");
@@ -58,8 +63,8 @@ $(document).ready(function(){
             contentType:"application/json",
             statusCode:{
                 201: function(data){
-                    $("[id$='Error']").html("");
-                    //cargamos la sig pagina
+                    encriptedAuth = btoa(login + ":" + password);
+                    loggedUser = login;
                 },
                 400: function(data){
                     $("[id$='Error']").html("");
