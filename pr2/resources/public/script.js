@@ -30,12 +30,12 @@ function login(evt) {
                     encriptedAuth = btoa(login + ":" + password);
                     loggedUser = login;
                     $("#logued_user").text("Usuario: " + login);
-                    $(".container").remove();
-                    $("#cards_image").remove();
+                    $(".container").hide();
+                    $("#cards_image").hide();
                     let view = createGamesView();
                     $("#homeDiv").append(view);
                     putActions();
-                    $("#list_game").hide();
+                    //$("#list_game").hide();
                 } else {
                     $("#genericError")[0].classList.remove("text-info");
                     $("#genericError")[0].classList.add("text-danger");
@@ -142,13 +142,45 @@ function putActions() {
 }
 
 function showGamesList(evt) {
-
+    console.log("Ey, el boton funciona!");
 }
 
 function createGame(evt) {
+    let nombre = $("#new_game_input").val();
 
+    $.ajax({
+        method: "PUT",
+        url: "/game/new",
+        data: JSON.stringify({
+            name: nombre
+        }),
+        contentType: "application/json",
+        statusCode: {
+            201: function(data) {
+                alert("Partida creada correctamente. Además, te has unido a ella");
+                $("#new_game_input").prop("value", "");
+            },
+            400: function(data) {
+                $("[id$='Error']").html("");
+                if (data.responseJSON.message instanceof Array) {
+                    data.responseJSON.message.forEach(error => {
+                        $("#" + error.param + "Error").html("<i class=\"fa fa-close\"></i> " + error.msg);
+                    });
+                } else {
+                    $("#loginError").html("<i class=\"fa fa-close\"></i> " + data.responseJSON.message);
+                }
+            },
+            500: function(data) {
+                $("[id$='Error']").html("");
+                $("#genericError")[0].classList.remove("text-info");
+                $("#genericError")[0].classList.add("text-danger");
+                $("#genericError").html("<i class=\"fa fa-close\"></i> Error! Mas información en la consola");
+                console.log(data);
+            }
+        }
+    });
 }
 
-function createGame(evt) {
+function joinGame(evt) {
 
 }
