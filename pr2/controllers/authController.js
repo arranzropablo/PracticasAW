@@ -1,4 +1,4 @@
-module.exports = function (express) {
+module.exports = function(express) {
 
     const authController = express.Router();
 
@@ -12,16 +12,16 @@ module.exports = function (express) {
         request.getValidationResult().then(result => {
             if (result.isEmpty()) {
                 request.daoUsuario.nuevoUsuario(newUser, (err, added) => {
-                    if(err){
-                        response.status(500).json({err});
+                    if (err) {
+                        response.status(500).json({ err });
                     } else if (added) {
                         response.status(201).json({});
                     } else {
-                        response.status(400).json({message: "El usuario ya existe"});
+                        response.status(400).json({ message: "El usuario ya existe" });
                     }
                 })
             } else {
-                response.status(400).json({message: result.array()});
+                response.status(400).json({ message: result.array() });
             }
         });
     });
@@ -37,18 +37,18 @@ module.exports = function (express) {
         request.getValidationResult().then(result => {
             if (result.isEmpty()) {
                 request.daoUsuario.login(newUser, (err, correct) => {
-                    if(err){
-                        response.status(500).json({err});
+                    if (err) {
+                        response.status(500).json({ err });
                     } else {
-                        if (correct){
-                            response.status(200).json({exists: true});
+                        if (correct) {
+                            response.status(200).json({ exists: true });
                         } else {
-                            response.status(200).json({exists: false});
+                            response.status(200).json({ exists: false });
                         }
                     }
                 });
             } else {
-                response.status(400).json({message: result.array()});
+                response.status(400).json({ message: result.array() });
             }
         });
     });

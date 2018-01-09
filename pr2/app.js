@@ -26,25 +26,24 @@ app.use(expressValidator({
 }));
 
 app.use(passport.initialize());
-passport.use(new passportHTTP.BasicStrategy((
-    {realm: "Unauthorized access"},
-        function(user, password, callback){
-            let checkUser = {
-                login: user,
-                password: password
-            }
-            daoUsuario.login(checkUser, (err, correct) => {
-                //hago un if(err)? en las diapositivas pone qe el primer argumento del callback va a null...
-                //como puedo enviar un 403?
-                if(!err) {
-                    if (correct){
-                        callback(null, checkUser.login);
-                    } else {
-                        callback(null, false);
-                    }
+passport.use(new passportHTTP.BasicStrategy(({ realm: "Unauthorized access" },
+    function(user, password, callback) {
+        let checkUser = {
+            login: user,
+            password: password
+        }
+        daoUsuario.login(checkUser, (err, correct) => {
+            //hago un if(err)? en las diapositivas pone qe el primer argumento del callback va a null...
+            //como puedo enviar un 403?
+            if (!err) {
+                if (correct) {
+                    callback(null, checkUser.login);
+                } else {
+                    callback(null, false);
                 }
-            });
-        })));
+            }
+        });
+    })));
 
 app.use((request, response, next) => {
     request.daoUsuario = daoUsuario;

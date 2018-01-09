@@ -1,4 +1,4 @@
-.navbar-home{
+.navbar-home {
     align-self: center;
     display: flex;
     align-items: center;
@@ -8,6 +8,22 @@
     width: 50%;
 }
 
-#homeDiv{
+#homeDiv {
     margin: 100px auto;
+}
+
+#logued_user {
+    margin-left: 75%;
+}
+
+.games_inputs {
+    margin-bottom: 20px;
+}
+
+games_buttons {
+    color: red;
+}
+
+.game_view {
+    margin: 10%;
 }

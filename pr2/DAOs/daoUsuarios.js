@@ -19,8 +19,7 @@ class DaoUsuarios {
                 callback(`Error al obtener la conexión: ${err.message}`, false)
             } else {
                 connection.query(
-                    "INSERT INTO usuarios (login, password) values(?,?)",
-                    [
+                    "INSERT INTO usuarios (login, password) values(?,?)", [
                         usuario.login,
                         usuario.password
                     ],
@@ -53,7 +52,7 @@ class DaoUsuarios {
                         connection.release();
                         if (!err) {
                             if (filas.length > 0) {
-                                if(filas[0].password == usuario.password){
+                                if (filas[0].password === usuario.password) {
                                     callback(null, true);
                                 } else {
                                     callback(null, false);
@@ -83,8 +82,8 @@ class DaoUsuarios {
                 callback(`Error al obtener la conexión: ${err.message}`, null)
             } else {
                 connection.query("select p.id, p.nombre " +
-                                    "from partidas p join juega_en j on j.idPartida=p.id join usuarios u on u.id=j.idUsuario " +
-                                    "where login=?", [usuario],
+                    "from partidas p join juega_en j on j.idPartida=p.id join usuarios u on u.id=j.idUsuario " +
+                    "where login=?", [usuario],
                     (err, filas) => {
                         connection.release();
                         if (!err) {
