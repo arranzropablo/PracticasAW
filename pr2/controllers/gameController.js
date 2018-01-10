@@ -16,17 +16,6 @@ module.exports = function(express, passport) {
     });
 
     //TIENE QUE ESTAR IDENTIFICADA CON AUTHORIZATION, SINO 403
-    gameController.get("/games", passport.authenticate('basic', { session: false }), (request, response) => {
-        request.daoJuegos.getGames(request.user, (err, partidas) => {
-            if (err) {
-                response.status(500).json({ err });
-            } else {
-                response.status(201).json(partidas);
-            }
-        });
-    });
-
-    //TIENE QUE ESTAR IDENTIFICADA CON AUTHORIZATION, SINO 403
     gameController.put("/new", passport.authenticate('basic', { session: false }), (request, response) => {
         request.daoJuegos.newGame(request.body.name, request.user, (err, result) => {
             if (err) {

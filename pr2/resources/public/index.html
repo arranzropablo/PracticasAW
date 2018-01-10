@@ -19,15 +19,16 @@
         <div class="navbar-brand">
             <span>Juego del mentiroso</span>
             <span id="logued_user"></span>
-        </div>
-    </nav>
-    <nav id="cards_image" class="navbar navbar-light bg-light">
-        <div class="navbar-brand navbar-home">
-            <img src="./imagenes/imagenPortada.png" height="200" class="d-inline-block align-top" alt="adasdas">
-            <span>Juego del mentiroso</span>
+            <span class="btn btn-danger float-right" id="logout">Desconectar</span>
         </div>
     </nav>
     <div id="homeDiv">
+        <nav id="cards_image" class="navbar navbar-light bg-light">
+            <div class="navbar-brand navbar-home">
+                <img src="./imagenes/imagenPortada.png" height="200" class="d-inline-block align-top" alt="adasdas">
+                <span>Juego del mentiroso</span>
+            </div>
+        </nav>
         <div class="container">
             <div class="row">
                 <div class="col-md-3"></div>
@@ -92,7 +93,9 @@
                 </div>
             </div>
         </div>
-        <div class="game_view">
+    </div>
+    <div id="game_view">
+        <div class="container">
             <div class="card" id="list_game">
                 <div class="card-body">
                     <h5 class="card-title">Mis partidas</h5>

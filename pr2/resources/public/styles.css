@@ -8,15 +8,11 @@
     width: 50%;
 }
 
-#homeDiv {
+#homeDiv > .container{
     margin: 100px auto;
 }
 
-#cards_image {
-    display: none;
-}
-
-.container {
+body > div {
     display: none;
 }
 
@@ -28,11 +24,16 @@
     margin-bottom: 20px;
 }
 
-games_buttons {
+#logout{
+    position: fixed;
+    right: 10px;
+    top: 7px;
+}
+
+.games_buttons {
     color: red;
 }
 
-.game_view {
-    margin: 10%;
-    display: none;
+#game_view {
+    margin: 15px;
 }
