@@ -92,10 +92,32 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div>
-
+        <div class="game_view">
+            <div class="card" id="list_game">
+                <div class="card-body">
+                    <h5 class="card-title">Mis partidas</h5>
+                    <p class="card-text">Aquí puedes ver las partidas en las que participas actualmente</p>
+                    <a class="games_buttons btn btn-primary" id="list_game_button">Ver partidas</a>
+                    <ul id="games_list"></ul>
+                </div>
+            </div>
+            <div class="card" id="new_game">
+                <div class="card-body">
+                    <h5 class="card-title">Crear nueva partida</h5>
+                    <p class="card-text">Aquí puedes crear una nueva partida con un nombre</p>
+                    <input type="text" placeholder="Introduce nombre de partida" class="form-control games_inputs" id="new_game_input">
+                    <a class="games_buttons btn btn-primary" id="new_game_button">Crear partida</a>
+                </div>
+            </div>
+            <div class="card" id="join_game">
+                <div class="card-body">
+                    <h5 class="card-title">Unirse a partida existente</h5>
+                    <p class="card-text">Aquí puedes unirte a una partida ya creada</p>
+                    <input type="text" placeholder="Introduce identificador de partida" class="form-control games_inputs" id="join_game_input">
+                    <a class="games_buttons btn btn-primary" id="join_game_button">Unirse a partida</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>

@@ -2,8 +2,11 @@ var loggedUser = "";
 var encriptedAuth = "";
 
 $(document).ready(function() {
-    $("#loginbtn").on('click', login);
-    $("#registerbtn").on('click', register);
+    $(".container").show();
+    $("#cards_image").show();
+
+    putActions();
+
 });
 
 
@@ -32,9 +35,9 @@ function login(evt) {
                     $("#logued_user").text("Usuario: " + login);
                     $(".container").hide();
                     $("#cards_image").hide();
-                    let view = createGamesView();
-                    $("#homeDiv").append(view);
-                    putActions();
+                    $(".game_view").show();
+                    /*let view = createGamesView();
+                    $("#homeDiv").append(view);*/
                     //$("#list_game").hide();
                 } else {
                     $("#genericError")[0].classList.remove("text-info");
@@ -79,9 +82,9 @@ function register(evt) {
                 $("#logued_user").text("Usuario: " + login);
                 $(".container").remove();
                 $("#cards_image").remove();
-                let view = createGamesView();
-                $("#homeDiv").append(view);
-                putActions();
+                $(".game_view").show();
+                /*let view = createGamesView();
+                $("#homeDiv").append(view);*/
             },
             400: function(data) {
                 $("[id$='Error']").html("");
@@ -104,7 +107,7 @@ function register(evt) {
     });
 }
 
-function createGamesView() {
+/*function createGamesView() {
     let result = $("<div>").addClass("game_view");
     result.append($("<div>").addClass("card").css("style", "18rem").attr("id", "list_game"));
     result.append($("<div>").addClass("card").css("style", "18rem").attr("id", "new_game"));
@@ -133,16 +136,49 @@ function createGamesView() {
     aux1.eq(2).append(aux2);
 
     return result;
-}
+}*/
 
 function putActions() {
+    $("#loginbtn").on('click', login);
+    $("#registerbtn").on('click', register);
     $("#list_game_button").on('click', showGamesList);
     $("#new_game_button").on('click', createGame);
     $("#join_game_button").on('click', joinGame);
 }
 
 function showGamesList(evt) {
-    console.log("Ey, el boton funciona!");
+    /*$("#new_game").hide();
+    $("#join_game").hide();*/
+    $("#list_game_button").hide();
+    $.ajax({
+        method: "GET",
+        url: "/game/games",
+        statusCode: {
+            201: function(data) {
+                if (data.length === 0) {
+                    $("#games_list").append($("<li>").text("No tienes ninguna partida"));
+                } else {
+                    data.forEach(elem => {
+                        $("#games_list").append($("<li>").text("id: " + elem.id + " Nombre: " + elem.nombre));
+                    });
+                }
+                $("#games_list").show();
+            },
+            403: function(data) {
+                $("[id$='Error']").html("");
+                if (data.responseJSON.message instanceof Array) {
+                    data.responseJSON.message.forEach(error => {
+                        $("#" + error.param + "Error").html("<i class=\"fa fa-close\"></i> " + error.msg);
+                    });
+                } else {
+                    alert("Fallo en la autenticación");
+                }
+            },
+            500: function(data) {
+                alert(data);
+            }
+        }
+    });
 }
 
 function createGame(evt) {
@@ -182,5 +218,41 @@ function createGame(evt) {
 }
 
 function joinGame(evt) {
-
+    let id = Number($("#join_game_input").val());
+    if (isNaN(id)) {
+        alert("El identificador debe ser un número");
+    }
+    $.ajax({
+        method: "PUT",
+        url: "/game/join/" + id,
+        statusCode: {
+            201: function(data) {
+                alert("Te has unido a la partida con identificador: " + id);
+                $("#join_game_input").prop("value", "");
+            },
+            403: function(data) {
+                $("[id$='Error']").html("");
+                if (data.responseJSON.message instanceof Array) {
+                    data.responseJSON.message.forEach(error => {
+                        $("#" + error.param + "Error").html("<i class=\"fa fa-close\"></i> " + error.msg);
+                    });
+                } else {
+                    alert("Fallo en la autenticación");
+                }
+            },
+            404: function(data) {
+                $("[id$='Error']").html("");
+                if (data.responseJSON.message instanceof Array) {
+                    data.responseJSON.message.forEach(error => {
+                        $("#" + error.param + "Error").html("<i class=\"fa fa-close\"></i> " + error.msg);
+                    });
+                } else {
+                    alert(data.responseJSON.message);
+                }
+            },
+            500: function(data) {
+                alert(data);
+            }
+        }
+    });
 }

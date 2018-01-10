@@ -12,6 +12,14 @@
     margin: 100px auto;
 }
 
+#cards_image {
+    display: none;
+}
+
+.container {
+    display: none;
+}
+
 #logued_user {
     margin-left: 75%;
 }
@@ -26,4 +34,5 @@ games_buttons {
 
 .game_view {
     margin: 10%;
+    display: none;
 }
