@@ -2,8 +2,7 @@ module.exports = function(express, passport) {
 
     const gameController = express.Router();
 
-    //TIENE QUE ESTAR IDENTIFICADA CON AUTHORIZATION, SINO 403
-    gameController.get("/players/:id", passport.authenticate('basic', { session: false }), (request, response) => {
+    gameController.get("/players/:id", passport.authenticate('basic', { session: false, failureRedirect: "/user/unauthorized" }), (request, response) => {
         request.daoJuegos.getPlayers(request.params.id, (err, players) => {
             if (err) {
                 response.status(500).json({ err });
@@ -15,8 +14,7 @@ module.exports = function(express, passport) {
         });
     });
 
-    //TIENE QUE ESTAR IDENTIFICADA CON AUTHORIZATION, SINO 403
-    gameController.put("/new", passport.authenticate('basic', { session: false }), (request, response) => {
+    gameController.put("/new", passport.authenticate('basic', { session: false, failureRedirect: "/user/unauthorized" }), (request, response) => {
         request.daoJuegos.newGame(request.body.name, request.user, (err, result) => {
             if (err) {
                 response.status(500).json({ err });
@@ -26,8 +24,7 @@ module.exports = function(express, passport) {
         });
     });
 
-    //TIENE QUE ESTAR IDENTIFICADA CON AUTHORIZATION, SINO 403
-    gameController.put("/join/:id", passport.authenticate('basic', { session: false }), (request, response) => {
+    gameController.put("/join/:id", passport.authenticate('basic', { session: false, failureRedirect: "/user/unauthorized" }), (request, response) => {
         request.daoJuegos.getPlayers(Number(request.params.id), (err, players) => {
             if (err) {
                 response.status(500).json({ message: err });

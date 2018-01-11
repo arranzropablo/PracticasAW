@@ -33,8 +33,6 @@ passport.use(new passportHTTP.BasicStrategy(({ realm: "Unauthorized access" },
             password: password
         }
         daoUsuario.login(checkUser, (err, correct) => {
-            //hago un if(err)? en las diapositivas pone qe el primer argumento del callback va a null...
-            //como puedo enviar un 403?
             if (!err) {
                 if (correct) {
                     callback(null, checkUser.login);

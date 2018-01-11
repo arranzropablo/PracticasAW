@@ -22,6 +22,8 @@
             <span class="btn btn-danger float-right" id="logout">Desconectar</span>
         </div>
     </nav>
+    <div id="errorMsg" class="alert alert-danger" role="alert">
+    </div>
     <div id="homeDiv">
         <nav id="cards_image" class="navbar navbar-light bg-light">
             <div class="navbar-brand navbar-home">
@@ -100,8 +102,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Mis partidas</h5>
                     <p class="card-text">Aquí puedes ver las partidas en las que participas actualmente</p>
-                    <a class="games_buttons btn btn-primary" id="list_game_button">Ver partidas</a>
                     <ul id="games_list"></ul>
+                    <a class="games_buttons btn btn-primary" id="list_game_button">Ver partidas</a>
                 </div>
             </div>
             <div class="card" id="new_game">
