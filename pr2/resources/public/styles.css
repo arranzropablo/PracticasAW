@@ -8,11 +8,15 @@
     width: 50%;
 }
 
-#homeDiv > .container{
+#homeDiv>.container {
     margin: 100px auto;
 }
 
-body > div {
+body>div {
+    display: none;
+}
+
+#logout {
     display: none;
 }
 
@@ -24,7 +28,7 @@ body > div {
     margin-bottom: 20px;
 }
 
-#logout{
+#logout {
     position: fixed;
     right: 10px;
     top: 7px;
@@ -36,4 +40,12 @@ body > div {
 
 #game_view {
     margin: 15px;
+}
+
+.single_game {
+    margin-bottom: 20px;
+}
+
+.detail_button {
+    margin-left: 40px;
 }

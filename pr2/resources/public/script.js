@@ -14,6 +14,19 @@ function putActions() {
     $("#list_game_button").on('click', showGamesList);
     $("#new_game_button").on('click', createGame);
     $("#join_game_button").on('click', joinGame);
+    $("#logout").on('click', logout);
+    $("#games_list").on("click", "button", gameStatus);
+}
+
+function logout() {
+    loggedUser = "";
+    encriptedAuth = "";
+
+    $("body>div").hide();
+    $("#logout").hide();
+    $("#games_list").hide();
+    $("#homeDiv").show();
+    $("#logued_user").text("");
 }
 
 function login(evt) {
@@ -41,6 +54,7 @@ function login(evt) {
                     $("#logued_user").text("Usuario: " + login);
                     $("#homeDiv").hide();
                     $("#game_view").show();
+                    $("#logout").show();
                 } else {
                     $("#genericError")[0].classList.remove("text-info");
                     $("#genericError")[0].classList.add("text-danger");
@@ -84,6 +98,7 @@ function register(evt) {
                 $("#logued_user").text("Usuario: " + login);
                 $("#homeDiv").hide();
                 $("#game_view").show();
+                $("#logout").show();
             },
             400: function(data) {
                 $("[id$='Error']").html("");
@@ -110,7 +125,7 @@ function showGamesList(evt) {
     $.ajax({
         method: "GET",
         url: "/user/games",
-        beforeSend: function(req){
+        beforeSend: function(req) {
             req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
         },
         statusCode: {
@@ -121,7 +136,7 @@ function showGamesList(evt) {
                     $("#games_list").append($("<li>").text("No tienes ninguna partida"));
                 } else {
                     games.forEach(elem => {
-                        $("#games_list").append($("<li>").text("id: " + elem.id + " Nombre: " + elem.nombre));
+                        $("#games_list").append($("<li>").addClass("single_game").html("id: " + elem.id + " Nombre: " + elem.nombre).data("id", elem.id).data("name", elem.nombre).append($("<button>").addClass("btn btn-primary").addClass("detail_button").text("Detalles")));
                     });
                 }
                 $("#games_list").show();
@@ -147,7 +162,7 @@ function createGame(evt) {
     $.ajax({
         method: "PUT",
         url: "/game/new",
-        beforeSend: function(req){
+        beforeSend: function(req) {
             req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
         },
         data: JSON.stringify({
@@ -161,7 +176,7 @@ function createGame(evt) {
                 $("#errorMsg")[0].classList.add("alert-success");
                 $('#errorMsg').fadeIn(1000);
                 $('#errorMsg').delay(3000);
-                $('#errorMsg').fadeOut(1000, function(){
+                $('#errorMsg').fadeOut(1000, function() {
                     $("#errorMsg")[0].classList.remove("alert-success");
                     $("#errorMsg")[0].classList.add("alert-danger");
                 });
@@ -189,27 +204,27 @@ function joinGame(evt) {
         $.ajax({
             method: "PUT",
             url: "/game/join/" + id,
-            beforeSend: function (req) {
+            beforeSend: function(req) {
                 req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
             },
             statusCode: {
-                201: function (data) {
+                201: function(data) {
                     $("#errorMsg").html("Te has unido a la partida con identificador: " + id);
                     $("#errorMsg")[0].classList.remove("alert-danger");
                     $("#errorMsg")[0].classList.add("alert-success");
                     $('#errorMsg').fadeIn(1000);
                     $('#errorMsg').delay(3000);
-                    $('#errorMsg').fadeOut(1000, function(){
+                    $('#errorMsg').fadeOut(1000, function() {
                         $("#errorMsg")[0].classList.remove("alert-success");
                         $("#errorMsg")[0].classList.add("alert-danger");
                     });
                     $("#join_game_input").prop("value", "");
                 },
-                403: function (data) {
+                403: function(data) {
                     $("#errorMsg").html("Fallo en la autenticación");
                     $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
                 },
-                404: function (data) {
+                404: function(data) {
                     $("[id$='Error']").html("");
                     if (data.responseJSON.message instanceof Array) {
                         data.responseJSON.message.forEach(error => {
@@ -219,7 +234,7 @@ function joinGame(evt) {
                         alert(data.responseJSON.message);
                     }
                 },
-                500: function (data) {
+                500: function(data) {
                     $("#errorMsg").html("Error! Mas información en la consola");
                     $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
                     console.log(data);
@@ -227,6 +242,42 @@ function joinGame(evt) {
             }
         });
     }
+}
+
+function gameStatus(evt) {
+    let game = $(evt.target).parent();
+    $.ajax({
+        method: "GET",
+        url: "/game/players/" + game.data("id"),
+        beforeSend: function(req) {
+            req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
+        },
+        statusCode: {
+            200: function(data) {
+                $("#game_name").text(game.data("name"));
+                $("#game_info").text("El identificador de esta partida es " + game.data("id"));
+                let numPlayer = 1;
+                data.forEach(player => {
+                    $("#playerName" + numPlayer).text(player.login);
+                    numPlayer++;
+                });
+                if (numPlayer < 5) $("#game_completed").text("La partida está incompleta. Esperando jugadores...");
+                else $("#game_completed").text("La partida está completa");
+
+                $("#game_view").hide();
+                $("#single_game_view").show();
+            },
+            403: function(data) {
+                $("#errorMsg").html("Fallo en la autenticación");
+                $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
+            },
+            500: function(data) {
+                $("#errorMsg").html("Error! Mas información en la consola");
+                $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
+                console.log(data);
+            }
+        }
+    });
 }
 
 /*function createGamesView() {

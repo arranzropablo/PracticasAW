@@ -7,7 +7,7 @@ module.exports = function(express, passport) {
             if (err) {
                 response.status(500).json({ err });
             } else if (players.length > 0) {
-                response.status(200).json({ players });
+                response.status(200).json(players);
             } else {
                 response.status(404).json({ message: "No existe la partida" });
             }
