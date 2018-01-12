@@ -103,7 +103,7 @@
                     <h5 class="card-title">Mis partidas</h5>
                     <p class="card-text">Aquí puedes ver las partidas en las que participas actualmente</p>
                     <ul id="games_list"></ul>
-                    <a class="btn btn-primary" id="list_game_button">Ver partidas</a>
+                    <button class="btn btn-primary" id="list_game_button">Ver partidas</button>
                 </div>
             </div>
             <div class="card" id="new_game">
@@ -111,7 +111,7 @@
                     <h5 class="card-title">Crear nueva partida</h5>
                     <p class="card-text">Aquí puedes crear una nueva partida con un nombre</p>
                     <input type="text" placeholder="Introduce nombre de partida" class="form-control games_inputs" id="new_game_input">
-                    <a class="btn btn-primary" id="new_game_button">Crear partida</a>
+                    <button class="btn btn-primary" id="new_game_button">Crear partida</button>
                 </div>
             </div>
             <div class="card" id="join_game">
@@ -119,7 +119,7 @@
                     <h5 class="card-title">Unirse a partida existente</h5>
                     <p class="card-text">Aquí puedes unirte a una partida ya creada</p>
                     <input type="text" placeholder="Introduce identificador de partida" class="form-control games_inputs" id="join_game_input">
-                    <a class="btn btn-primary" id="join_game_button">Unirse a partida</a>
+                    <button class="btn btn-primary" id="join_game_button">Unirse a partida</button>
                 </div>
             </div>
         </div>
@@ -130,7 +130,7 @@
                 <h5 class="card-title" id="game_name"></h5>
                 <p class="card-text" id="game_info"></p>
                 <p class="card-text" id="game_completed"></p>
-                <a class="btn btn-primary">Actualizar partida</a>
+                <button id="single_game_update" class="btn btn-primary games_buttons">Actualizar partida</button>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -142,28 +142,29 @@
                     <tbody>
                         <tr>
                             <th scope="row">1</th>
-                            <td id="playerName1">-</td>
-                            <td id="playerCards1">-</td>
+                            <td id="playerName1"></td>
+                            <td id="playerCards1"></td>
                         </tr>
                         <tr>
                             <th scope="row">2</th>
-                            <td id="playerName2">-</td>
-                            <td id="playerCards2">-</td>
+                            <td id="playerName2"></td>
+                            <td id="playerCards2"></td>
                         </tr>
                         <tr>
                             <th scope="row">3</th>
-                            <td id="playerName3">-</td>
-                            <td id="playerCards3">-</td>
+                            <td id="playerName3"></td>
+                            <td id="playerCards3"></td>
                         </tr>
                         <tr>
                             <th scope="row">4</th>
-                            <td id="playerName4">-</td>
-                            <td id="playerCards4">-</td>
+                            <td id="playerName4"></td>
+                            <td id="playerCards4"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+        <button id="single_game_back" class="btn btn-primary games_buttons">Volver</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>

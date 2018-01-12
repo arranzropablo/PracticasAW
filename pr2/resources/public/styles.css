@@ -35,7 +35,8 @@ body>div {
 }
 
 .games_buttons {
-    color: red;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 #game_view {

@@ -16,6 +16,8 @@ function putActions() {
     $("#join_game_button").on('click', joinGame);
     $("#logout").on('click', logout);
     $("#games_list").on("click", "button", gameStatus);
+    $("#single_game_back").on('click', singleGameGoBack);
+    $("#single_game_update").on('click', updateGame);
 }
 
 function logout() {
@@ -49,12 +51,7 @@ function login(evt) {
             200: function(data) {
                 $("[id$='Error']").html("");
                 if (data.exists) {
-                    encriptedAuth = btoa(login + ":" + password);
-                    loggedUser = login;
-                    $("#logued_user").text("Usuario: " + login);
-                    $("#homeDiv").hide();
-                    $("#game_view").show();
-                    $("#logout").show();
+                    loginRegisterSuccess(login, password);
                 } else {
                     $("#genericError")[0].classList.remove("text-info");
                     $("#genericError")[0].classList.add("text-danger");
@@ -93,12 +90,7 @@ function register(evt) {
         contentType: "application/json",
         statusCode: {
             201: function(data) {
-                encriptedAuth = btoa(login + ":" + password);
-                loggedUser = login;
-                $("#logued_user").text("Usuario: " + login);
-                $("#homeDiv").hide();
-                $("#game_view").show();
-                $("#logout").show();
+                loginRegisterSuccess(login, password);
             },
             400: function(data) {
                 $("[id$='Error']").html("");
@@ -119,6 +111,15 @@ function register(evt) {
             }
         }
     });
+}
+
+function loginRegisterSuccess(login, password) {
+    encriptedAuth = btoa(login + ":" + password);
+    loggedUser = login;
+    $("#logued_user").text("Usuario: " + login);
+    $("#homeDiv").hide();
+    $("#game_view").show();
+    $("#logout").show();
 }
 
 function showGamesList(evt) {
@@ -231,13 +232,13 @@ function joinGame(evt) {
                             $("#" + error.param + "Error").html("<i class=\"fa fa-close\"></i> " + error.msg);
                         });
                     } else {
-                        alert(data.responseJSON.message);
+                        $("#errorMsg").html(data.responseJSON.message);
+                        $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
                     }
                 },
                 500: function(data) {
-                    $("#errorMsg").html("Error! Mas información en la consola");
+                    $("#errorMsg").html(data.responseJSON.message);
                     $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
-                    console.log(data);
                 }
             }
         });
@@ -256,13 +257,9 @@ function gameStatus(evt) {
             200: function(data) {
                 $("#game_name").text(game.data("name"));
                 $("#game_info").text("El identificador de esta partida es " + game.data("id"));
-                let numPlayer = 1;
-                data.forEach(player => {
-                    $("#playerName" + numPlayer).text(player.login);
-                    numPlayer++;
-                });
-                if (numPlayer < 5) $("#game_completed").text("La partida está incompleta. Esperando jugadores...");
-                else $("#game_completed").text("La partida está completa");
+                $("#game_name").data("id", game.data("id"));
+
+                loadGameData(data);
 
                 $("#game_view").hide();
                 $("#single_game_view").show();
@@ -278,6 +275,57 @@ function gameStatus(evt) {
             }
         }
     });
+}
+
+function singleGameGoBack() {
+    $("#single_game_view").hide();
+    $("#games_list").hide();
+    $("#game_view").show();
+
+}
+
+function updateGame() {
+    let name = $("#game_name").val();
+    let id = $("#game_name").data("id");
+
+    $.ajax({
+        method: "GET",
+        url: "/game/players/" + id,
+        beforeSend: function(req) {
+            req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
+        },
+        statusCode: {
+            200: function(data) {
+                loadGameData(data);
+
+                $("#game_view").hide();
+                $("#single_game_view").show();
+            },
+            403: function(data) {
+                $("#errorMsg").html("Fallo en la autenticación");
+                $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
+            },
+            500: function(data) {
+                $("#errorMsg").html("Error! Mas información en la consola");
+                $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
+                console.log(data);
+            }
+        }
+    });
+}
+
+function loadGameData(data) {
+    for (let i = 1; i <= 4; ++i) {
+        if (i <= data.length) {
+            $("#playerName" + i).text(data[i - 1].login);
+        } else {
+            $("#playerName" + i).text("-");
+        }
+        $("#playerCards" + i).text("-");
+    }
+
+    if (data.length < 4) $("#game_completed").text("La partida está incompleta. Esperando jugadores...");
+    else $("#game_completed").text("La partida está completa");
 }
 
 /*function createGamesView() {
