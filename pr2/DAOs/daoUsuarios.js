@@ -70,6 +70,29 @@ class DaoUsuarios {
         });
     }
 
+    getUserByNickname(nombre, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`, undefined)
+            } else {
+                connection.query("SELECT login, id FROM usuarios WHERE login = ?", [nombre],
+                    (err, filas) => {
+                        connection.release();
+                        if (!err) {
+                            if (filas.length > 0) {
+                                let user = { login: filas[0].login, id: filas[0].id };
+                                callback(null, user);
+                            }
+                        } else {
+                            callback("Error al obtener el usuario", undefined)
+                        }
+                    }
+                );
+            }
+
+        });
+    }
+
     /**
      * Devuelve una lista de juegos en los que participa el usuario
      * @param {String} email email del user
