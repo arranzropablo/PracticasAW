@@ -50,3 +50,9 @@ body>div {
 .detail_button {
     margin-left: 40px;
 }
+
+.single_game_info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}

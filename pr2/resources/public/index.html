@@ -127,44 +127,50 @@
     <div id="single_game_view">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title" id="game_name"></h5>
-                <p class="card-text" id="game_info"></p>
-                <p class="card-text" id="game_completed"></p>
-                <button id="single_game_update" class="btn btn-primary games_buttons">Actualizar partida</button>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Jugador</th>
-                            <th>Numero de cartas</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td id="playerName1"></td>
-                            <td id="playerCards1"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td id="playerName2"></td>
-                            <td id="playerCards2"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td id="playerName3"></td>
-                            <td id="playerCards3"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">4</th>
-                            <td id="playerName4"></td>
-                            <td id="playerCards4"></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="single_game_info">
+                    <div>
+                        <h5 class="card-title" id="game_name"></h5>
+                        <p class="card-text" id="game_info"></p>
+                        <p class="card-text" id="game_completed"></p>
+                        <button id="single_game_update" class="btn btn-primary games_buttons">Actualizar partida</button>
+                        <button id="single_game_back" class="btn btn-primary games_buttons">Volver</button>
+                    </div>
+                    <div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Jugador</th>
+                                    <th>Numero de cartas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td id="playerName1"></td>
+                                    <td id="playerCards1"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td id="playerName2"></td>
+                                    <td id="playerCards2"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">3</th>
+                                    <td id="playerName3"></td>
+                                    <td id="playerCards3"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">4</th>
+                                    <td id="playerName4"></td>
+                                    <td id="playerCards4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-        <button id="single_game_back" class="btn btn-primary games_buttons">Volver</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
