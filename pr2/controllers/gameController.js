@@ -94,6 +94,8 @@ module.exports = function(express, passport) {
                 numero = "Q";
             } else if (carta % 13 === 12) {
                 numero = "K";
+            } else if (carta % 13 === 0) {
+                numero = "A"
             } else {
                 numero = (carta % 13) + 1;
             }
@@ -102,11 +104,11 @@ module.exports = function(express, passport) {
             if (Math.floor(carta / 13) === 0) {
                 palo = "D";
             } else if (Math.floor(carta / 13) === 1) {
-                palo = "P";
+                palo = "S";
             } else if (Math.floor(carta / 13) === 2) {
                 palo = "C";
             } else {
-                palo = "T";
+                palo = "H";
             }
 
             //Introducimos la carta al jugador correspondiente

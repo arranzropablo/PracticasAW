@@ -56,3 +56,25 @@ body>div {
     flex-direction: row;
     justify-content: space-around;
 }
+
+#cards_display {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-content: center;
+    margin: 3%;
+    flex-wrap: wrap;
+}
+
+#board_game_view {
+    text-align: center;
+}
+
+.game_title_info {
+    text-align: center;
+    margin-top: 50px;
+}
+
+#player_cards {
+    flex-grow: 3;
+}

@@ -246,49 +246,27 @@ function joinGame(evt) {
     }
 }
 
-function gameStatus(evt) {
-    let game = $(evt.target).parent();
-    $.ajax({
-        method: "GET",
-        url: "/game/status/" + game.data("id"),
-        beforeSend: function(req) {
-            req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
-        },
-        statusCode: {
-            200: function(data) {
-                $("#game_name").text(game.data("name"));
-                $("#game_info").text("El identificador de esta partida es " + game.data("id"));
-                $("#game_name").data("id", game.data("id"));
-
-                loadPlayers(data);
-
-                $("#game_view").hide();
-                $("#single_game_view").show();
-            },
-            403: function(data) {
-                $("#errorMsg").html("Fallo en la autenticación");
-                $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
-            },
-            500: function(data) {
-                $("#errorMsg").html("Error! Mas información en la consola");
-                $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
-                console.log(data);
-            }
-        }
-    });
-}
 
 function singleGameGoBack() {
     $("#single_game_view").hide();
+    $("#board_game_view").hide();
     $("#games_list").hide();
     $("#game_view").show();
 
 }
 
-function updateGame() {
-    let name = $("#game_name").val();
-    let id = $("#game_name").data("id");
+function gameStatus(evt) {
+    let game = $(evt.target).parent();
+    getStatus(game.data("name"), game.data("id"));
+}
 
+function updateGame() {
+    let name = $("#game_name").data("name");
+    let id = $("#game_name").data("id");
+    getStatus(name, id);
+}
+
+function getStatus(name, id) {
     $.ajax({
         method: "GET",
         url: "/game/status/" + id,
@@ -297,10 +275,18 @@ function updateGame() {
         },
         statusCode: {
             200: function(data) {
+                $("#game_name").text(name);
+                $("#game_info").text("El identificador de esta partida es " + id);
+                $("#game_name").data("id", id);
+                $("#game_name").data("name", name);
                 loadPlayers(data);
 
                 $("#game_view").hide();
                 $("#single_game_view").show();
+                if (data.turno) {
+                    $("#board_game_view").show();
+                    loadCards(data.players[0].cards);
+                }
             },
             403: function(data) {
                 $("#errorMsg").html("Fallo en la autenticación");
@@ -328,6 +314,12 @@ function loadPlayers(data) {
 
     if (data.length < 4) $("#game_completed").text("La partida está incompleta. Esperando jugadores...");
     else $("#game_completed").text("La partida está completa");
+}
+
+function loadCards(cards) {
+    cards.forEach(card => {
+        $("#cards_display").append($("<img>").prop("src", "./imagenes/" + card.numero + "_" + card.palo + ".png"));
+    });
 }
 
 /*function createGamesView() {
