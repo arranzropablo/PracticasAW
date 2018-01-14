@@ -27,6 +27,7 @@ function logout() {
     $("body>div").hide();
     $("#logout").hide();
     $("#games_list").hide();
+    $(".form-control-feedback > span").html("");
     $("#homeDiv").show();
     $("#logued_user").text("");
 }
@@ -249,7 +250,7 @@ function gameStatus(evt) {
     let game = $(evt.target).parent();
     $.ajax({
         method: "GET",
-        url: "/game/players/" + game.data("id"),
+        url: "/game/status/" + game.data("id"),
         beforeSend: function(req) {
             req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
         },
@@ -259,7 +260,7 @@ function gameStatus(evt) {
                 $("#game_info").text("El identificador de esta partida es " + game.data("id"));
                 $("#game_name").data("id", game.data("id"));
 
-                loadGameData(data);
+                loadPlayers(data);
 
                 $("#game_view").hide();
                 $("#single_game_view").show();
@@ -290,13 +291,13 @@ function updateGame() {
 
     $.ajax({
         method: "GET",
-        url: "/game/players/" + id,
+        url: "/game/status/" + id,
         beforeSend: function(req) {
             req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
         },
         statusCode: {
             200: function(data) {
-                loadGameData(data);
+                loadPlayers(data);
 
                 $("#game_view").hide();
                 $("#single_game_view").show();
@@ -314,10 +315,10 @@ function updateGame() {
     });
 }
 
-function loadGameData(data) {
+function loadPlayers(data) {
     for (let i = 1; i <= 4; ++i) {
-        if (i <= data.length) {
-            $("#playerName" + i).text(data[i - 1].login);
+        if (i <= data.players.length) {
+            $("#playerName" + i).text(data.players[i - 1].info.login);
         } else {
             $("#playerName" + i).text("-");
         }

@@ -22,9 +22,31 @@ class DaoJuegos {
                         } else {
                             let players = [];
                             filas.forEach(fila => {
-                                players.push({ login: fila.login, id: fila.id })
+                                players.push({login: fila.login, id: fila.id});
                             });
                             callback(null, players);
+                        }
+                    }
+                );
+            }
+        });
+    }
+
+    getStatus(id, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`, false)
+            } else {
+                connection.query(
+                    "select estado from partidas where id = ?", [id],
+                    (err, filas) => {
+                        connection.release();
+                        if (err) {
+                            callback("Error al realizar la consulta", null)
+                        } else if (filas.length > 0) {
+                            callback(null, JSON.parse(filas[0].estado));
+                        } else {
+                            callback(null, null)
                         }
                     }
                 );
@@ -107,21 +129,17 @@ class DaoJuegos {
         });
     }
 
-    setCards(player, cartas, idPartida, callback) {
+    setGameState(id, gameState, callback) {
         this.pool.getConnection((err, connection) => {
             if (err) {
                 callback(`Error al obtener la conexión: ${err.message}`)
             } else {
-                let cardsToInsert = []
-                cartas.forEach(carta => {
-                    cardsToInsert.push([player.id, idPartida, carta.numero, carta.palo]);
-                });
                 connection.query(
-                    "INSERT INTO cartas_jugador (idJugador, idPartida, numero, palo) VALUES ?", [cardsToInsert],
+                    "UPDATE partidas SET estado = ? WHERE id = ?", [JSON.stringify(gameState), id],
                     (err, filas) => {
                         connection.release();
                         if (err) {
-                            callback("Error en la consulta")
+                            callback("Error en la consulta.")
                         } else {
                             callback(null);
                         }
