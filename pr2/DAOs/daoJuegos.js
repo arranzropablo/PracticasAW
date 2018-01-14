@@ -22,7 +22,7 @@ class DaoJuegos {
                         } else {
                             let players = [];
                             filas.forEach(fila => {
-                                players.push({login: fila.login, id: fila.id});
+                                players.push({ login: fila.login, id: fila.id });
                             });
                             callback(null, players);
                         }
@@ -44,7 +44,7 @@ class DaoJuegos {
                         if (err) {
                             callback("Error al realizar la consulta", null)
                         } else if (filas.length > 0) {
-                            callback(null, JSON.parse(filas[0].estado));
+                            callback(null, filas[0].estado);
                         } else {
                             callback(null, null)
                         }
@@ -59,8 +59,14 @@ class DaoJuegos {
             if (err) {
                 callback(`Error al obtener la conexión: ${err.message}`, false)
             } else {
+                let gameState = {
+                    players: [
+                        { info: { login: user }, cards: [] },
+                    ]
+                }
+
                 connection.query(
-                    "insert into partidas (nombre) values (?)", [nombre],
+                    "insert into partidas (nombre, estado) values (?, ?)", [nombre, JSON.stringify(gameState)],
                     (err, result) => {
                         if (err) {
                             connection.release();
@@ -92,11 +98,25 @@ class DaoJuegos {
                 connection.query(
                     "insert into juega_en values ((select id from usuarios where login = ?), ?)", [user, id],
                     (err, result) => {
-                        connection.release();
                         if (err) {
                             callback("El jugador ya se ha unido a esta partida", null)
                         } else {
-                            callback(null, true);
+                            connection.query("SELECT estado FROM partidas WHERE id = ?", [id], (err, filas) => {
+                                connection.release();
+                                if (err) {
+                                    callback("Error al obtener el estado de la partida", null);
+                                } else {
+                                    let estado = JSON.parse(filas[0].estado);
+                                    estado.players.push({ info: { login: user }, cards: [] });
+                                    this.setGameState(id, estado, err => {
+                                        if (err) {
+                                            callback(err, null);
+                                        } else {
+                                            callback(null, true);
+                                        }
+                                    });
+                                }
+                            });
                         }
                     }
                 );

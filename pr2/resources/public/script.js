@@ -319,10 +319,11 @@ function loadPlayers(data) {
     for (let i = 1; i <= 4; ++i) {
         if (i <= data.players.length) {
             $("#playerName" + i).text(data.players[i - 1].info.login);
+            $("#playerCards" + i).text(data.players[i - 1].cards.length);
         } else {
             $("#playerName" + i).text("-");
+            $("#playerCards" + i).text("-");
         }
-        $("#playerCards" + i).text("-");
     }
 
     if (data.length < 4) $("#game_completed").text("La partida está incompleta. Esperando jugadores...");

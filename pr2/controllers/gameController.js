@@ -6,10 +6,10 @@ module.exports = function(express, passport) {
         request.daoJuegos.getStatus(request.params.id, (err, status) => {
             if (err) {
                 response.status(500).json({ err });
-            } else if (status == null) {
+            } else if (status === null) {
                 response.status(404).json({ message: "No existe la partida" });
             } else {
-                response.status(200).json(status);
+                response.status(200).json(JSON.parse(status));
             }
         });
     });
@@ -110,7 +110,7 @@ module.exports = function(express, passport) {
             }
 
             //Introducimos la carta al jugador correspondiente
-            cardsPlayers[Math.floor(i / 13)].push({numero: numero, palo: palo});
+            cardsPlayers[Math.floor(i / 13)].push({ numero: numero, palo: palo });
         }
 
         //Falta tambien asignar el turno aleatoriamente
@@ -127,16 +127,16 @@ module.exports = function(express, passport) {
                 num: null,
                 valor: null
             },
-            players:[
-                {info: players[0], cards: cardsPlayers[0]},
-                {info: players[1], cards: cardsPlayers[1]},
-                {info: players[2], cards: cardsPlayers[2]},
-                {info: players[3], cards: cardsPlayers[3]},
+            players: [
+                { info: players[0], cards: cardsPlayers[0] },
+                { info: players[1], cards: cardsPlayers[1] },
+                { info: players[2], cards: cardsPlayers[2] },
+                { info: players[3], cards: cardsPlayers[3] },
             ]
         }
 
         daoJuegos.setGameState(idGame, gameState, (err) => {
-            if(err){
+            if (err) {
                 callback(err);
             } else {
                 callback(null);
