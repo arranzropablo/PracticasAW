@@ -1,5 +1,6 @@
 var loggedUser = "";
 var encriptedAuth = "";
+let selectedCards = [];
 
 $(document).ready(function() {
     $("#homeDiv").show();
@@ -18,6 +19,18 @@ function putActions() {
     $("#games_list").on("click", "button", gameStatus);
     $("#single_game_back").on('click', singleGameGoBack);
     $("#single_game_update").on('click', updateGame);
+    $("#cards_display").on("click", "img", getCard);
+}
+
+function getCard(evt) {
+    console.log("Carta seleccionada");
+    let card = $(evt.target);
+    if (selectedCards.some(selectedCard => { return card.data("numero") === selectedCard.numero && card.data("palo") === selectedCard.palo })) {
+        selectedCards = selectedCards.filter(selectedCard => { return card.data("numero") !== selectedCard.numero && card.data("palo") !== selectedCard.palo });
+    } else {
+        selectedCards.push({ numero: card.data("numero"), palo: card.data("palo") });
+    }
+    console.log(selectedCards);
 }
 
 function logout() {
@@ -329,7 +342,7 @@ function loadPlayers(data) {
 
 function loadCards(cards) {
     cards.forEach(card => {
-        $("#cards_display").append($("<img>").prop("src", "./imagenes/" + card.numero + "_" + card.palo + ".png"));
+        $("#cards_display").append($("<img>").data("numero", card.numero).data("palo", card.palo).prop("src", "./imagenes/" + card.numero + "_" + card.palo + ".png"));
     });
 }
 
