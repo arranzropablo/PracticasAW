@@ -1,6 +1,7 @@
 var loggedUser = "";
 var encriptedAuth = "";
 let selectedCards = [];
+let status;
 
 $(document).ready(function() {
     $("#homeDiv").show();
@@ -20,15 +21,30 @@ function putActions() {
     $("#single_game_back").on('click', singleGameGoBack);
     $("#single_game_update").on('click', updateGame);
     $("#cards_display").on("click", "img", getCard);
+    $("#play_button").on('click', actionPlay);
+    $("#lier_button").on('click', actionLier);
+
+}
+
+function actionPlay() {
+    selectedCards.forEach(card => {
+        status.monton.cartas.push(card);
+        //status.players[status.turno].cartas.splice(, 1)
+    });
+    selectedCards = [];
+
+
 }
 
 function getCard(evt) {
     console.log("Carta seleccionada");
     let card = $(evt.target);
     if (selectedCards.some(selectedCard => { return card.data("numero") === selectedCard.numero && card.data("palo") === selectedCard.palo })) {
-        selectedCards = selectedCards.filter(selectedCard => { return card.data("numero") !== selectedCard.numero && card.data("palo") !== selectedCard.palo });
+        selectedCards = selectedCards.filter(selectedCard => { return card.data("numero") !== selectedCard.numero || card.data("palo") !== selectedCard.palo });
+        card.removeClass("selected_card");
     } else {
         selectedCards.push({ numero: card.data("numero"), palo: card.data("palo") });
+        card.addClass("selected_card");
     }
     console.log(selectedCards);
 }
@@ -292,24 +308,32 @@ function getStatus(name, id) {
         },
         statusCode: {
             200: function(data) {
+                status = data;
                 $("#game_name").text(name);
                 $("#game_info").text("El identificador de esta partida es " + id);
                 $("#game_name").data("id", id);
                 $("#game_name").data("name", name);
-                loadPlayers(data);
+                loadPlayers(status);
 
                 $("#game_view").hide();
                 $("#single_game_view").show();
-                if (data.turno) {
+                if (status.turno) {
                     $("#board_game_view").show();
                     let pos = 0;
-                    while (pos < data.players.length) {
-                        if (loggedUser === data.players[pos].info.login) { break; }
+                    while (pos < status.players.length) {
+                        if (loggedUser === status.players[pos].info.login) { break; }
                         pos++;
                     }
-                    loadCards(data.players[pos].cards);
-                    console.log($("#cards_display").children().length);
+                    loadCards(status.players[pos].cards);
 
+                    $("#cards_mount").text(status.monton.cartas.length + status.monton.valor);
+                    $("#turn").text("Turno del jugador " + status.players[status.turno].info.login);
+                    if (status.ultimaJugada.num) {
+                        $("#last_action").text("El jugador " + status.players[status.turno].info.login + " ha echado " + status.ultimaJugada.num + " " + status.ultimaJugada.valor);
+                    } else { $("#last_action").text(); }
+                    if (status.turno !== pos) {
+                        $("#players_actions").hide();
+                    } else { $("#players_actions").show(); }
                 }
             },
             403: function(data) {
@@ -336,8 +360,9 @@ function loadPlayers(data) {
         }
     }
 
-    if (data.length < 4) $("#game_completed").text("La partida está incompleta. Esperando jugadores...");
-    else $("#game_completed").text("La partida está completa");
+    if (data.players.length < 4) {
+        $("#game_completed").text("La partida está incompleta. Esperando jugadores...");
+    } else { $("#game_completed").text("La partida está completa"); }
 }
 
 function loadCards(cards) {

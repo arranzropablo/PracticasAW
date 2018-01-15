@@ -78,3 +78,8 @@ body>div {
 #player_cards {
     flex-grow: 3;
 }
+
+.selected_card {
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
+}
