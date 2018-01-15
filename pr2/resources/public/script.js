@@ -22,18 +22,72 @@ function putActions() {
     $("#single_game_update").on('click', updateGame);
     $("#cards_display").on("click", "img", getCard);
     $("#play_button").on('click', actionPlay);
-    $("#lier_button").on('click', actionLier);
+    //$("#lier_button").on('click', actionLier);
 
 }
 
 function actionPlay() {
+
+    //Ponemos la ultima jugada
+    status.ultimaJugada.num = selectedCards.length;
+    if (status.monton.valor === null) {
+        //De paso, el valor del monton de cartas que meta el usuario si este es el primero que mete cartas al mismo
+        status.monton.valor = $("#mount_value").val();
+    }
+    status.ultimaJugada.valor = status.monton.valor;
+
+    //Buscamos las cartas seleccionadas por el jugador, las añadimos al monton las quitamos de la mano del jugador
+    //Tengo en la cabeza una forma mas eficiente para evitar el bucle while, pero ya la haré mas adelante (quiero que funcione)
     selectedCards.forEach(card => {
         status.monton.cartas.push(card);
-        //status.players[status.turno].cartas.splice(, 1)
+        let pos = 0;
+        while (pos < status.players[status.turno].cards.length) {
+            if (card.numero === status.players[status.turno].cards[pos].numero && card.palo === status.players[status.turno].cards[pos].palo) {
+                break;
+            }
+            pos++;
+        }
+        status.players[status.turno].cards.splice(pos, 1)
     });
+    //Vaciamos el array
     selectedCards = [];
 
+    //Cambiamos el turno
+    status.turno++;
+    if (status.turno === 4) {
+        status.turno = 0;
+    }
 
+    //Mandamos el status al servidor para que haga el update 
+    $.ajax({
+        method: "PUT",
+        url: "game/action/" + $("#game_name").data("id"),
+        beforeSend: function(req) {
+            req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
+        },
+        data: JSON.stringify({
+            status: status,
+        }),
+        contentType: "application/json",
+        statusCode: {
+            200: function(data) {
+                getStatus($("#game_name").data("name"), $("#game_name").data("id"));
+            },
+            400: function(data) {
+                $("[id$='Error']").html("");
+                data.responseJSON.message.forEach(error => {
+                    $("#" + error.param + "Error").html("<i class=\"fa fa-close\"></i> " + error.msg);
+                });
+            },
+            500: function(data) {
+                $("[id$='Error']").html("");
+                $("#genericError")[0].classList.remove("text-info");
+                $("#genericError")[0].classList.add("text-danger");
+                $("#genericError").html("<i class=\"fa fa-close\"></i> Error! Mas información en la consola");
+                console.log(data);
+            }
+        }
+    });
 }
 
 function getCard(evt) {
@@ -281,11 +335,6 @@ function singleGameGoBack() {
     $("#board_game_view").hide();
     $("#games_list").hide();
     $("#game_view").show();
-    let cards = $("#cards_display").children();
-    for (let i = 0; i < cards.length; ++i) {
-        cards.eq(i).remove();
-    }
-
 }
 
 function gameStatus(evt) {
@@ -317,7 +366,7 @@ function getStatus(name, id) {
 
                 $("#game_view").hide();
                 $("#single_game_view").show();
-                if (status.turno) {
+                if (status.players.length === 4) {
                     $("#board_game_view").show();
                     let pos = 0;
                     while (pos < status.players.length) {
@@ -326,14 +375,22 @@ function getStatus(name, id) {
                     }
                     loadCards(status.players[pos].cards);
 
-                    $("#cards_mount").text(status.monton.cartas.length + status.monton.valor);
+                    $("#cards_mount").text(status.monton.cartas.length + " " + status.monton.valor);
                     $("#turn").text("Turno del jugador " + status.players[status.turno].info.login);
-                    if (status.ultimaJugada.num) {
-                        $("#last_action").text("El jugador " + status.players[status.turno].info.login + " ha echado " + status.ultimaJugada.num + " " + status.ultimaJugada.valor);
+                    if (status.ultimaJugada.num !== null) {
+                        let lastPlayer = (status.turno === 0 ? 3 : status.turno - 1);
+                        $("#last_action").text("El jugador " + status.players[lastPlayer].info.login + " ha echado " + status.ultimaJugada.num + " " + status.ultimaJugada.valor);
                     } else { $("#last_action").text(); }
                     if (status.turno !== pos) {
                         $("#players_actions").hide();
-                    } else { $("#players_actions").show(); }
+                    } else {
+                        $("#players_actions").show();
+                        if (status.monton.valor === null) {
+                            $("#mount_value").show();
+                        } else {
+                            $("#mount_value").hide();
+                        }
+                    }
                 }
             },
             403: function(data) {
@@ -366,9 +423,18 @@ function loadPlayers(data) {
 }
 
 function loadCards(cards) {
+    dropCards();
     cards.forEach(card => {
         $("#cards_display").append($("<img>").data("numero", card.numero).data("palo", card.palo).prop("src", "./imagenes/" + card.numero + "_" + card.palo + ".png"));
     });
+}
+
+function dropCards() {
+    let cards = $("#cards_display").children();
+    for (let i = 0; i < cards.length; ++i) {
+        cards.eq(i).remove();
+    }
+    selectedCards = [];
 }
 
 /*function createGamesView() {

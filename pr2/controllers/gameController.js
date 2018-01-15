@@ -61,6 +61,24 @@ module.exports = function(express, passport) {
         });
     });
 
+    gameController.put("/action/:id", passport.authenticate('basic', { session: false, failureRedirect: "/user/unauthorized" }), (request, response) => {
+        /*
+        La accion tiene este formato:
+        action: (puede ser 'jugada', 'levantar')
+        cartas:{ (es null si action es levantar, sino tiene esto)
+            valor: ,
+            num:
+        }
+         */
+        request.daoJuegos.setGameState(Number(request.params.id), request.body.status, err => {
+            if (err) {
+                response.status(404).json({ message: "No existe la partida" });
+            } else {
+                response.status(200).json({});
+            }
+        });
+    });
+
     function startGame(daoJuegos, players, idGame, callback) {
         let cards = [];
         let cardsPlayers = [];
@@ -116,7 +134,7 @@ module.exports = function(express, passport) {
         }
 
         //Falta tambien asignar el turno aleatoriamente
-        let turno = Math.round(Math.random() * 3) + 1; //...
+        let turno = Math.round(Math.random() * 3); //Asi podemos aprovechar el turno como la posicion
 
         //Guardamos toda la informacion en la bd (cartas turno etc)
         let gameState = {
@@ -145,17 +163,6 @@ module.exports = function(express, passport) {
             }
         });
     }
-
-    gameController.post("/action", passport.authenticate('basic', { session: false, failureRedirect: "/user/unauthorized" }), (request, response) => {
-        /*
-        La accion tiene este formato:
-        action: (puede ser 'jugada', 'levantar')
-        cartas:{ (es null si action es levantar, sino tiene esto)
-            valor: ,
-            num:
-        }
-         */
-    });
 
     return gameController;
 }
