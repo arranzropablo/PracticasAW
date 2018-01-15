@@ -62,14 +62,7 @@ module.exports = function(express, passport) {
     });
 
     gameController.put("/action/:id", passport.authenticate('basic', { session: false, failureRedirect: "/user/unauthorized" }), (request, response) => {
-        /*
-        La accion tiene este formato:
-        action: (puede ser 'jugada', 'levantar')
-        cartas:{ (es null si action es levantar, sino tiene esto)
-            valor: ,
-            num:
-        }
-         */
+
         request.daoJuegos.setGameState(Number(request.params.id), request.body.status, err => {
             if (err) {
                 response.status(404).json({ message: "No existe la partida" });
