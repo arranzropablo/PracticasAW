@@ -252,6 +252,10 @@ function singleGameGoBack() {
     $("#board_game_view").hide();
     $("#games_list").hide();
     $("#game_view").show();
+    let cards = $("#cards_display").children();
+    for (let i = 0; i < cards.length; ++i) {
+        cards.eq(i).remove();
+    }
 
 }
 
@@ -285,7 +289,14 @@ function getStatus(name, id) {
                 $("#single_game_view").show();
                 if (data.turno) {
                     $("#board_game_view").show();
-                    loadCards(data.players[0].cards);
+                    let pos = 0;
+                    while (pos < data.players.length) {
+                        if (loggedUser === data.players[pos].info.login) { break; }
+                        pos++;
+                    }
+                    loadCards(data.players[pos].cards);
+                    console.log($("#cards_display").children().length);
+
                 }
             },
             403: function(data) {
