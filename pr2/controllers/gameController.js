@@ -62,12 +62,20 @@ module.exports = function(express, passport) {
     });
 
     gameController.put("/action/:id", passport.authenticate('basic', { session: false, failureRedirect: "/user/unauthorized" }), (request, response) => {
-
+        let status = request.body.status;
         request.daoJuegos.setGameState(Number(request.params.id), request.body.status, err => {
             if (err) {
                 response.status(404).json({ message: "No existe la partida" });
             } else {
-                response.status(200).json({});
+                let lastPlayer = (status.turno === 0 ? 3 : status.turno - 1);
+                request.daoJuegos.setHistorial(status.players[lastPlayer].info, Number(request.params.id), status.ultimaJugada.texto, err2 => {
+                    if (err2) {
+                        response.status(404).json({ message: "Error al actualizar el historial" });
+                    } else {
+                        response.status(200).json({});
+                    }
+                });
+
             }
         });
     });

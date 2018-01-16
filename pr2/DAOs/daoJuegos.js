@@ -168,7 +168,28 @@ class DaoJuegos {
             }
         });
     }
+
+    setHistorial(player, idPartida, evento, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`)
+            } else {
+                connection.query(
+                    "INSERT INTO historial (id, idPartida, evento) VALUES (?, ?, ?)", [player.id, idPartida, evento],
+                    (err, filas) => {
+                        connection.release();
+                        if (err) {
+                            callback("Error en la inserción del historial.")
+                        } else {
+                            callback(null);
+                        }
+                    }
+                );
+            }
+        });
+    }
 }
+
 
 module.exports = {
     DaoJuegos: DaoJuegos
