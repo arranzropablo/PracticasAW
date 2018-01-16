@@ -137,8 +137,10 @@ module.exports = function(express, passport) {
                 valor: null
             },
             ultimaJugada: {
-                num: null,
-                valor: null
+                /*num: null,
+                valor: null*/
+                cartas: [],
+                texto: null
             },
             players: [
                 { info: players[0], cards: cardsPlayers[0] },

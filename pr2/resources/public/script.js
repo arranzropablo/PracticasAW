@@ -28,18 +28,18 @@ function putActions() {
 
 function actionPlay() {
 
-    //Ponemos la ultima jugada
-    status.ultimaJugada.num = selectedCards.length;
+    status.ultimaJugada.cartas = [];
+    //Ponemos valor al monton en caso de no tener
     if (status.monton.valor === null) {
         //De paso, el valor del monton de cartas que meta el usuario si este es el primero que mete cartas al mismo
         status.monton.valor = $("#mount_value").val();
     }
-    status.ultimaJugada.valor = status.monton.valor;
 
     //Buscamos las cartas seleccionadas por el jugador, las añadimos al monton las quitamos de la mano del jugador
     //Tengo en la cabeza una forma mas eficiente para evitar el bucle while, pero ya la haré mas adelante (quiero que funcione)
     selectedCards.forEach(card => {
         status.monton.cartas.push(card);
+        status.ultimaJugada.cartas.push(card);
         let pos = 0;
         while (pos < status.players[status.turno].cards.length) {
             if (card.numero === status.players[status.turno].cards[pos].numero && card.palo === status.players[status.turno].cards[pos].palo) {
@@ -51,6 +51,9 @@ function actionPlay() {
     });
     //Vaciamos el array
     selectedCards = [];
+
+    //Rellenamos el texto de la ultima jugada
+    status.ultimaJugada.texto = "El jugador " + status.players[status.turno].info.login + " ha echado " + status.ultimaJugada.cartas.length + " " + status.monton.valor;
 
     //Cambiamos el turno
     status.turno++;
@@ -377,9 +380,8 @@ function getStatus(name, id) {
 
                     $("#cards_mount").text(status.monton.cartas.length + " " + status.monton.valor);
                     $("#turn").text("Turno del jugador " + status.players[status.turno].info.login);
-                    if (status.ultimaJugada.num !== null) {
-                        let lastPlayer = (status.turno === 0 ? 3 : status.turno - 1);
-                        $("#last_action").text("El jugador " + status.players[lastPlayer].info.login + " ha echado " + status.ultimaJugada.num + " " + status.ultimaJugada.valor);
+                    if (status.ultimaJugada.texto !== null) {
+                        $("#last_action").text(status.ultimaJugada.texto);
                     } else { $("#last_action").text(); }
                     if (status.turno !== pos) {
                         $("#players_actions").hide();
