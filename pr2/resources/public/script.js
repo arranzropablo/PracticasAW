@@ -22,8 +22,58 @@ function putActions() {
     $("#single_game_update").on('click', updateGame);
     $("#cards_display").on("click", "img", getCard);
     $("#play_button").on('click', actionPlay);
-    //$("#lier_button").on('click', actionLier);
+    $("#lier_button").on('click', actionLier);
 
+}
+
+function actionLier() {
+    if (status.ultimaJugada.cartas.every(carta => { return carta.numero === status.monton.valor })) {
+        status.ultimaJugada.texto = "El jugador " + status.players[status.turno].info.login + " piensa que el anterior jugador miente, ¡pero se ha equivocado!";
+        status.monton.cartas.forEach(carta => {
+            status.players[status.turno].cards.push(carta);
+        });
+        status.turno++;
+        if (status.turno === 4) { status.turno = 0; }
+
+    } else {
+        let lastPlayer = (status.turno === 0 ? 3 : status.turno - 1);
+        status.ultimaJugada.texto = "El jugador " + status.players[status.turno].info.login + " piensa que el anterior jugador miente, ¡y estaba en lo cierto!";
+        status.monton.cartas.forEach(carta => {
+            status.players[lastPlayer].cards.push(carta);
+        });
+    }
+    status.monton.cartas = [];
+    status.monton.valor = null;
+
+    $.ajax({
+        method: "PUT",
+        url: "game/action/" + $("#game_name").data("id"),
+        beforeSend: function(req) {
+            req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
+        },
+        data: JSON.stringify({
+            status: status,
+        }),
+        contentType: "application/json",
+        statusCode: {
+            200: function(data) {
+                getStatus($("#game_name").data("name"), $("#game_name").data("id"));
+            },
+            400: function(data) {
+                $("[id$='Error']").html("");
+                data.responseJSON.message.forEach(error => {
+                    $("#" + error.param + "Error").html("<i class=\"fa fa-close\"></i> " + error.msg);
+                });
+            },
+            500: function(data) {
+                $("[id$='Error']").html("");
+                $("#genericError")[0].classList.remove("text-info");
+                $("#genericError")[0].classList.add("text-danger");
+                $("#genericError").html("<i class=\"fa fa-close\"></i> Error! Mas información en la consola");
+                console.log(data);
+            }
+        }
+    });
 }
 
 function actionPlay() {
@@ -92,6 +142,7 @@ function actionPlay() {
         }
     });
 }
+
 
 function getCard(evt) {
     console.log("Carta seleccionada");
