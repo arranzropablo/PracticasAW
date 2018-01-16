@@ -76,7 +76,7 @@ body>div {
 }
 
 #player_cards {
-    flex-grow: 3;
+    flex-grow: 2;
 }
 
 .selected_card {

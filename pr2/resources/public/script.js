@@ -83,20 +83,19 @@ function actionLier() {
 }
 
 function actionPlay() {
-
-    //Ponemos valor al monton en caso de no tener
-    if (status.monton.valor === null) {
-        //De paso, el valor del monton de cartas que meta el usuario si este es el primero que mete cartas al mismo
-        status.monton.valor = $("#mount_value").val();
-    }
-
-    if (status.monton.valor === '') {
-        $('#errorMsg').html("Debes introducir el valor de las cartas de la mesa");
+    //Comprobamos que se hayan seleccionado cartas
+    if (selectedCards.length === 0) {
+        $('#errorMsg').html("Por favor, selecciona cartas para jugar");
         $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
-        status.monton.valor = null;
     } else {
-        if (selectedCards.length === 0) {
-            $('#errorMsg').html("Por favor, selecciona cartas para jugar");
+        //Ponemos valor al monton en caso de no tener
+        if (status.monton.valor === null) {
+            //De paso, el valor del monton de cartas que meta el usuario si este es el primero que mete cartas al mismo
+            status.monton.valor = $("#mount_value").val();
+        }
+        //Comprobamos que se haya introducido un valor al monton
+        if (status.monton.valor === '') {
+            $('#errorMsg').html("Debes introducir el valor de las cartas de la mesa");
             $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
             status.monton.valor = null;
         } else {
