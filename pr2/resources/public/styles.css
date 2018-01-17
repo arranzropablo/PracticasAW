@@ -16,10 +16,6 @@ body>div {
     display: none;
 }
 
-#logout {
-    display: none;
-}
-
 #logued_user {
     margin-left: 75%;
 }
@@ -29,6 +25,7 @@ body>div {
 }
 
 #logout {
+    display: none;
     position: fixed;
     right: 10px;
     top: 7px;

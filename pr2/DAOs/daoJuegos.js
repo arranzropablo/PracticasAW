@@ -188,6 +188,30 @@ class DaoJuegos {
             }
         });
     }
+
+    getHistorial(idPartida, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(`Error al obtener la conexión: ${err.message}`)
+            } else {
+                connection.query(
+                    "SELECT hora, evento from historial where idPartida = ?", [idPartida],
+                    (err, filas) => {
+                        connection.release();
+                        if (err) {
+                            callback("Error al recuperar el historial.", null)
+                        } else {
+                            let history = [];
+                            filas.forEach(fila => {
+                                history.push({timestamp: fila.hora, evento: fila.evento});
+                            })
+                            callback(null, history);
+                        }
+                    }
+                );
+            }
+        });
+    }
 }
 
 

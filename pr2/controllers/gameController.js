@@ -35,24 +35,24 @@ module.exports = function(express, passport) {
                     if (err) {
                         response.status(500).json({ message: err });
                     } else {
-                        if (players.length + 1 === 4) {
-                            request.daoUsuario.getUserByNickname(request.user, (err, user) => {
-                                if (err) {
-                                    response.status(500).json({ message: err });
-                                } else {
+                        request.daoUsuario.getUserByNickname(request.user, (err, user) => {
+                            if (err) {
+                                response.status(500).json({ message: err });
+                            } else {
+                                if (players.length + 1 === 4) {
                                     players.push(user);
                                     startGame(request.daoJuegos, players, Number(request.params.id), (err) => {
                                         if (err) {
                                             response.status(500).json(err)
                                         } else {
-                                            response.status(201);
+                                            response.status(201).json({});
                                         };
                                     });
+                                } else {
+                                    response.status(201).json({});
                                 }
-                            });
-                        } else {
-                            response.status(201).json({});
-                        }
+                            }
+                        });
                     }
                 });
             } else {
@@ -61,7 +61,7 @@ module.exports = function(express, passport) {
         });
     });
 
-    gameController.put("/action/:id", passport.authenticate('basic', { session: false, failureRedirect: "/user/unauthorized" }), (request, response) => {
+    gameController.post("/action/:id", passport.authenticate('basic', { session: false, failureRedirect: "/user/unauthorized" }), (request, response) => {
         let status = request.body.status;
         request.daoJuegos.setGameState(Number(request.params.id), request.body.status, err => {
             if (err) {
@@ -80,7 +80,19 @@ module.exports = function(express, passport) {
         });
     });
 
-    function startGame(daoJuegos, players, idGame, callback) {
+    gameController.get("/history/:id", passport.authenticate('basic', { session: false, failureRedirect: "/user/unauthorized" }), (request, response) => {
+        request.daoJuegos.getHistorial(Number(request.params.id), (err, historial) => {
+            if (err) {
+                response.status(500).json({ message: err });
+            } else if (historial.length === 0) {
+                response.status(404).json({message: "No existe la partida"});
+            } else {
+                response.status(200).json(historial);
+            }
+        });
+    });
+
+        function startGame(daoJuegos, players, idGame, callback) {
         let cards = [];
         let cardsPlayers = [];
         cardsPlayers[0] = [];
@@ -138,6 +150,7 @@ module.exports = function(express, passport) {
         let turno = Math.round(Math.random() * 3); //Asi podemos aprovechar el turno como la posicion
 
         //Guardamos toda la informacion en la bd (cartas turno etc)
+        //TODO hay que ver en cada accion si algun jugador tiene 4 cartas iguales, para que se descarte
         let gameState = {
             turno: turno,
             monton: {
@@ -163,6 +176,16 @@ module.exports = function(express, passport) {
                 callback(err);
             } else {
                 callback(null);
+            }
+        });
+    }
+
+    function logThis(player, idPartida, loggableText, callback){
+        request.daoJuegos.setHistorial(player, idPartida, loggableText, err => {
+            if (err) {
+                callback("Error al actualizar el historial", null)
+            } else {
+                callback(null, null);
             }
         });
     }

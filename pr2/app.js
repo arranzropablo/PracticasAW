@@ -10,7 +10,12 @@ const daoJuegos = require("./DAOs/daoJuegos");
 const expressValidator = require("express-validator");
 var passport = require("passport");
 var passportHTTP = require("passport-http");
+var https = require("https");
+var fs = require("fs");
 const app = express();
+
+var private_key = fs.readFileSync("./" + config.private_key);
+var certificado = fs.readFileSync("./" + config.certificate);
 
 let daoUsuario = new daoUsuarios.DaoUsuarios(database.pool);
 let daoJuego = new daoJuegos.DaoJuegos(database.pool);
@@ -59,11 +64,22 @@ app.use("/user", userController);
 
 app.use("/game", gameController);
 
+var servidor = https.createServer({key: private_key, cert: certificado}, app);
+
+servidor.listen(config.httpsPort, function(err) {
+    if (err) {
+        console.log("No se ha podido iniciar el servidor.")
+        console.log(err);
+    } else {
+        console.log(`Servidor https escuchando en puerto ${config.httpsPort}.`);
+    }
+});
+
 app.listen(config.port, function(err) {
     if (err) {
         console.log("No se ha podido iniciar el servidor.")
         console.log(err);
     } else {
-        console.log(`Servidor escuchando en puerto ${config.port}.`);
+        console.log(`Servidor http escuchando en puerto ${config.port}.`);
     }
 });

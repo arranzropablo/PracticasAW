@@ -22,11 +22,11 @@ function putActions() {
     $("#single_game_update").on('click', updateGame);
     $("#cards_display").on("click", "img", getCard);
     $("#play_button").on('click', actionPlay);
-    $("#lier_button").on('click', actionLier);
+    $("#liar_button").on('click', actionLiar);
 
 }
 
-function actionLier() {
+function actionLiar() {
     if (status.monton.cartas.length === 0) {
         $('#errorMsg').html("No hay ningún jugador anterior que haya echado cartas");
         $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
@@ -51,7 +51,7 @@ function actionLier() {
         status.ultimaJugada.cartas = [];
 
         $.ajax({
-            method: "PUT",
+            method: "POST",
             url: "game/action/" + $("#game_name").data("id"),
             beforeSend: function(req) {
                 req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
@@ -63,6 +63,7 @@ function actionLier() {
             statusCode: {
                 200: function(data) {
                     getStatus($("#game_name").data("name"), $("#game_name").data("id"));
+                    $("#players_actions").hide()
                 },
                 400: function(data) {
                     $("[id$='Error']").html("");
@@ -128,7 +129,7 @@ function actionPlay() {
 
             //Mandamos el status al servidor para que haga el update 
             $.ajax({
-                method: "PUT",
+                method: "POST",
                 url: "game/action/" + $("#game_name").data("id"),
                 beforeSend: function(req) {
                     req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
@@ -140,6 +141,7 @@ function actionPlay() {
                 statusCode: {
                     200: function(data) {
                         getStatus($("#game_name").data("name"), $("#game_name").data("id"));
+                        $("#players_actions").hide();
                     },
                     400: function(data) {
                         $("[id$='Error']").html("");
@@ -452,9 +454,7 @@ function getStatus(name, id) {
                         $("#cards_mount").text(status.monton.cartas.length);
                     }
                     $("#turn").text("Turno del jugador " + status.players[status.turno].info.login);
-                    if (status.ultimaJugada.texto !== null) {
-                        $("#last_action").text(status.ultimaJugada.texto);
-                    } else { $("#last_action").text(); }
+                    loadHistory(id);
                     if (status.turno !== pos) {
                         $("#players_actions").hide();
                     } else {
@@ -475,6 +475,39 @@ function getStatus(name, id) {
                 $("#errorMsg").html("Error! Mas información en la consola");
                 $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
                 console.log(data);
+            }
+        }
+    });
+}
+
+function loadHistory(id){
+    $.ajax({
+        method: "GET",
+        url: "/game/history/" + id,
+        beforeSend: function(req) {
+            req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
+        },
+        statusCode: {
+            200: function(data) {
+                data.forEach(log => {
+                    $("#game_history").prepend($("<div>").text(log.evento));
+                    let fecha = new Date(log.timestamp);
+                    $("#game_history").prepend($("<strong>").text(fecha.getDate() + "-" +
+                                                                 (fecha.getMonth() + 1) + "-" +
+                                                                  fecha.getFullYear() + " " +
+                                                                  fecha.getHours() + ":" +
+                                                                  fecha.getMinutes() + ":" +
+                                                                  fecha.getSeconds()));
+                });
+            },
+            404: function(data) {
+                $("#errorMsg").html(data.message);
+                $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
+            },
+            500: function(data) {
+                $("#errorMsg").html("Error! Mas información en la consola");
+                $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
+                console.log(data.message);
             }
         }
     });

@@ -19,7 +19,16 @@ module.exports = {
     // Nombre de la base de datos
     dbName: "practica1",
 
-    //puerto donde escucha la aplicacion
-    port: 3000
+    // Puerto donde escucha la aplicacion
+    port: 3000,
+
+    // Puerto donde se escucha por https
+    httpsPort: 3443,
+
+    // Fichero con la clave privada
+    private_key: "clave_aw.pem",
+
+    // Fichero con el certificado
+    certificate: "certificado_aw_firmado.crt"
 
 }

@@ -26,7 +26,6 @@ module.exports = function(express) {
         });
     });
 
-    //Esto es para hacer el login (puedo enviarlo al menos codificado en base64?) y el passport es para autorizar las demas
     authController.post("/login", (request, response) => {
         request.checkBody("login", "Usuario no valido").notEmptyField();
         request.checkBody("password", "Contraseña no valida").notEmptyField();
