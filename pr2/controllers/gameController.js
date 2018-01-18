@@ -65,14 +65,84 @@ module.exports = function(express, passport) {
     });
 
     gameController.post("/action/:id", passport.authenticate('basic', { session: false, failureRedirect: "/user/unauthorized" }), (request, response) => {
-        let status = request.body.status;
-        request.daoJuegos.setGameState(Number(request.params.id), request.body.status, err => {
+        request.daoJuegos.getStatus(request.params.id, (err, statusRetrieved) => {
             if (err) {
-                response.status(404).json({ message: "No existe la partida" });
+                response.status(500).json({err});
+            } else if (statusRetrieved === null) {
+                response.status(404).json({message: "No existe la partida"});
             } else {
-                let lastPlayer = (status.turno === 0 ? 3 : status.turno - 1);
-                logThis(Number(request.params.id), status.ultimaJugada.texto, request.daoJuegos)
-                response.status(200).json({});
+                let status = JSON.parse(statusRetrieved)
+                let action = request.body.action;
+                switch (action) {
+                    case "mentira":
+                        let lastPlayer = (status.turno === 0 ? 3 : status.turno - 1);
+                        if (status.ultimaJugada.cartas.every(carta => {
+                                return carta.numero == status.monton.valor
+                            })) {
+                            logThis(Number(request.params.id), "El jugador " + status.players[status.turno].info.login + " piensa que " + status.players[lastPlayer].info.login + " miente, ¡pero se ha equivocado!", request.daoJuegos);
+
+                            status.monton.cartas.forEach(carta => {
+                                status.players[status.turno].cards.push(carta);
+                            });
+
+                            status.turno++;
+                            if (status.turno === 4) {
+                                status.turno = 0;
+                            }
+
+                        } else {
+                            logThis(Number(request.params.id), "El jugador " + status.players[status.turno].info.login + " piensa que " + status.players[lastPlayer].info.login + " miente, ¡y estaba en lo cierto!", request.daoJuegos);
+
+                            status.monton.cartas.forEach(carta => {
+                                status.players[lastPlayer].cards.push(carta);
+                            });
+                        }
+                        status.monton.cartas = [];
+                        status.monton.valor = null;
+                        status.ultimaJugada.cartas = [];
+
+                        break;
+
+                    case "jugada":
+                        //Ponemos valor al monton en caso de no tener
+                        if (status.monton.valor === null) {
+                            //De paso, el valor del monton de cartas que meta el usuario si este es el primero que mete cartas al mismo
+                            status.monton.valor = request.body.valor;
+                        }
+                        status.ultimaJugada.cartas = [];
+
+                        request.body.cartas.forEach(card => {
+                            status.monton.cartas.push(card);
+                            status.ultimaJugada.cartas.push(card);
+                            let pos = 0;
+                            while (pos < status.players[status.turno].cards.length) {
+                                if (card.numero === status.players[status.turno].cards[pos].numero &&
+                                    card.palo === status.players[status.turno].cards[pos].palo) {
+                                    break;
+                                }
+                                pos++;
+                            }
+                            status.players[status.turno].cards.splice(pos, 1)
+                        });
+
+                        //Rellenamos el texto de la ultima jugada
+                        logThis(Number(request.params.id), "El jugador " + status.players[status.turno].info.login + " ha echado " + status.ultimaJugada.cartas.length + " " + status.monton.valor, request.daoJuegos);
+
+                        //Cambiamos el turno
+                        status.turno++;
+                        if (status.turno === 4) {
+                            status.turno = 0;
+                        }
+
+                        break;
+                }
+                request.daoJuegos.setGameState(Number(request.params.id), status, err => {
+                    if (err) {
+                        response.status(500).json({err});
+                    } else {
+                        response.status(200).json({});
+                    }
+                });
             }
         });
     });
@@ -151,8 +221,6 @@ module.exports = function(express, passport) {
             //TODO hay que comprobar en cada jugada el final del juego (y logarlo)
             //TODO cuando aun no estan todos en partida podemos ver el historial en algun sitio? quizas deberíamos
             //TODO moverlo a otro sitio (debajo de las cartas) para que se vea siempre, porqe logeamos mas cosas aparte de jugadas
-            //TODO ultima jugada quizas sobra? hay qe ver bien qe sobra y qe no
-            //toDO poner un mensajito con la accion de llamar mentiroso al anterior
         let gameState = {
             turno: turno,
             monton: {
@@ -160,17 +228,15 @@ module.exports = function(express, passport) {
                 valor: null
             },
             ultimaJugada: {
-                /*num: null,
-                valor: null*/
                 cartas: [],
-                texto: null
             },
             players: [
                 { info: players[0], cards: cardsPlayers[0] },
                 { info: players[1], cards: cardsPlayers[1] },
                 { info: players[2], cards: cardsPlayers[2] },
                 { info: players[3], cards: cardsPlayers[3] },
-            ]
+            ],
+            terminado: false
         }
 
         daoJuegos.setGameState(idGame, gameState, (err) => {

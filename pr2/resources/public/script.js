@@ -31,25 +31,6 @@ function actionLiar() {
         $('#errorMsg').html("No hay ningún jugador anterior que haya echado cartas");
         $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
     } else {
-        if (status.ultimaJugada.cartas.every(carta => { return carta.numero == status.monton.valor })) {
-            status.ultimaJugada.texto = "El jugador " + status.players[status.turno].info.login + " piensa que el anterior jugador miente, ¡pero se ha equivocado!";
-            status.monton.cartas.forEach(carta => {
-                status.players[status.turno].cards.push(carta);
-            });
-            status.turno++;
-            if (status.turno === 4) { status.turno = 0; }
-
-        } else {
-            let lastPlayer = (status.turno === 0 ? 3 : status.turno - 1);
-            status.ultimaJugada.texto = "El jugador " + status.players[status.turno].info.login + " piensa que el anterior jugador miente, ¡y estaba en lo cierto!";
-            status.monton.cartas.forEach(carta => {
-                status.players[lastPlayer].cards.push(carta);
-            });
-        }
-        status.monton.cartas = [];
-        status.monton.valor = null;
-        status.ultimaJugada.cartas = [];
-
         $.ajax({
             method: "POST",
             url: "game/action/" + $("#game_name").data("id"),
@@ -57,7 +38,7 @@ function actionLiar() {
                 req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
             },
             data: JSON.stringify({
-                status: status,
+                action: "mentira",
             }),
             contentType: "application/json",
             statusCode: {
@@ -88,77 +69,42 @@ function actionPlay() {
     if (selectedCards.length === 0) {
         $('#errorMsg').html("Por favor, selecciona cartas para jugar");
         $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
+    } else if (status.monton.valor === null && $("#mount_value").val() === "") {
+        $('#errorMsg').html("Selecciona que valor quieres darle a las cartas");
+        $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
     } else {
-        //Ponemos valor al monton en caso de no tener
-        if (status.monton.valor === null) {
-            //De paso, el valor del monton de cartas que meta el usuario si este es el primero que mete cartas al mismo
-            status.monton.valor = $("#mount_value").val();
-        }
-        //Comprobamos que se haya introducido un valor al monton
-        if (status.monton.valor === '') {
-            $('#errorMsg').html("Debes introducir el valor de las cartas de la mesa");
-            $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
-            status.monton.valor = null;
-        } else {
-            status.ultimaJugada.cartas = [];
-            //Buscamos las cartas seleccionadas por el jugador, las añadimos al monton las quitamos de la mano del jugador
-            //Tengo en la cabeza una forma mas eficiente para evitar el bucle while, pero ya la haré mas adelante (quiero que funcione)
-            selectedCards.forEach(card => {
-                status.monton.cartas.push(card);
-                status.ultimaJugada.cartas.push(card);
-                let pos = 0;
-                while (pos < status.players[status.turno].cards.length) {
-                    if (card.numero === status.players[status.turno].cards[pos].numero && card.palo === status.players[status.turno].cards[pos].palo) {
-                        break;
-                    }
-                    pos++;
-                }
-                status.players[status.turno].cards.splice(pos, 1)
-            });
-            //Vaciamos el array
-            selectedCards = [];
-
-            //Rellenamos el texto de la ultima jugada
-            status.ultimaJugada.texto = "El jugador " + status.players[status.turno].info.login + " ha echado " + status.ultimaJugada.cartas.length + " " + status.monton.valor;
-
-            //Cambiamos el turno
-            status.turno++;
-            if (status.turno === 4) {
-                status.turno = 0;
-            }
-
-            //Mandamos el status al servidor para que haga el update 
-            $.ajax({
-                method: "POST",
-                url: "game/action/" + $("#game_name").data("id"),
-                beforeSend: function(req) {
-                    req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
+        $.ajax({
+            method: "POST",
+            url: "game/action/" + $("#game_name").data("id"),
+            beforeSend: function (req) {
+                req.setRequestHeader("Authorization", "Basic " + encriptedAuth);
+            },
+            data: JSON.stringify({
+                action: "jugada",
+                cartas: selectedCards,
+                valor: Number($("#mount_value").val())
+            }),
+            contentType: "application/json",
+            statusCode: {
+                200: function (data) {
+                    getStatus($("#game_name").data("name"), $("#game_name").data("id"));
+                    $("#players_actions").hide();
                 },
-                data: JSON.stringify({
-                    status: status,
-                }),
-                contentType: "application/json",
-                statusCode: {
-                    200: function(data) {
-                        getStatus($("#game_name").data("name"), $("#game_name").data("id"));
-                        $("#players_actions").hide();
-                    },
-                    400: function(data) {
-                        $("[id$='Error']").html("");
-                        data.responseJSON.message.forEach(error => {
-                            $("#" + error.param + "Error").html("<i class=\"fa fa-close\"></i> " + error.msg);
-                        });
-                    },
-                    500: function(data) {
-                        $("[id$='Error']").html("");
-                        $("#genericError")[0].classList.remove("text-info");
-                        $("#genericError")[0].classList.add("text-danger");
-                        $("#genericError").html("<i class=\"fa fa-close\"></i> Error! Mas información en la consola");
-                        console.log(data);
-                    }
+                400: function (data) {
+                    $("[id$='Error']").html("");
+                    data.responseJSON.message.forEach(error => {
+                        $("#" + error.param + "Error").html("<i class=\"fa fa-close\"></i> " + error.msg);
+                    });
+                },
+                500: function (data) {
+                    $("[id$='Error']").html("");
+                    $("#genericError")[0].classList.remove("text-info");
+                    $("#genericError")[0].classList.add("text-danger");
+                    $("#genericError").html("<i class=\"fa fa-close\"></i> Error! Mas información en la consola");
+                    console.log(data);
                 }
-            });
-        }
+            }
+        });
     }
 }
 

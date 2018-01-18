@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="67f43d91-5134-4f9d-b61f-d2ae5580384a" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/DAOs/daoJuegos.js" afterPath="$PROJECT_DIR$/DAOs/daoJuegos.js" />
       <change beforePath="$PROJECT_DIR$/controllers/gameController.js" afterPath="$PROJECT_DIR$/controllers/gameController.js" />
       <change beforePath="$PROJECT_DIR$/resources/public/script.js" afterPath="$PROJECT_DIR$/resources/public/script.js" />
     </list>
@@ -19,11 +18,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="gameController.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="gameController.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controllers/gameController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
-              <caret line="184" column="48" lean-forward="true" selection-start-line="184" selection-start-column="48" selection-end-line="184" selection-end-column="48" />
+            <state relative-caret-position="196">
+              <caret line="222" column="13" lean-forward="false" selection-start-line="221" selection-start-column="12" selection-end-line="222" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -32,38 +31,18 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="82" column="36" lean-forward="true" selection-start-line="82" selection-start-column="36" selection-end-line="82" selection-end-column="36" />
+            <state relative-caret-position="142">
+              <caret line="56" column="23" lean-forward="false" selection-start-line="56" selection-start-column="23" selection-end-line="56" selection-end-column="23" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="script.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="script.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/public/script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="483" column="32" lean-forward="false" selection-start-line="483" selection-start-column="32" selection-end-line="483" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/public/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1092">
-              <caret line="126" column="8" lean-forward="false" selection-start-line="126" selection-start-column="8" selection-end-line="126" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="daoJuegos.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DAOs/daoJuegos.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="81" column="70" lean-forward="false" selection-start-line="81" selection-start-column="70" selection-end-line="81" selection-end-column="70" />
+            <state relative-caret-position="323">
+              <caret line="88" column="34" lean-forward="true" selection-start-line="88" selection-start-column="34" selection-end-line="88" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -81,14 +60,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>a</find>
-      <find>encript</find>
-      <find>error</find>
-      <find>game</find>
-      <find>games_list</find>
-      <find>/players</find>
-      <find>start</find>
-      <find>getplaye</find>
       <find>loadgamedata</find>
       <find>json.par</find>
       <find>log</find>
@@ -100,17 +71,25 @@
       <find>last_action</find>
       <find>login</find>
       <find>detail_button</find>
-      <find>getstatus</find>
       <find>strong</find>
       <find>histor</find>
       <find>getCard</find>
       <find>historial</find>
       <find>logthis</find>
       <find>ultimaju</find>
+      <find>data:</find>
       <find>history</find>
       <find>join</find>
-      <find>data:</find>
+      <find>game_histor</find>
+      <find>getstatus</find>
+      <find>fadein</find>
       <find>ultimajugada</find>
+      <find>texto</find>
+      <find>ultimajugada.texto</find>
+      <find>%</find>
+      <find>?</find>
+      <find>status</find>
+      <find>valor</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/resources/public</dir>
@@ -138,8 +117,8 @@
         <option value="$PROJECT_DIR$/config.js" />
         <option value="$PROJECT_DIR$/resources/public/index.html" />
         <option value="$PROJECT_DIR$/DAOs/daoJuegos.js" />
-        <option value="$PROJECT_DIR$/controllers/gameController.js" />
         <option value="$PROJECT_DIR$/resources/public/script.js" />
+        <option value="$PROJECT_DIR$/controllers/gameController.js" />
       </list>
     </option>
   </component>
@@ -181,6 +160,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -213,7 +193,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -226,14 +205,14 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/utils" />
+      <recent name="$PROJECT_DIR$/DAOs" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/resources/public" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/resources" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/utils" />
-      <recent name="$PROJECT_DIR$/DAOs" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -291,12 +270,13 @@
       <workItem from="1516115435899" duration="840000" />
       <workItem from="1516120764657" duration="2418000" />
       <workItem from="1516198543147" duration="6423000" />
-      <workItem from="1516284965856" duration="3252000" />
+      <workItem from="1516284965856" duration="4291000" />
+      <workItem from="1516290205605" duration="3204000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="63686000" />
+    <option name="totallyTimeSpent" value="67929000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -306,7 +286,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329602" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329602" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -330,10 +310,18 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/controllers/gameController.js</url>
+          <line>107</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="186" />
+        </line-breakpoint>
+      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="181" />
+      <option name="time" value="190" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -654,34 +642,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DAOs/daoJuegos.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="81" column="70" lean-forward="false" selection-start-line="81" selection-start-column="70" selection-end-line="81" selection-end-column="70" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="82" column="36" lean-forward="true" selection-start-line="82" selection-start-column="36" selection-end-line="82" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/gameController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="184" column="48" lean-forward="true" selection-start-line="184" selection-start-column="48" selection-end-line="184" selection-end-column="48" />
+        <state relative-caret-position="142">
+          <caret line="56" column="23" lean-forward="false" selection-start-line="56" selection-start-column="23" selection-end-line="56" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/public/script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="483" column="32" lean-forward="false" selection-start-line="483" selection-start-column="32" selection-end-line="483" selection-end-column="32" />
+        <state relative-caret-position="323">
+          <caret line="88" column="34" lean-forward="true" selection-start-line="88" selection-start-column="34" selection-end-line="88" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAOs/daoJuegos.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-8">
+          <caret line="34" column="4" lean-forward="false" selection-start-line="34" selection-start-column="4" selection-end-line="34" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/gameController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="222" column="13" lean-forward="false" selection-start-line="221" selection-start-column="12" selection-end-line="222" selection-end-column="13" />
           <folding />
         </state>
       </provider>
