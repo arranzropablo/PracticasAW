@@ -89,6 +89,9 @@ module.exports = function(express, passport) {
                             if (status.turno === 4) {
                                 status.turno = 0;
                             }
+                            if(status.winner !== null && status.winner.id === status.players[lastPlayer].info.id){
+                                logThis(Number(request.params.id), "El jugador " + status.players[lastPlayer].info.login + " ha ganado", request.daoJuegos);
+                            }
 
                         } else {
                             logThis(Number(request.params.id), "El jugador " + status.players[status.turno].info.login + " piensa que " + status.players[lastPlayer].info.login + " miente, ¡y estaba en lo cierto!", request.daoJuegos);
@@ -136,6 +139,11 @@ module.exports = function(express, passport) {
 
                         break;
                 }
+                status.players.forEach(player => {
+                    if(player.cards.length === 0){
+                        status.winner = player.info;
+                    }
+                });
                 request.daoJuegos.setGameState(Number(request.params.id), status, err => {
                     if (err) {
                         response.status(500).json({err});
@@ -217,10 +225,10 @@ module.exports = function(express, passport) {
         let turno = Math.round(Math.random() * 3); //Asi podemos aprovechar el turno como la posicion
 
         //Guardamos toda la informacion en la bd (cartas turno etc)
-        //TODO hay que ver en cada accion si algun jugador tiene 4 cartas iguales, para que se descarte (y logarlo)
-            //TODO hay que comprobar en cada jugada el final del juego (y logarlo)
-            //TODO cuando aun no estan todos en partida podemos ver el historial en algun sitio? quizas deberíamos
-            //TODO moverlo a otro sitio (debajo de las cartas) para que se vea siempre, porqe logeamos mas cosas aparte de jugadas
+        //TODO hay que ver en cada accion si algun jugador tiene 4 cartas iguales, para que se descarte (y logarlo) para eso puedo ordenarlas y ya
+        //TODO cuando una partida no esta creada al completo se muestra el historial de otra, arreglar eso
+        //TODO hacer que el state no vaya siempre al completo al cliente porqe lo pueden ver todos los jugadores
+        //TODO hay que hacer que cuando hay un winner el siguiente solo le aparezca el boton de mentiroso y si lo pulsa y gana pues que ya no aparezca nada al siguiente jugador
         let gameState = {
             turno: turno,
             monton: {
@@ -236,7 +244,7 @@ module.exports = function(express, passport) {
                 { info: players[2], cards: cardsPlayers[2] },
                 { info: players[3], cards: cardsPlayers[3] },
             ],
-            terminado: false
+            winner: null
         }
 
         daoJuegos.setGameState(idGame, gameState, (err) => {

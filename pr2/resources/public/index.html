@@ -138,7 +138,6 @@
                     <p><strong class="card-text" id="turn"></strong></p>
                     <h5 class="card-title">Cartas en la mesa:</h5>
                     <p class="card-text" id="cards_mount"></p>
-                    <p class="card-text" id="game_history"></p>
                 </div>
             </div>
         </div>
@@ -151,49 +150,54 @@
         </div>
     </div>
     <div id="single_game_view">
-        <h5 class="game_title_info">Información sobre la partida</h5>
-        <div class="card">
-            <div class="card-body">
-                <div class="single_game_info">
-                    <div>
-                        <h5 class="card-title" id="game_name"></h5>
-                        <p class="card-text" id="game_info"></p>
-                        <p class="card-text" id="game_completed"></p>
-                        <button id="single_game_update" class="btn btn-primary games_buttons">Actualizar partida</button>
-                        <button id="single_game_back" class="btn btn-primary games_buttons">Volver</button>
-                    </div>
-                    <div>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Jugador</th>
-                                    <th>Numero de cartas</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td id="playerName1"></td>
-                                    <td id="playerCards1"></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td id="playerName2"></td>
-                                    <td id="playerCards2"></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td id="playerName3"></td>
-                                    <td id="playerCards3"></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td id="playerName4"></td>
-                                    <td id="playerCards4"></td>
-                                </tr>
-                            </tbody>
-                        </table>
+        <div id="history_and_info">
+            <p class="card-text" id="game_history"></p>
+            <div>
+                <h5 class="game_title_info">Información sobre la partida</h5>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="single_game_info">
+                            <div>
+                                <h5 class="card-title" id="game_name"></h5>
+                                <p class="card-text" id="game_info"></p>
+                                <p class="card-text" id="game_completed"></p>
+                                <button id="single_game_update" class="btn btn-primary games_buttons">Actualizar partida</button>
+                                <button id="single_game_back" class="btn btn-primary games_buttons">Volver</button>
+                            </div>
+                            <div>
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Jugador</th>
+                                        <th>Numero de cartas</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td id="playerName1"></td>
+                                        <td id="playerCards1"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td id="playerName2"></td>
+                                        <td id="playerCards2"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td id="playerName3"></td>
+                                        <td id="playerCards3"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">4</th>
+                                        <td id="playerName4"></td>
+                                        <td id="playerCards4"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
