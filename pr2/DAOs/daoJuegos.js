@@ -79,7 +79,7 @@ class DaoJuegos {
                                     if (err) {
                                         callback("Error al realizar la insercion", null)
                                     } else {
-                                        callback(null, true);
+                                        callback(null, result.insertId);
                                     }
                                 }
                             );
@@ -169,13 +169,13 @@ class DaoJuegos {
         });
     }
 
-    setHistorial(player, idPartida, evento, callback) {
+    setHistorial(idPartida, evento, callback) {
         this.pool.getConnection((err, connection) => {
             if (err) {
                 callback(`Error al obtener la conexión: ${err.message}`)
             } else {
                 connection.query(
-                    "INSERT INTO historial (id, idPartida, evento) VALUES (?, ?, ?)", [player.id, idPartida, evento],
+                    "INSERT INTO historial (idPartida, evento) VALUES (?, ?)", [idPartida, evento],
                     (err, filas) => {
                         connection.release();
                         if (err) {

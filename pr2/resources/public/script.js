@@ -481,6 +481,7 @@ function getStatus(name, id) {
 }
 
 function loadHistory(id){
+    $("#game_history").html("");
     $.ajax({
         method: "GET",
         url: "/game/history/" + id,

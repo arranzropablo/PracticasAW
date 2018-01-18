@@ -15,10 +15,11 @@ module.exports = function(express, passport) {
     });
 
     gameController.put("/new", passport.authenticate('basic', { session: false, failureRedirect: "/user/unauthorized" }), (request, response) => {
-        request.daoJuegos.newGame(request.body.name, request.user, (err, result) => {
+        request.daoJuegos.newGame(request.body.name, request.user, (err, idCreated) => {
             if (err) {
                 response.status(500).json({ err });
             } else {
+                logThis(idCreated, "El usuario " + request.user + " ha creado la partida y se ha unido a ella", request.daoJuegos)
                 response.status(201).json({});
             }
         });
@@ -39,12 +40,14 @@ module.exports = function(express, passport) {
                             if (err) {
                                 response.status(500).json({ message: err });
                             } else {
+                                logThis(Number(request.params.id), "El usuario " + user.login + " se ha unido a la partida", request.daoJuegos);
                                 if (players.length + 1 === 4) {
                                     players.push(user);
                                     startGame(request.daoJuegos, players, Number(request.params.id), (err) => {
                                         if (err) {
                                             response.status(500).json(err)
                                         } else {
+                                            logThis(Number(request.params.id), "Comienza la partida!", request.daoJuegos);
                                             response.status(201).json({});
                                         };
                                     });
@@ -68,14 +71,8 @@ module.exports = function(express, passport) {
                 response.status(404).json({ message: "No existe la partida" });
             } else {
                 let lastPlayer = (status.turno === 0 ? 3 : status.turno - 1);
-                request.daoJuegos.setHistorial(status.players[lastPlayer].info, Number(request.params.id), status.ultimaJugada.texto, err2 => {
-                    if (err2) {
-                        response.status(404).json({ message: "Error al actualizar el historial" });
-                    } else {
-                        response.status(200).json({});
-                    }
-                });
-
+                logThis(Number(request.params.id), status.ultimaJugada.texto, request.daoJuegos)
+                response.status(200).json({});
             }
         });
     });
@@ -92,7 +89,7 @@ module.exports = function(express, passport) {
         });
     });
 
-        function startGame(daoJuegos, players, idGame, callback) {
+    function startGame(daoJuegos, players, idGame, callback) {
         let cards = [];
         let cardsPlayers = [];
         cardsPlayers[0] = [];
@@ -150,7 +147,12 @@ module.exports = function(express, passport) {
         let turno = Math.round(Math.random() * 3); //Asi podemos aprovechar el turno como la posicion
 
         //Guardamos toda la informacion en la bd (cartas turno etc)
-        //TODO hay que ver en cada accion si algun jugador tiene 4 cartas iguales, para que se descarte
+        //TODO hay que ver en cada accion si algun jugador tiene 4 cartas iguales, para que se descarte (y logarlo)
+            //TODO hay que comprobar en cada jugada el final del juego (y logarlo)
+            //TODO cuando aun no estan todos en partida podemos ver el historial en algun sitio? quizas deberíamos
+            //TODO moverlo a otro sitio (debajo de las cartas) para que se vea siempre, porqe logeamos mas cosas aparte de jugadas
+            //TODO ultima jugada quizas sobra? hay qe ver bien qe sobra y qe no
+            //toDO poner un mensajito con la accion de llamar mentiroso al anterior
         let gameState = {
             turno: turno,
             monton: {
@@ -180,12 +182,12 @@ module.exports = function(express, passport) {
         });
     }
 
-    function logThis(player, idPartida, loggableText, callback){
-        request.daoJuegos.setHistorial(player, idPartida, loggableText, err => {
+    function logThis(idPartida, loggableText, dao){
+        dao.setHistorial(idPartida, loggableText, err => {
             if (err) {
-                callback("Error al actualizar el historial", null)
-            } else {
-                callback(null, null);
+                //No considero el error al actualizar el historial como un error crucial para no
+                //devolver un codigo http OK, por lo que de aquí no sube.
+                console.log("Error al actualizar el historial");
             }
         });
     }
