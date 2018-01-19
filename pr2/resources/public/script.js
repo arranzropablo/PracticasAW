@@ -27,7 +27,7 @@ function putActions() {
 }
 
 function actionLiar() {
-    if (status.monton.cartas.length === 0) {
+    if (status.monton.cantidad === 0) {
         $('#errorMsg').html("No hay ningún jugador anterior que haya echado cartas");
         $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
     } else {
@@ -385,6 +385,7 @@ function getStatus(name, id) {
 
                 $("#game_view").hide();
                 $("#single_game_view").show();
+                loadHistory(id);
                 if (status.players.length === 4) {
                     $("#board_game_view").show();
                     let pos = 0;
@@ -395,12 +396,12 @@ function getStatus(name, id) {
                     loadCards(status.players[pos].cards);
 
                     if (status.monton.valor !== null) {
-                        $("#cards_mount").text(status.monton.cartas.length + " " + status.monton.valor);
+                        $("#cards_mount").text(status.monton.cantidad + " " + status.monton.valor);
                     } else {
-                        $("#cards_mount").text(status.monton.cartas.length);
+                        $("#cards_mount").text(status.monton.cantidad);
                     }
                     $("#turn").text("Turno del jugador " + status.players[status.turno].info.login);
-                    loadHistory(id);
+                    //if (status.turno !== pos || status.winner !== null ) {
                     if (status.turno !== pos) {
                         $("#players_actions").hide();
                     } else {
@@ -410,6 +411,12 @@ function getStatus(name, id) {
                         } else {
                             $("#mount_value").hide();
                         }
+                        /*
+                        let lastPlayer = (status.turno === 0 ? 3 : status.turno - 1);
+                        if(status.players[lastPlayer].cantidad === 0){
+                            $("#play_button").hide();
+                        }
+                        */
                     }
                 }
             },
@@ -464,7 +471,7 @@ function loadPlayers(data) {
     for (let i = 1; i <= 4; ++i) {
         if (i <= data.players.length) {
             $("#playerName" + i).text(data.players[i - 1].info.login);
-            $("#playerCards" + i).text(data.players[i - 1].cards.length);
+            $("#playerCards" + i).text(data.players[i - 1].cantidad);
         } else {
             $("#playerName" + i).text("-");
             $("#playerCards" + i).text("-");

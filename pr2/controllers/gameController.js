@@ -9,7 +9,20 @@ module.exports = function(express, passport) {
             } else if (status === null) {
                 response.status(404).json({ message: "No existe la partida" });
             } else {
-                response.status(200).json(JSON.parse(status));
+                let statusRetrieved = JSON.parse(status);
+                if(statusRetrieved.players.length === 4) {
+                    statusRetrieved.monton.cantidad = statusRetrieved.monton.cartas.length;
+                    statusRetrieved.monton.cartas = [];
+                    statusRetrieved.ultimaJugada.cantidad = statusRetrieved.ultimaJugada.cartas.length;
+                    statusRetrieved.ultimaJugada.cartas = [];
+                }
+                statusRetrieved.players.forEach(player => {
+                    player.cantidad = player.cards.length;
+                    if (player.info.login !== request.user) {
+                        player.cards = [];
+                    }
+                });
+                response.status(200).json(statusRetrieved);
             }
         });
     });
@@ -89,7 +102,9 @@ module.exports = function(express, passport) {
                             if (status.turno === 4) {
                                 status.turno = 0;
                             }
-                            if(status.winner !== null && status.winner.id === status.players[lastPlayer].info.id){
+
+                            if(status.players[lastPlayer].cantidad !== 0){
+                                status.winner = status.players[lastPlayer].info;
                                 logThis(Number(request.params.id), "El jugador " + status.players[lastPlayer].info.login + " ha ganado", request.daoJuegos);
                             }
 
@@ -139,11 +154,6 @@ module.exports = function(express, passport) {
 
                         break;
                 }
-                status.players.forEach(player => {
-                    if(player.cards.length === 0){
-                        status.winner = player.info;
-                    }
-                });
                 request.daoJuegos.setGameState(Number(request.params.id), status, err => {
                     if (err) {
                         response.status(500).json({err});
@@ -226,9 +236,8 @@ module.exports = function(express, passport) {
 
         //Guardamos toda la informacion en la bd (cartas turno etc)
         //TODO hay que ver en cada accion si algun jugador tiene 4 cartas iguales, para que se descarte (y logarlo) para eso puedo ordenarlas y ya
-        //TODO cuando una partida no esta creada al completo se muestra el historial de otra, arreglar eso
-        //TODO hacer que el state no vaya siempre al completo al cliente porqe lo pueden ver todos los jugadores
         //TODO hay que hacer que cuando hay un winner el siguiente solo le aparezca el boton de mentiroso y si lo pulsa y gana pues que ya no aparezca nada al siguiente jugador
+        //TODO hacer la prueba de qe uno "gane" el siguiente diga mentiroso, y el anterior se las lleve... no se muestra el boton de jugar cartas seleccionadas
         let gameState = {
             turno: turno,
             monton: {
