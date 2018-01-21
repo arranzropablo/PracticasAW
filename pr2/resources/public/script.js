@@ -72,6 +72,9 @@ function actionPlay() {
     } else if (status.monton.valor === null && $("#mount_value").val() === "") {
         $('#errorMsg').html("Selecciona que valor quieres darle a las cartas");
         $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
+    } else if($("#mount_value").val() !== "" && !["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"].includes($("#mount_value").val())){
+        $('#errorMsg').html("Introduce un valor válido");
+        $('#errorMsg').fadeIn(1000).delay(2500).fadeOut(1000);
     } else {
         $.ajax({
             method: "POST",
@@ -82,7 +85,7 @@ function actionPlay() {
             data: JSON.stringify({
                 action: "jugada",
                 cartas: selectedCards,
-                valor: Number($("#mount_value").val())
+                valor: $("#mount_value").val()
             }),
             contentType: "application/json",
             statusCode: {
@@ -401,22 +404,24 @@ function getStatus(name, id) {
                         $("#cards_mount").text(status.monton.cantidad);
                     }
                     $("#turn").text("Turno del jugador " + status.players[status.turno].info.login);
-                    //if (status.turno !== pos || status.winner !== null ) {
-                    if (status.turno !== pos) {
+                    if (status.turno !== pos || status.winner !== null) {
                         $("#players_actions").hide();
                     } else {
                         $("#players_actions").show();
+                        $("#players_actions").find("*").show();
+                        if (status.monton.cantidad === 0){
+                            $("#liar_button").hide();
+                        }
                         if (status.monton.valor === null) {
                             $("#mount_value").show();
                         } else {
                             $("#mount_value").hide();
                         }
-                        /*
                         let lastPlayer = (status.turno === 0 ? 3 : status.turno - 1);
                         if(status.players[lastPlayer].cantidad === 0){
                             $("#play_button").hide();
+                            $("mount_value").hide();
                         }
-                        */
                     }
                 }
             },
@@ -446,12 +451,12 @@ function loadHistory(id){
                 data.forEach(log => {
                     $("#game_history").prepend($("<div>").text(log.evento));
                     let fecha = new Date(log.timestamp);
-                    $("#game_history").prepend($("<strong>").text(fecha.getDate() + "-" +
-                                                                 (fecha.getMonth() + 1) + "-" +
+                    $("#game_history").prepend($("<strong>").text(("0" + fecha.getDate()).slice(-2) + "-" +
+                                                                  ("0" + (fecha.getMonth() + 1)).slice(-2) + "-" +
                                                                   fecha.getFullYear() + " " +
-                                                                  fecha.getHours() + ":" +
-                                                                  fecha.getMinutes() + ":" +
-                                                                  fecha.getSeconds()));
+                                                                  ("0" + fecha.getHours()).slice(-2) + ":" +
+                                                                  ("0" + fecha.getMinutes()).slice(-2) + ":" +
+                                                                  ("0" + fecha.getSeconds()).slice(-2)));
                 });
             },
             404: function(data) {
@@ -497,34 +502,3 @@ function dropCards() {
     }
     selectedCards = [];
 }
-
-/*function createGamesView() {
-    let result = $("<div>").addClass("game_view");
-    result.append($("<div>").addClass("card").css("style", "18rem").attr("id", "list_game"));
-    result.append($("<div>").addClass("card").css("style", "18rem").attr("id", "new_game"));
-    result.append($("<div>").addClass("card").css("style", "18rem").attr("id", "join_game"));
-
-    let aux1 = result.children();
-
-    let aux2 = $("<div>").addClass("card-body");
-    aux2.append($("<h5>").addClass("card-title").text("Mis partidas"));
-    aux2.append($("<p>").addClass("card-text").text("Aquí puedes ver las partidas en las que participas actualmente"));
-    aux2.append($("<a>").addClass("games_buttons").addClass("btn btn-primary").attr("id", "list_game_button").text("Ver partidas"));
-    aux1.eq(0).append(aux2);
-
-    aux2 = $("<div>").addClass("card-body");
-    aux2.append($("<h5>").addClass("card-title").text("Crear nueva partida"));
-    aux2.append($("<p>").addClass("card-text").text("Aquí puedes crear una nueva partida con un nombre"));
-    aux2.append($("<input type=\"text\" placeholder=\"Introduce nombre de partida\">").addClass("form-control").addClass("games_inputs").attr("id", "new_game_input"));
-    aux2.append($("<a>").addClass("games_buttons").addClass("btn btn-primary").attr("id", "new_game_button").text("Crear partida"));
-    aux1.eq(1).append(aux2);
-
-    aux2 = $("<div>").addClass("card-body");
-    aux2.append($("<h5>").addClass("card-title").text("Unirse a partida existente"));
-    aux2.append($("<p>").addClass("card-text").text("Aquí puedes unirte a una partida ya creada"));
-    aux2.append($("<input type=\"text\" placeholder=\"Introduce identificador de partida\">").addClass("form-control").addClass("games_inputs").attr("id", "join_game_input"));
-    aux2.append($("<a>").addClass("games_buttons").addClass("btn btn-primary").attr("id", "join_game_button").text("Unirse a partida"));
-    aux1.eq(2).append(aux2);
-
-    return result;
-}*/

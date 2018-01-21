@@ -84,83 +84,104 @@ module.exports = function(express, passport) {
             } else if (statusRetrieved === null) {
                 response.status(404).json({message: "No existe la partida"});
             } else {
-                let status = JSON.parse(statusRetrieved)
-                let action = request.body.action;
-                switch (action) {
-                    case "mentira":
-                        let lastPlayer = (status.turno === 0 ? 3 : status.turno - 1);
-                        if (status.ultimaJugada.cartas.every(carta => {
-                                return carta.numero == status.monton.valor
-                            })) {
-                            logThis(Number(request.params.id), "El jugador " + status.players[status.turno].info.login + " piensa que " + status.players[lastPlayer].info.login + " miente, ¡pero se ha equivocado!", request.daoJuegos);
+                let status = JSON.parse(statusRetrieved);
+                if (status.winner === undefined || status.winner === null){
+                    let action = request.body.action;
+                    switch (action) {
+                        case "mentira":
+                            let lastPlayer = (status.turno === 0 ? 3 : status.turno - 1);
+                            if (status.ultimaJugada.cartas.every(carta => {
+                                    return carta.numero == status.monton.valor
+                                })) {
+                                logThis(Number(request.params.id), "El jugador " + status.players[status.turno].info.login + " piensa que " + status.players[lastPlayer].info.login + " miente, ¡pero se ha equivocado!", request.daoJuegos);
 
-                            status.monton.cartas.forEach(carta => {
-                                status.players[status.turno].cards.push(carta);
+                                status.monton.cartas.forEach(carta => {
+                                    status.players[status.turno].cards.push(carta);
+                                });
+
+                                status.turno++;
+                                if (status.turno === 4) {
+                                    status.turno = 0;
+                                }
+
+                                if (status.players[lastPlayer].cards.length === 0) {
+                                    status.winner = status.players[lastPlayer].info;
+                                    logThis(Number(request.params.id), "El jugador " + status.players[lastPlayer].info.login + " ha ganado", request.daoJuegos);
+                                }
+
+                            } else {
+                                logThis(Number(request.params.id), "El jugador " + status.players[status.turno].info.login + " piensa que " + status.players[lastPlayer].info.login + " miente, ¡y estaba en lo cierto!", request.daoJuegos);
+
+                                status.monton.cartas.forEach(carta => {
+                                    status.players[lastPlayer].cards.push(carta);
+                                });
+                            }
+                            status.monton.cartas = [];
+                            status.monton.valor = null;
+                            status.ultimaJugada.cartas = [];
+
+                            break;
+
+                        case "jugada":
+                            //Ponemos valor al monton en caso de no tener
+                            if (status.monton.valor === null) {
+                                //De paso, el valor del monton de cartas que meta el usuario si este es el primero que mete cartas al mismo
+                                status.monton.valor = request.body.valor;
+                            }
+                            status.ultimaJugada.cartas = [];
+
+                            request.body.cartas.forEach(card => {
+                                status.monton.cartas.push(card);
+                                status.ultimaJugada.cartas.push(card);
+                                let pos = 0;
+                                while (pos < status.players[status.turno].cards.length) {
+                                    if (card.numero === status.players[status.turno].cards[pos].numero &&
+                                        card.palo === status.players[status.turno].cards[pos].palo) {
+                                        break;
+                                    }
+                                    pos++;
+                                }
+                                status.players[status.turno].cards.splice(pos, 1)
                             });
 
+                            //Rellenamos el texto de la ultima jugada
+                            logThis(Number(request.params.id), "El jugador " + status.players[status.turno].info.login + " ha echado " + status.ultimaJugada.cartas.length + " " + status.monton.valor, request.daoJuegos);
+
+                            //Cambiamos el turno
                             status.turno++;
                             if (status.turno === 4) {
                                 status.turno = 0;
                             }
 
-                            if(status.players[lastPlayer].cantidad !== 0){
-                                status.winner = status.players[lastPlayer].info;
-                                logThis(Number(request.params.id), "El jugador " + status.players[lastPlayer].info.login + " ha ganado", request.daoJuegos);
-                            }
-
-                        } else {
-                            logThis(Number(request.params.id), "El jugador " + status.players[status.turno].info.login + " piensa que " + status.players[lastPlayer].info.login + " miente, ¡y estaba en lo cierto!", request.daoJuegos);
-
-                            status.monton.cartas.forEach(carta => {
-                                status.players[lastPlayer].cards.push(carta);
-                            });
-                        }
-                        status.monton.cartas = [];
-                        status.monton.valor = null;
-                        status.ultimaJugada.cartas = [];
-
-                        break;
-
-                    case "jugada":
-                        //Ponemos valor al monton en caso de no tener
-                        if (status.monton.valor === null) {
-                            //De paso, el valor del monton de cartas que meta el usuario si este es el primero que mete cartas al mismo
-                            status.monton.valor = request.body.valor;
-                        }
-                        status.ultimaJugada.cartas = [];
-
-                        request.body.cartas.forEach(card => {
-                            status.monton.cartas.push(card);
-                            status.ultimaJugada.cartas.push(card);
-                            let pos = 0;
-                            while (pos < status.players[status.turno].cards.length) {
-                                if (card.numero === status.players[status.turno].cards[pos].numero &&
-                                    card.palo === status.players[status.turno].cards[pos].palo) {
-                                    break;
-                                }
-                                pos++;
-                            }
-                            status.players[status.turno].cards.splice(pos, 1)
-                        });
-
-                        //Rellenamos el texto de la ultima jugada
-                        logThis(Number(request.params.id), "El jugador " + status.players[status.turno].info.login + " ha echado " + status.ultimaJugada.cartas.length + " " + status.monton.valor, request.daoJuegos);
-
-                        //Cambiamos el turno
-                        status.turno++;
-                        if (status.turno === 4) {
-                            status.turno = 0;
-                        }
-
-                        break;
-                }
-                request.daoJuegos.setGameState(Number(request.params.id), status, err => {
-                    if (err) {
-                        response.status(500).json({err});
-                    } else {
-                        response.status(200).json({});
+                            break;
                     }
-                });
+                    status.players.forEach(player =>{
+                        let numerosOrdenados = player.cards.map(card => card.numero).sort();
+                        let cont = 1;
+                        let numerosADescartar = [];
+                        for (let i = 0; i < numerosOrdenados.length - 1; ++i){
+                            if (numerosOrdenados[i + 1] === numerosOrdenados[i]) {
+                                ++cont;
+                            } else {
+                                cont = 1;
+                            }
+                            if (cont === 4){
+                                numerosADescartar.push(numerosOrdenados[i]);
+                            }
+                        }
+                        numerosADescartar.forEach(numero => {
+                            player.cards = player.cards.filter(card => card.numero !== numero);
+                            logThis(Number(request.params.id), "El jugador " + player.info.login + " se ha descartado de sus " + numero, request.daoJuegos);
+                        });
+                    });
+                    request.daoJuegos.setGameState(Number(request.params.id), status, err => {
+                        if (err) {
+                            response.status(500).json({err});
+                        } else {
+                            response.status(200).json({});
+                        }
+                    });
+                }
             }
         });
     });
@@ -235,9 +256,6 @@ module.exports = function(express, passport) {
         let turno = Math.round(Math.random() * 3); //Asi podemos aprovechar el turno como la posicion
 
         //Guardamos toda la informacion en la bd (cartas turno etc)
-        //TODO hay que ver en cada accion si algun jugador tiene 4 cartas iguales, para que se descarte (y logarlo) para eso puedo ordenarlas y ya
-        //TODO hay que hacer que cuando hay un winner el siguiente solo le aparezca el boton de mentiroso y si lo pulsa y gana pues que ya no aparezca nada al siguiente jugador
-        //TODO hacer la prueba de qe uno "gane" el siguiente diga mentiroso, y el anterior se las lleve... no se muestra el boton de jugar cartas seleccionadas
         let gameState = {
             turno: turno,
             monton: {
