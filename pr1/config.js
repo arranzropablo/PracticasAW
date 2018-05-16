@@ -8,13 +8,13 @@
 module.exports = {
 
     // Ordenador que ejecuta el SGBD
-    dbHost: "91.121.109.58",
+    dbHost: "localhost",
 
     // Usuario que accede a la BD
-    dbUser: "usuariop1",
+    dbUser: "root",
 
     // Contraseña con la que se accede a la BD
-    dbPassword: "accesop1",
+    dbPassword: "",
 
     // Nombre de la base de datos
     dbName: "practica1",

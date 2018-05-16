@@ -1,3 +1,0 @@
-Aleatorio de preguntas desde la bd
-
-select ..... from preguntas order by rand() limit 5;

@@ -1,2 +1,4 @@
 # PracticasAW
-Practicas de AW en la Universidad Complutensee
+Practicas de la asignatura AW.
+
+Uso de Javascript y Node.js
